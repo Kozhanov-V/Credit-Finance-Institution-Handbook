@@ -1,11 +1,15 @@
+html{
+    background-color: #EDEDEF;;
+}
+
 a:active, /* активная/посещенная ссылка */
 a {
   text-decoration: none;
-  color: #666;
+  color: #333333;
   transition: 0.2s;
 }
 a:hover{
-    color: #222222;
+    color: #666;
 }
 h2{
     font-size: 28px;
@@ -16,3 +20,70 @@ h1{
 p{
     font-size: 14px;
 }
+label{
+    font-size: 14px;
+}
+
+
+.container{
+    position: relative;
+    top: -21px;
+    left: 70px;
+    width: 1780px;
+    min-height: 900px;
+    background: white;
+ }
+
+ .handbook{
+    position: relative;
+    top: 48px;
+    left: 150px;
+}
+
+ .filter{
+    position: relative;
+    top: 32px;
+    display: flex;
+    align-items: flex-start;
+ }
+
+ #filter-form .block label,
+ #filter-form .block input,
+ #filter-form .block select {
+   display: block;
+   margin-right: 16px;
+   padding-left: 4px;
+   padding-top: 0px;
+   padding-bottom: 0px;
+
+ }
+
+ #update-table,
+ #add-item{
+    position: relative;
+ }
+
+ .long-button{
+    width: 156px;
+    height: 28px;
+   border: 1px solid black;
+   border-style: outset;
+   box-sizing: content-box; 
+   padding: 0; 
+ }
+ .short-button{
+    width: 96px;
+    height: 28px;
+   border: 1px solid black;
+   border-style: outset;
+   box-sizing: content-box; 
+   padding: 0; 
+ }
+
+ #filter-form{
+    display: flex;
+ }
+ .output-info{
+    position: relative;
+    top: 50px;
+ }

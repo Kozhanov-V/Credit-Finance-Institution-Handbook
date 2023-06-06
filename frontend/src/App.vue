@@ -1,10 +1,6 @@
 
 <template>
     <Header/>
-
-     <br>
-      <RouterLink to="/">handbook</RouterLink><br>
-      <RouterLink to="/import">import</RouterLink>
       <RouterView></RouterView>
 </template>
 
@@ -21,7 +17,6 @@ export default{
   #app{
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     color: #333333;
-    background: #EDEDEF;
   }
 
 </style>
