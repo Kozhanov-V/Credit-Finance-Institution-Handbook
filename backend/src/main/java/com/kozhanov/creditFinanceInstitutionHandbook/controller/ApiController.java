@@ -13,22 +13,18 @@ import java.util.*;
 public class ApiController {
 
 
-
-
-
     @GetMapping("/data")
     public ResponseEntity<?> getAllData() {
         System.out.println("qq есть запрос");
 
         return new ResponseEntity<>("Все четка data", HttpStatus.OK);
     }
+
     @PostMapping("/filter")
     public ResponseEntity<?> filter(@RequestBody FilterParameters filterParameters) {
         System.out.println(filterParameters);
         return new ResponseEntity<>("Все четка filter", HttpStatus.OK);
     }
-
-
 
 
 }

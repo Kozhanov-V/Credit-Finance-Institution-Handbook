@@ -4,38 +4,28 @@ import java.time.LocalDate;
 
 public class FilterParameters {
 
-    private boolean deletedRecord;
     private String orderBy;
-    private String cod;
+    private String bic;
     private String nameRecord;
-    private String typeOrganization;
-    private String typePayer;
+    private String typeTransfer;
     private LocalDate validFrom;
     private LocalDate validUntil;
 
-    // Конструкторы, геттеры и сеттеры здесь
 
     public FilterParameters() {
     }
 
-    public FilterParameters(boolean deletedRecord, String orderBy, String cod, String nameRecord, String typeOrganization, String typePayer, LocalDate validFrom, LocalDate validUntil) {
-        this.deletedRecord = deletedRecord;
+    public FilterParameters(String orderBy, String bic, String nameRecord, String typeTransfer, LocalDate validFrom, LocalDate validUntil) {
+
         this.orderBy = orderBy;
-        this.cod = cod;
+        this.bic = bic;
         this.nameRecord = nameRecord;
-        this.typeOrganization = typeOrganization;
-        this.typePayer = typePayer;
+        this.typeTransfer = typeTransfer;
         this.validFrom = validFrom;
         this.validUntil = validUntil;
     }
 
-    public boolean isDeletedRecord() {
-        return deletedRecord;
-    }
 
-    public void setDeletedRecord(boolean deletedRecord) {
-        this.deletedRecord = deletedRecord;
-    }
 
     public String getOrderBy() {
         return orderBy;
@@ -45,12 +35,12 @@ public class FilterParameters {
         this.orderBy = orderBy;
     }
 
-    public String getCod() {
-        return cod;
+    public String getBic() {
+        return bic;
     }
 
-    public void setCod(String cod) {
-        this.cod = cod;
+    public void setBic(String bic) {
+        this.bic = bic;
     }
 
     public String getNameRecord() {
@@ -61,20 +51,12 @@ public class FilterParameters {
         this.nameRecord = nameRecord;
     }
 
-    public String getTypeOrganization() {
-        return typeOrganization;
+    public String getTypeTransfer() {
+        return typeTransfer;
     }
 
-    public void setTypeOrganization(String typeOrganization) {
-        this.typeOrganization = typeOrganization;
-    }
-
-    public String getTypePayer() {
-        return typePayer;
-    }
-
-    public void setTypePayer(String typePayer) {
-        this.typePayer = typePayer;
+    public void setTypeTransfer(String typeTransfer) {
+        this.typeTransfer = typeTransfer;
     }
 
     public LocalDate getValidFrom() {
@@ -96,12 +78,10 @@ public class FilterParameters {
     @Override
     public String toString() {
         return "FilterParameters{" +
-                "deletedRecord=" + deletedRecord +
                 ", orderBy='" + orderBy + '\'' +
-                ", cod='" + cod + '\'' +
+                ", bic='" + bic + '\'' +
                 ", nameRecord='" + nameRecord + '\'' +
-                ", typeOrganization='" + typeOrganization + '\'' +
-                ", typePayer='" + typePayer + '\'' +
+                ", typeTransfer='" + typeTransfer + '\'' +
                 ", validFrom=" + validFrom +
                 ", validUntil=" + validUntil +
                 '}';

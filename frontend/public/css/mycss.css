@@ -87,3 +87,6 @@ label{
     position: relative;
     top: 50px;
  }
+ td{
+    text-align: center;
+ }
