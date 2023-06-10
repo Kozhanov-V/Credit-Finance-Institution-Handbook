@@ -20,6 +20,15 @@ public class ChangeType {
     @Column(name = "es_type")
     private String esType;
 
+    public ChangeType() {
+    }
+
+    public ChangeType(String code, String description, String esType) {
+        this.code = code;
+        this.description = description;
+        this.esType = esType;
+    }
+
     public String getCode() {
         return code;
     }

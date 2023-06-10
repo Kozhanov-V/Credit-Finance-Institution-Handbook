@@ -13,6 +13,7 @@ public class ParticipantInfo {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "id")
     private Integer id;
 
     @Column(name = "name_participant")
@@ -84,6 +85,27 @@ public class ParticipantInfo {
     @ManyToOne
     @JoinColumn(name = "participant_status_code")
     private ParticipantStatus participantStatus;
+
+    public ParticipantInfo(String nameParticipant, String registrationNumber, String countryCode, String regionCode, String index, String typeLocation, String nameLocation, String address, int parentBIC, Date dateIn, ParticipantType participantType, AvailableTransferService availableTransferService, ExchangeParticipant exchangeParticipant, int UID, ParticipantStatus participantStatus) {
+        this.nameParticipant = nameParticipant;
+        this.registrationNumber = registrationNumber;
+        this.countryCode = countryCode;
+        this.regionCode = regionCode;
+        this.index = index;
+        this.typeLocation = typeLocation;
+        this.nameLocation = nameLocation;
+        this.address = address;
+        this.parentBIC = parentBIC;
+        this.dateIn = dateIn;
+        this.participantType = participantType;
+        this.availableTransferService = availableTransferService;
+        this.exchangeParticipant = exchangeParticipant;
+        this.UID = UID;
+        this.participantStatus = participantStatus;
+    }
+
+    public ParticipantInfo() {
+    }
 
     public Integer getId() {
         return id;

@@ -20,6 +20,15 @@ public class ParticipantStatus {
     @Column(name = "es_type")
     private String esType;
 
+    public ParticipantStatus(String code, String description, String esType) {
+        this.code = code;
+        this.description = description;
+        this.esType = esType;
+    }
+
+    public ParticipantStatus() {
+    }
+
     public String getCode() {
         return code;
     }

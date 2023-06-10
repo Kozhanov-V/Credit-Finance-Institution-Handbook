@@ -13,7 +13,9 @@ public class ExchangeParticipant {
     @Column(name = "code")
     @Id
     @Size(min = 1,max = 1)
-    private boolean code;
+    private int code;
+
+
 
     @Column(name = "description")
     private String description;
@@ -21,7 +23,22 @@ public class ExchangeParticipant {
     @Column(name = "es_type")
     private String esType;
 
+    public ExchangeParticipant(int code, String description, String esType) {
+        this.code = code;
+        this.description = description;
+        this.esType = esType;
+    }
 
+    public ExchangeParticipant() {
+    }
+
+    public int getCode() {
+        return code;
+    }
+
+    public void setCode(int code) {
+        this.code = code;
+    }
 
     public String getDescription() {
         return description;

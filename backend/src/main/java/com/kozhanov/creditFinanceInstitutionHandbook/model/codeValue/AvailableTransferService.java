@@ -21,7 +21,22 @@ public class AvailableTransferService {
     @Column(name = "es_type")
     private String esType;
 
+    public AvailableTransferService() {
+    }
 
+    public int getCode() {
+        return code;
+    }
+
+    public void setCode(int code) {
+        this.code = code;
+    }
+
+    public AvailableTransferService(int code, String description, String esType) {
+        this.code = code;
+        this.description = description;
+        this.esType = esType;
+    }
 
     public String getDescription() {
         return description;

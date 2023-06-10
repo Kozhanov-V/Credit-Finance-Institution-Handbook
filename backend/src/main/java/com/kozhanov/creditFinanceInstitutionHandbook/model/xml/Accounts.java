@@ -48,6 +48,17 @@ public class Accounts {
     @JoinColumn(name = "BIC")
     private BICDirectoryEntry bicDirectoryEntry;
 
+    public Accounts() {
+    }
+
+    public Accounts(String account, RegulationAccountType regulationAccountType, String controlKey, String accountCBRBIC, Date dateIn, AccountStatus accountStatus) {
+        this.account = account;
+        this.regulationAccountType = regulationAccountType;
+        this.controlKey = controlKey;
+        this.accountCBRBIC = accountCBRBIC;
+        this.dateIn = dateIn;
+        this.accountStatus = accountStatus;
+    }
 
     public String getAccount() {
         return account;

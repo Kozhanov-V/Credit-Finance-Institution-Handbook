@@ -22,6 +22,15 @@ public class ParticipantType {
     @Column(name = "es_type")
     private String esType;
 
+    public ParticipantType() {
+    }
+
+    public ParticipantType(int code, String description, String esType) {
+        this.code = code;
+        this.description = description;
+        this.esType = esType;
+    }
+
     public int getCode() {
         return code;
     }

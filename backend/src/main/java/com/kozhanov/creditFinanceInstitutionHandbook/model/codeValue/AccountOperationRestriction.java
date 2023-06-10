@@ -22,6 +22,16 @@ public class AccountOperationRestriction {
     @Column(name = "es_type")
     private String esType;
 
+
+    public AccountOperationRestriction(String code, String description, String esType) {
+        this.code = code;
+        this.description = description;
+        this.esType = esType;
+    }
+
+    public AccountOperationRestriction() {
+    }
+
     public String getCode() {
         return code;
     }

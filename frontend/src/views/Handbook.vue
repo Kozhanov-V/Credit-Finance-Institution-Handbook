@@ -78,23 +78,23 @@
           <th>Участник обмена</th>
           <th>Actions</th>
         </tr>
-        <tr>
-          <td>1</td>
-          <td>123456789</td>
-          <td>УФК по Астраханской области</td>
-          <td>3292/2</td>
-          <td>RU</td>
-          <td>12</td>
-          <td>414056</td>
-          <td>г.</td>
-          <td>Астрахань</td>
-          <td>ул. Владимира Ленина, 127</td>
-          <td>123456789</td>
-          <td>18.05.2023</td>
-          <td>18.05.2023</td>
-          <td>52</td>
-          <td></td>
-          <td></td>
+        <tr v v-for="item in tableData" :key="item.bic">
+          <td>{{ item.idES }}</td>
+          <td>{{ item.bic }}</td>
+          <td>{{ item.nameParticipant }}</td>
+          <td>{{ item.registrationNumber }}</td>
+          <td>{{ item.countryCode }}</td>
+          <td>{{ item.regionCode }}</td>
+          <td>{{ item.index }}</td>
+          <td>{{ item.typeLocation }}</td>
+          <td>{{ item.nameLocation }}</td>
+          <td>{{ item.address }}</td>
+          <td>{{ item.parentBIC }}</td>
+          <td>{{ item.dateIn}}</td>
+          <td>{{ item.dateOut}}</td>
+          <td>{{ item.participantType }}</td>
+          <td>{{ item.availableTransferService}}</td>
+          <td>{{ item.exchangeParticipant }}</td>
           <td><button><img src="/more_horiz.png" /></button></td>
         </tr>      
          
@@ -116,16 +116,12 @@ export default {
       typeTransfer: '',
       validFrom: '',
       validUntil: '',
+      tableData:[],
     };
   },
   methods: {
 
-    data() {
-      return {
-        // остальные данные
-        tableData: [],
-      };
-    },
+    
 
     resetForm() {
       this.orderBy = 'БИК по убыванию';
@@ -154,13 +150,36 @@ export default {
 
     async fetchData() {
       try {
-        const response = await axios.get('http://localhost:8080/api/data');
-        // убедитесь, что в ответе есть нужные данные и добавьте их в data
-        this.tableData = response.data;
-        console.log(response.data)
-      } catch (error) {
-        console.error(error);
-      }
+      const response = await axios.get('http://localhost:8080/api/data');
+
+      // Обработайте данные здесь, преобразовав их в формат, который вы ожидаете в tableData
+
+      this.tableData = response.data.map(item => ({
+
+        // Убедитесь, что поля здесь соответствуют полям, которые вы хотите отобразить в таблице
+
+        idES: item.electronicDocuments.number,
+        bic: item.bic,
+        nameParticipant: item.participantInfo.nameParticipant,
+        registrationNumber: item.participantInfo.registrationNumber,
+        countryCode: item.participantInfo.countryCode,
+        regionCode: item.participantInfo.regionCode,
+        index: item.participantInfo.index,
+        typeLocation: item.participantInfo.typeLocation,
+        nameLocation: item.participantInfo.nameLocation,
+        address: item.participantInfo.address,
+        parentBIC: item.participantInfo.parentBIC,
+        dateIn: item.participantInfo.dateIn,
+        dateOut: item.participantInfo.dateOut,
+        participantType: item.participantInfo.participantType.code,
+        availableTransferService: item.participantInfo.availableTransferService.code,
+        exchangeParticipant: item.participantInfo.exchangeParticipant.code,
+
+        // и так далее для каждого поля, которое вам нужно
+      }));
+    } catch (error) {
+      console.error(error);
+    }
     }
   },
   created() {

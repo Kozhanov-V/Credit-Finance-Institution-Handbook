@@ -14,7 +14,6 @@ import java.util.Date;
 public class ElectronicDocuments {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "number")
     @Digits(integer = 9, fraction = 0)
     private Integer number;
@@ -53,6 +52,32 @@ public class ElectronicDocuments {
     @Column(name = "directory_version")
     @Max(99)
     private int directoryVersion;
+
+    public ElectronicDocuments(Integer number, Date date, long author, long receiver, CreationReason creationReason, Date creationDateTime, InfoTypeCode infoTypeCode, Date businessDay, int directoryVersion) {
+        this.number = number;
+        this.date = date;
+        this.author = author;
+        this.receiver = receiver;
+        this.creationReason = creationReason;
+        this.creationDateTime = creationDateTime;
+        this.infoTypeCode = infoTypeCode;
+        this.businessDay = businessDay;
+        this.directoryVersion = directoryVersion;
+    }
+
+    public ElectronicDocuments() {
+    }
+
+    public ElectronicDocuments(Integer number, Date date, long author, CreationReason creationReason, Date creationDateTime, InfoTypeCode infoTypeCode, Date businessDay, int directoryVersion) {
+        this.number = number;
+        this.date = date;
+        this.author = author;
+        this.creationReason = creationReason;
+        this.creationDateTime = creationDateTime;
+        this.infoTypeCode = infoTypeCode;
+        this.businessDay = businessDay;
+        this.directoryVersion = directoryVersion;
+    }
 
     public Integer getNumber() {
         return number;

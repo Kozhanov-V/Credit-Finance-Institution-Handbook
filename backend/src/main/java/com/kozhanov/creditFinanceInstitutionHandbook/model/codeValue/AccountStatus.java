@@ -20,6 +20,15 @@ public class AccountStatus {
     @Column(name = "es_type")
     private String esType;
 
+    public AccountStatus(String code, String description, String esType) {
+        this.code = code;
+        this.description = description;
+        this.esType = esType;
+    }
+
+    public AccountStatus() {
+    }
+
     public String getCode() {
         return code;
     }
