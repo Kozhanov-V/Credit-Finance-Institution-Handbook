@@ -1,6 +1,12 @@
 package com.kozhanov.creditFinanceInstitutionHandbook.model.xml;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.kozhanov.creditFinanceInstitutionHandbook.deserialization.AvailableTransferServiceDeserializer;
+import com.kozhanov.creditFinanceInstitutionHandbook.deserialization.ExchangeParticipantDeserializer;
+import com.kozhanov.creditFinanceInstitutionHandbook.deserialization.ParticipantTypeDeserializer;
 import com.kozhanov.creditFinanceInstitutionHandbook.model.codeValue.*;
+import com.kozhanov.creditFinanceInstitutionHandbook.repository.codeValue.ParticipantTypeRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -11,12 +17,14 @@ import javax.validation.constraints.*;
 @Table(name = "participant_info")
 public class ParticipantInfo {
 
+
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")
     private Integer id;
 
-    @Column(name = "name_participant")
+    @Column(name = "name_participant",nullable = false)
     @Size(max = 160)
     private String nameParticipant;
 
@@ -57,7 +65,7 @@ public class ParticipantInfo {
     @Max(999999999)
     private int parentBIC;
 
-    @Column(name = "date_in")
+    @Column(name = "date_in",nullable = false)
     @Temporal(TemporalType.DATE)
     private Date dateIn;
 
@@ -66,28 +74,41 @@ public class ParticipantInfo {
     private Date dateOut;
 
     @ManyToOne
-    @JoinColumn(name = "participant_type_code")
+    @JoinColumn(name = "participant_type_code",nullable = false)
+    @JsonDeserialize(using = ParticipantTypeDeserializer.class)
     private ParticipantType participantType;
 
     @ManyToOne
-    @JoinColumn(name = "available_transfer_service_code")
+    @JoinColumn(name = "available_transfer_service_code",nullable = false)
+    @JsonDeserialize(using = AvailableTransferServiceDeserializer.class)
     private AvailableTransferService availableTransferService;
 
     @ManyToOne
-    @JoinColumn(name = "exchange_participant_code")
+    @JoinColumn(name = "exchange_participant_code",nullable = false)
+    @JsonDeserialize(using = ExchangeParticipantDeserializer.class)
     private ExchangeParticipant exchangeParticipant;
 
     @Column(name = "uid")
     @Min(1000000000L)
     @Max(9999999999L)
-    private int UID;
+    private long UID;
 
     @ManyToOne
     @JoinColumn(name = "participant_status_code")
     private ParticipantStatus participantStatus;
 
-    public ParticipantInfo(String nameParticipant, String registrationNumber, String countryCode, String regionCode, String index, String typeLocation, String nameLocation, String address, int parentBIC, Date dateIn, ParticipantType participantType, AvailableTransferService availableTransferService, ExchangeParticipant exchangeParticipant, int UID, ParticipantStatus participantStatus) {
+    public ParticipantInfo(String nameParticipant, Date dateIn, ParticipantType participantType, AvailableTransferService availableTransferService, ExchangeParticipant exchangeParticipant) {
         this.nameParticipant = nameParticipant;
+        this.dateIn = dateIn;
+        this.participantType = participantType;
+        this.availableTransferService = availableTransferService;
+        this.exchangeParticipant = exchangeParticipant;
+    }
+
+    public ParticipantInfo(Integer id, String nameParticipant, String engNameParticipant, String registrationNumber, String countryCode, String regionCode, String index, String typeLocation, String nameLocation, String address, int parentBIC, Date dateIn, Date dateOut, ParticipantType participantType, AvailableTransferService availableTransferService, ExchangeParticipant exchangeParticipant, int UID, ParticipantStatus participantStatus) {
+        this.id = id;
+        this.nameParticipant = nameParticipant;
+        this.engNameParticipant = engNameParticipant;
         this.registrationNumber = registrationNumber;
         this.countryCode = countryCode;
         this.regionCode = regionCode;
@@ -97,12 +118,15 @@ public class ParticipantInfo {
         this.address = address;
         this.parentBIC = parentBIC;
         this.dateIn = dateIn;
+        this.dateOut = dateOut;
         this.participantType = participantType;
         this.availableTransferService = availableTransferService;
         this.exchangeParticipant = exchangeParticipant;
         this.UID = UID;
         this.participantStatus = participantStatus;
     }
+
+
 
     public ParticipantInfo() {
     }
@@ -235,11 +259,11 @@ public class ParticipantInfo {
         this.exchangeParticipant = exchangeParticipant;
     }
 
-    public int getUID() {
+    public long getUID() {
         return UID;
     }
 
-    public void setUID(int UID) {
+    public void setUID(long UID) {
         this.UID = UID;
     }
 
@@ -249,6 +273,126 @@ public class ParticipantInfo {
 
     public void setParticipantStatus(ParticipantStatus participantStatus) {
         this.participantStatus = participantStatus;
+    }
+
+    @Override
+    public String toString() {
+        return "ParticipantInfo{" +
+                "id=" + id +
+                ", nameParticipant='" + nameParticipant + '\'' +
+                ", engNameParticipant='" + engNameParticipant + '\'' +
+                ", registrationNumber='" + registrationNumber + '\'' +
+                ", countryCode='" + countryCode + '\'' +
+                ", regionCode='" + regionCode + '\'' +
+                ", index='" + index + '\'' +
+                ", typeLocation='" + typeLocation + '\'' +
+                ", nameLocation='" + nameLocation + '\'' +
+                ", address='" + address + '\'' +
+                ", parentBIC=" + parentBIC +
+                ", dateIn=" + dateIn +
+                ", dateOut=" + dateOut +
+                ", participantType=" + participantType +
+                ", availableTransferService=" + availableTransferService +
+                ", exchangeParticipant=" + exchangeParticipant +
+                ", UID=" + UID +
+                ", participantStatus=" + participantStatus +
+                '}';
+    }
+    public static class Builder {
+        private String nameParticipant;
+        private String engNameParticipant;
+        private String registrationNumber;
+        private String countryCode;
+        private String regionCode;
+        private String index;
+        private String typeLocation;
+        private String nameLocation;
+        private String address;
+        private int parentBIC;
+        private Date dateIn;
+        private Date dateOut;
+        private ParticipantType participantType;
+        private AvailableTransferService availableTransferService;
+        private ExchangeParticipant exchangeParticipant;
+        private long UID;
+        private ParticipantStatus participantStatus;
+
+        public Builder nameParticipant(String nameParticipant) {
+            this.nameParticipant = nameParticipant;
+            return this;
+        } public Builder engNameParticipant(String engNameParticipant) {
+            this.engNameParticipant = engNameParticipant;
+            return this;
+        } public Builder registrationNumber(String registrationNumber) {
+            this.registrationNumber = registrationNumber;
+            return this;
+        } public Builder countryCode(String countryCode) {
+            this.countryCode = countryCode;
+            return this;
+        } public Builder regionCode(String regionCode) {
+            this.regionCode = regionCode;
+            return this;
+        } public Builder index(String index) {
+            this.index = index;
+            return this;
+        } public Builder typeLocation(String typeLocation) {
+            this.typeLocation = typeLocation;
+            return this;
+        } public Builder nameLocation(String nameLocation) {
+            this.nameLocation = nameLocation;
+            return this;
+        } public Builder address(String address) {
+            this.address = address;
+            return this;
+        } public Builder parentBIC(int parentBIC) {
+            this.parentBIC = parentBIC;
+            return this;
+        } public Builder dateIn(Date dateIn) {
+            this.dateIn = dateIn;
+            return this;
+        } public Builder dateOut(Date dateOut) {
+            this.dateOut = dateOut;
+            return this;
+        } public Builder participantType(ParticipantType participantType) {
+            this.participantType = participantType;
+            return this;
+        }public Builder availableTransferService(AvailableTransferService availableTransferService) {
+            this.availableTransferService = availableTransferService;
+            return this;
+        } public Builder exchangeParticipant(ExchangeParticipant exchangeParticipant) {
+            this.exchangeParticipant = exchangeParticipant;
+            return this;
+        } public Builder UID(long UID) {
+            this.UID = UID;
+            return this;
+        } public Builder participantStatus(ParticipantStatus participantStatus) {
+            this.participantStatus = participantStatus;
+            return this;
+        }
+
+        public ParticipantInfo build() {
+            ParticipantInfo participantInfo = new ParticipantInfo();
+            participantInfo.nameParticipant = this.nameParticipant;
+            participantInfo.engNameParticipant = this.engNameParticipant;
+            participantInfo.registrationNumber = this.registrationNumber;
+            participantInfo.countryCode = this.countryCode;
+            participantInfo.regionCode = this.regionCode;
+            participantInfo.index = this.index;
+            participantInfo.typeLocation = this.typeLocation;
+            participantInfo.nameLocation = this.nameLocation;
+            participantInfo.address = this.address;
+            participantInfo.parentBIC = this.parentBIC;
+            participantInfo.dateIn = this.dateIn;
+            participantInfo.dateOut = this.dateOut;
+            participantInfo.participantType = this.participantType;
+            participantInfo.availableTransferService = this.availableTransferService;
+            participantInfo.exchangeParticipant = this.exchangeParticipant;
+            participantInfo.UID = this.UID;
+            participantInfo.participantStatus = this.participantStatus;
+
+            return participantInfo;
+        }
+
     }
 }
 

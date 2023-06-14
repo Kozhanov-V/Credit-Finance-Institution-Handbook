@@ -150,4 +150,19 @@ public class ElectronicDocuments {
     public void setDirectoryVersion(int directoryVersion) {
         this.directoryVersion = directoryVersion;
     }
+
+    @Override
+    public String toString() {
+        return "ElectronicDocuments{" +
+                "number=" + number +
+                ", date=" + date +
+                ", author=" + author +
+                ", receiver=" + receiver +
+                ", creationReason=" + creationReason +
+                ", creationDateTime=" + creationDateTime +
+                ", infoTypeCode=" + infoTypeCode +
+                ", businessDay=" + businessDay +
+                ", directoryVersion=" + directoryVersion +
+                '}';
+    }
 }

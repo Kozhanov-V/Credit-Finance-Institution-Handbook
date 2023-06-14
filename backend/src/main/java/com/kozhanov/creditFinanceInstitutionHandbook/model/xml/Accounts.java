@@ -16,7 +16,7 @@ public class Accounts {
 
     @Id
     @Column(name = "account")
-    @Size(min = 20,max = 20)
+    @Size(min = 20, max = 20)
     private String account;
 
     @ManyToOne
@@ -24,7 +24,7 @@ public class Accounts {
     private RegulationAccountType regulationAccountType;
 
     @Column(name = "control_key")
-    @Size(min = 2,max = 2)
+    @Size(min = 2, max = 2)
     private String controlKey;
 
     @Column(name = "account_cbr_bic")
@@ -122,6 +122,20 @@ public class Accounts {
 
     public void setBicDirectoryEntry(BICDirectoryEntry bicDirectoryEntry) {
         this.bicDirectoryEntry = bicDirectoryEntry;
+    }
+
+    @Override
+    public String toString() {
+        return "Accounts{" +
+                "account='" + account + '\'' +
+                ", regulationAccountType=" + regulationAccountType +
+                ", controlKey='" + controlKey + '\'' +
+                ", accountCBRBIC='" + accountCBRBIC + '\'' +
+                ", dateIn=" + dateIn +
+                ", dateOut=" + dateOut +
+                ", accountStatus=" + accountStatus +
+                ", bicDirectoryEntry=" + bicDirectoryEntry +
+                '}';
     }
 }
 

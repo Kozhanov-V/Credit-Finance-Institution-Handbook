@@ -1,47 +1,45 @@
-header{
-    position: relative;
-    top: -8px;
-    left: -8px;
-    display: flex;
-    background: white;
-    width: 1780px;
-    height: 90px;
-    padding-top: 30px;
-    padding-bottom: 30px;
-    line-height: 90px;
-    white-space: nowrap;
-    padding-left: 70px;
-    padding-right: 70px;
+header {
+  position: relative;
+  top: -8px;
+  left: -8px;
+  display: flex;
+  background: white;
+  width: 1780px;
+  height: 90px;
+  padding-top: 30px;
+  padding-bottom: 30px;
+  line-height: 90px;
+  white-space: nowrap;
+  padding-left: 70px;
+  padding-right: 70px;
 }
 
-header span{
-font-size: 28px;
-font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+header span {
+  font-size: 28px;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
 
-
-header .logo img{
-    margin: 0 auto;
-    display: block;
+header .logo img {
+  margin: 0 auto;
+  display: block;
 }
 
-header .import{
-
+header .import {
 }
 
-header .logo{
-    display: flex;
-    align-items: center;
-    margin: 0 auto;
-    width: 680px; /* задайте ширину логотипа */
+header .logo {
+  display: flex;
+  align-items: center;
+  margin: 0 auto;
+  width: 680px; /* задайте ширину логотипа */
 }
-header h2{
-    display: flex;
-    align-items: center;
+header h2 {
+  display: flex;
+  align-items: center;
 }
 
-header a{
-    margin-left: 32px;
-    display: flex;
-    align-items: center;
+header a {
+  margin-left: 32px;
+  display: flex;
+  align-items: center;
 }

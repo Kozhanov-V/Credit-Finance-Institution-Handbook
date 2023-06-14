@@ -12,9 +12,8 @@ import javax.validation.constraints.Size;
 public class ExchangeParticipant {
     @Column(name = "code")
     @Id
-    @Size(min = 1,max = 1)
+    @Size(min = 1, max = 1)
     private int code;
-
 
 
     @Column(name = "description")

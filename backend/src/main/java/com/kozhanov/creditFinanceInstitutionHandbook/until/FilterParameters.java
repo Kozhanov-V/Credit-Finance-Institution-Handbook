@@ -26,7 +26,6 @@ public class FilterParameters {
     }
 
 
-
     public String getOrderBy() {
         return orderBy;
     }

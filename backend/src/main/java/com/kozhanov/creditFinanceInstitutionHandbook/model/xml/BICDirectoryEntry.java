@@ -1,16 +1,20 @@
 package com.kozhanov.creditFinanceInstitutionHandbook.model.xml;
 
 import com.kozhanov.creditFinanceInstitutionHandbook.model.codeValue.ChangeType;
+import org.hibernate.annotations.Cascade;
 
 import javax.persistence.*;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Table(name = "bic_directory_entry")
-public class BICDirectoryEntry {
+public class BICDirectoryEntry{
+
+
 
     public BICDirectoryEntry(int BIC, ChangeType changeType, ElectronicDocuments electronicDocuments, List<Accounts> accounts, ParticipantInfo participantInfo) {
         this.BIC = BIC;
@@ -33,6 +37,11 @@ public class BICDirectoryEntry {
         this.participantInfo = participantInfo;
     }
 
+    public BICDirectoryEntry(int BIC, ParticipantInfo participantInfo) {
+        this.BIC = BIC;
+        this.participantInfo = participantInfo;
+    }
+
     public BICDirectoryEntry() {
     }
 
@@ -40,6 +49,7 @@ public class BICDirectoryEntry {
     @Column(name = "bic")
     @Min(100000000)
     @Max(999999999)
+    @NotNull
     private int BIC;
 
     @ManyToOne
@@ -47,7 +57,7 @@ public class BICDirectoryEntry {
     private ChangeType changeType;
 
     @ManyToOne
-    @JoinColumn(name = "electronic_documents_number",nullable = false)
+    @JoinColumn(name = "electronic_documents_number", nullable = false)
     private ElectronicDocuments electronicDocuments;
 
     @OneToMany(mappedBy = "bicDirectoryEntry")
@@ -86,7 +96,7 @@ public class BICDirectoryEntry {
     }
 
     public void addAccount(Accounts account) {
-        if(accounts==null){
+        if (accounts == null) {
             accounts = new ArrayList<>();
         }
         accounts.add(account);

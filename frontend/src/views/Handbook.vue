@@ -3,45 +3,34 @@
     <div class="handbook">
       <h1>СПРАВОЧНИК</h1>
     </div>
+
     <div class="filter">
       <div id="filter-form">
 
         <div class="block">
-
-          <label for="order-by">Сортировка</label>
-          <select id="order-by" class="short-button" v-model="orderBy">
-            <option>Наименование возрастанию</option>
-            <option>Наименование убывание</option>
-            <option>БИК по убыванию </option>
-            <option>БИК по возрастанию </option>
-          </select>
-        </div>
-
-        <div class="block">
           <label for="bic-input">БИК</label>
-          <input id="bic-input" type="text" class="long-button" v-model="bic">
+          <input id="bic-input" type="number" class="long-button" v-model="formFilter.bic">
 
           <label for="name-record-input">Наименование</label>
-          <input id="name-record-input" type="text" class="long-button" v-model="nameRecord">
+          <input id="name-record-input" type="text" class="long-button" v-model="formFilter.nameRecord">
         </div>
 
-      
+
         <div class="block">
           <label for="valid-from-datepicker">Действует на дату с:</label>
-          <input id="valid-from-datepicker" type="date" class="long-button" v-model="validFrom">
+          <input id="valid-from-datepicker" type="date" class="long-button" v-model="formFilter.validFrom">
 
           <label for="valid-until-datepicker">по:</label>
-          <input id="valid-until-datepicker" type="date" class="long-button" v-model="validUntil">
+          <input id="valid-until-datepicker" type="date" class="long-button" v-model="formFilter.validUntil">
         </div>
 
         <div class="block">
           <label for="type-organization-select">Тип участника</label>
-          <select id="type-organization-select" class="long-button" v-model="typeOrganization">
-            <option></option>
-            <option>00</option>
-            <option>10</option>
-            <option>12</option>
-            <option>15</option>
+          <select id="type-organization-select" class="long-button" v-model="formFilter.typeTransfer">
+            <option v-for="(type, index) in participantTypes" :value="type.code" :key="index">
+              {{ type.code }}
+            </option>
+
           </select>
         </div>
 
@@ -50,12 +39,17 @@
           <button type="button" class="short-button" @click="submitForm">Найти</button>
         </div>
 
-       
+
 
 
       </div>
       <button id="update-table" class="short-button">Обновить</button>
-      <button id="add-item" class="short-button">Добавить</button>
+      <button id="add-item" class="short-button" @click="openSaveModal">Добавить</button>
+
+      <SaveModalForm :visible="isSaveModalVisible" @close="isSaveModalVisible = false"
+        :available-transfer-services="availableTransferServices" :participant-types="participantTypes"
+        :participant-statuses="participantStatuses" />
+
     </div>
     <div class="output-info">
       <table>
@@ -76,6 +70,8 @@
           <th>Тип участника</th>
           <th>Доступные серв. перевода</th>
           <th>Участник обмена</th>
+          <th>УИС</th>
+          <th>Статус участника</th>
           <th>Actions</th>
         </tr>
         <tr v v-for="item in tableData" :key="item.bic">
@@ -90,14 +86,16 @@
           <td>{{ item.nameLocation }}</td>
           <td>{{ item.address }}</td>
           <td>{{ item.parentBIC }}</td>
-          <td>{{ item.dateIn}}</td>
-          <td>{{ item.dateOut}}</td>
+          <td>{{ item.dateIn }}</td>
+          <td>{{ item.dateOut }}</td>
           <td>{{ item.participantType }}</td>
-          <td>{{ item.availableTransferService}}</td>
+          <td>{{ item.availableTransferService }}</td>
           <td>{{ item.exchangeParticipant }}</td>
+          <td>{{ item.UID }}</td>
+          <td>{{ item.participantStatus }}</td>
           <td><button><img src="/more_horiz.png" /></button></td>
-        </tr>      
-         
+        </tr>
+
       </table>
     </div>
   </div>
@@ -105,41 +103,62 @@
 
 <script>
 
+import { useVuelidate } from '@vuelidate/core'
+import { required, between } from '@vuelidate/validators'
+
+import SaveModalForm from '@/components/SaveForm.vue';
+
 import axios from 'axios';
 
 export default {
+  components: {
+    SaveModalForm
+  },
+  setup() {
+    return { v$: useVuelidate() }
+  },
   data() {
     return {
-      orderBy: '',
-      bic: '',
-      nameRecord: '',
-      typeTransfer: '',
-      validFrom: '',
-      validUntil: '',
-      tableData:[],
+      bicDirectoryEntries: [],
+      participantTypes: [],
+      availableTransferServices: [],
+      participantStatuses: [],
+      formFilter: {
+        bic: '',
+        nameRecord: '',
+        typeTransfer: '',
+        validFrom: '',
+        validUntil: '',
+
+      },
+      tableData: [],
+      isSaveModalVisible: false
     };
+  },
+  validations() {
+    return {
+      formFilter: {
+        bic: { between: between(0, 999999999) }
+      }
+    }
   },
   methods: {
 
-    
+    openSaveModal() {
+      this.isSaveModalVisible = true;
+    },
 
     resetForm() {
-      this.orderBy = 'БИК по убыванию';
-      this.bic = '';
-      this.nameRecord = '';
-      this.typeTransfer = '';
-      this.validFrom = '';
-      this.validUntil = '';
+      this.formFilter.bic = '';
+      this.formFilter.nameRecord = '';
+      this.formFilter.typeTransfer = '';
+      this.formFilter.validFrom = '';
+      this.formFilter.validUntil = '';
     },
     async submitForm() {
       try {
         const response = await axios.post('http://localhost:8080/api/filter', {
-          orderBy: this.orderBy,
-          bic: this.bic,
-          nameRecord: this.nameRecord,
-          typeTransfer: this.typeTransfer,
-          validFrom: this.validFrom,
-          validUntil: this.validUntil,
+          formFilter,
         });
         // обрабатывайте ответ сервера
         console.log(response.data);
@@ -149,37 +168,44 @@ export default {
     },
 
     async fetchData() {
+
       try {
-      const response = await axios.get('http://localhost:8080/api/data');
+        const response = await axios.get('http://localhost:8080/api/data');
 
-      // Обработайте данные здесь, преобразовав их в формат, который вы ожидаете в tableData
+        this.bicDirectoryEntries = response.data.bicDirectoryEntries;
+        this.participantTypes = response.data.participantTypes;
+        this.availableTransferServices = response.data.availableTransferServices;
+        this.participantStatuses = response.data.participantStatuses;
 
-      this.tableData = response.data.map(item => ({
 
-        // Убедитесь, что поля здесь соответствуют полям, которые вы хотите отобразить в таблице
+        this.typeTransfers = this.participantTypes;
+        this.tableData = this.bicDirectoryEntries.map(item => ({
 
-        idES: item.electronicDocuments.number,
-        bic: item.bic,
-        nameParticipant: item.participantInfo.nameParticipant,
-        registrationNumber: item.participantInfo.registrationNumber,
-        countryCode: item.participantInfo.countryCode,
-        regionCode: item.participantInfo.regionCode,
-        index: item.participantInfo.index,
-        typeLocation: item.participantInfo.typeLocation,
-        nameLocation: item.participantInfo.nameLocation,
-        address: item.participantInfo.address,
-        parentBIC: item.participantInfo.parentBIC,
-        dateIn: item.participantInfo.dateIn,
-        dateOut: item.participantInfo.dateOut,
-        participantType: item.participantInfo.participantType.code,
-        availableTransferService: item.participantInfo.availableTransferService.code,
-        exchangeParticipant: item.participantInfo.exchangeParticipant.code,
+          // Убедитесь, что поля здесь соответствуют полям, которые вы хотите отобразить в таблице
 
-        // и так далее для каждого поля, которое вам нужно
-      }));
-    } catch (error) {
-      console.error(error);
-    }
+          idES: item.electronicDocuments.number,
+          bic: item.bic,
+          nameParticipant: item.participantInfo.nameParticipant,
+          registrationNumber: item.participantInfo.registrationNumber,
+          countryCode: item.participantInfo.countryCode,
+          regionCode: item.participantInfo.regionCode,
+          index: item.participantInfo.index,
+          typeLocation: item.participantInfo.typeLocation,
+          nameLocation: item.participantInfo.nameLocation,
+          address: item.participantInfo.address,
+          parentBIC: item.participantInfo.parentBIC,
+          dateIn: item.participantInfo.dateIn,
+          dateOut: item.participantInfo.dateOut,
+          participantType: item.participantInfo.participantType?.code,
+          availableTransferService: item.participantInfo.availableTransferService?.code,
+          exchangeParticipant: item.participantInfo.exchangeParticipant?.code,
+          UID: item.participantInfo.UID,
+          participantStatus: item.participantInfo.participantStatus?.code,
+          // и так далее для каждого поля, которое вам нужно
+        }));
+      } catch (error) {
+        console.error(error);
+      }
     }
   },
   created() {

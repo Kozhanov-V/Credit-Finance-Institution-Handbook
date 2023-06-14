@@ -12,7 +12,7 @@ import javax.validation.constraints.Size;
 public class RegulationAccountType {
     @Column(name = "code")
     @Id
-    @Size(min = 4,max = 4)
+    @Size(min = 4, max = 4)
     private String code;
 
     @Column(name = "description")
