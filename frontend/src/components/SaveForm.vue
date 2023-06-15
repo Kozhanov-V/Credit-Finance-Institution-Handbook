@@ -5,118 +5,128 @@
       <form @submit.prevent="submitForm">
         <h2>Добавление записи</h2>
 
-        <label class="required-field" for="BIC">БИК *</label>
-        <input v-model.trim="bicDirectoryEntry.bic" type="number" placeholder="BIC" name="BIC">
-        <span class="error" v-if="v$.bicDirectoryEntry.bic.$dirty && v$.bicDirectoryEntry.bic.$error">Поле "BIC"
-          обязательно и должно быть числом от 0 до 999999999</span>
+        <div class="input-group">
+          <label class="required-field" for="BIC">БИК *</label>
+          <input v-model.trim="bicDirectoryEntry.bic" type="number" placeholder="BIC" name="BIC">
+          <span class="error" v-if="v$.bicDirectoryEntry.bic.$dirty && v$.bicDirectoryEntry.bic.$error">Требуется
+            9-значный БИК</span>
 
-        <LAbel class="required-field" for="nameParticipant">Наименование *</LAbel>
-        <input v-model.trim="bicDirectoryEntry.participantInfo.nameParticipant" type="text" placeholder="Наименование"
-          name="nameParticipant">
-        <span class="error" v-if="v$.bicDirectoryEntry.participantInfo.nameParticipant.$dirty
-          && v$.bicDirectoryEntry.participantInfo.nameParticipant.$error">Поле "Наименование" обязательно и не должно
-          превышать 140 символов</span>
+        </div>
 
+        <div class="input-group">
+          <LAbel class="required-field" for="nameParticipant">Наименование *</LAbel>
+          <input v-model.trim="bicDirectoryEntry.participantInfo.nameParticipant" type="text" placeholder="Наименование"
+            name="nameParticipant">
+          <span class="error" v-if="v$.bicDirectoryEntry.participantInfo.nameParticipant.$dirty
+            && v$.bicDirectoryEntry.participantInfo.nameParticipant.$error">Не более 140 символов</span>
+        </div>
 
-        <label for="registrationNumber">Регистрационный порядковый номер</label>
-        <input v-model.trim="bicDirectoryEntry.participantInfo.registrationNumber" type="text" placeholder="Рег.порядок"
-          name="registrationNumber">
-        <span class="error" v-if="v$.bicDirectoryEntry.participantInfo.registrationNumber.$dirty
-          && v$.bicDirectoryEntry.participantInfo.registrationNumber.$error">Поле "Регистрационный порядковый номер" не
-          должно превышать 9 символов</span>
+        <div class="input-group">
+          <label for="registrationNumber">Регистрационный поряд. номер</label>
+          <input v-model.trim="bicDirectoryEntry.participantInfo.registrationNumber" type="text" placeholder="Рег.порядок"
+            name="registrationNumber">
+          <span class="error" v-if="v$.bicDirectoryEntry.participantInfo.registrationNumber.$dirty
+            && v$.bicDirectoryEntry.participantInfo.registrationNumber.$error">Не более 9 символов</span>
+        </div>
 
+        <div class="input-group">
+          <label for="countryCode">Код страны</label>
+          <input v-model.trim="bicDirectoryEntry.participantInfo.countryCode" type="text" placeholder="Код страны"
+            name="countryCode">
+          <span class="error" v-if="v$.bicDirectoryEntry.participantInfo.countryCode.$dirty
+            && v$.bicDirectoryEntry.participantInfo.countryCode.$error">Не более 2 символов</span>
+        </div>
 
-        <label for="countryCode">Код страны</label>
-        <input v-model.trim="bicDirectoryEntry.participantInfo.countryCode" type="text" placeholder="Код страны"
-          name="countryCode">
-        <span class="error" v-if="v$.bicDirectoryEntry.participantInfo.countryCode.$dirty
-          && v$.bicDirectoryEntry.participantInfo.countryCode.$error">Поле "Код страны" не должно превышать 2
-          символа</span>
+        <div class="input-group">
+          <label for="regionCode">Код региона</label>
+          <input v-model.trim="bicDirectoryEntry.participantInfo.regionCode" type="text" placeholder="Код региона"
+            name="regionCode">
+          <span class="error" v-if="v$.bicDirectoryEntry.participantInfo.regionCode.$dirty
+            && v$.bicDirectoryEntry.participantInfo.regionCode.$error">Не более 2 символова</span>
+        </div>
 
+        <div class="input-group">
+          <label for="index">Индекс</label>
+          <input v-model.trim="bicDirectoryEntry.participantInfo.index" type="text" placeholder="Индекс" name="index">
+          <span class="error" v-if="v$.bicDirectoryEntry.participantInfo.index.$dirty
+            && v$.bicDirectoryEntry.participantInfo.index.$error">Не более 6 символов</span>
+        </div>
 
-        <label for="regionCode">Код региона</label>
-        <input v-model.trim="bicDirectoryEntry.participantInfo.regionCode" type="text" placeholder="Код региона"
-          name="regionCode">
-        <span class="error" v-if="v$.bicDirectoryEntry.participantInfo.regionCode.$dirty
-          && v$.bicDirectoryEntry.participantInfo.regionCode.$error">Поле "Код региона" не должно превышать 2
-          символа</span>
+        <div class="input-group">
+          <label for="typeLocation">Тип населенного пункта</label>
+          <input v-model.trim="bicDirectoryEntry.participantInfo.typeLocation" type="text"
+            placeholder="тип населенного пункта" name="typeLocation">
+          <span class="error" v-if="v$.bicDirectoryEntry.participantInfo.typeLocation.$dirty
+            && v$.bicDirectoryEntry.participantInfo.typeLocation.$error">Не более 6 символов</span>
+        </div>
 
+        <div class="input-group">
+          <label for="nameLocation">Населенный пункт</label>
+          <input v-model.trim="bicDirectoryEntry.participantInfo.nameLocation" type="text"
+            placeholder="Название населенного пункта" name="nameLocation">
+          <span class="error" v-if="v$.bicDirectoryEntry.participantInfo.nameLocation.$dirty
+            && v$.bicDirectoryEntry.participantInfo.nameLocation.$error">Не более 25 символов</span>
+        </div>
 
-        <label for="index">Индекс</label>
-        <input v-model.trim="bicDirectoryEntry.participantInfo.index" type="text" placeholder="Индекс" name="index">
-        <span class="error" v-if="v$.bicDirectoryEntry.participantInfo.index.$dirty
-          && v$.bicDirectoryEntry.participantInfo.index.$error">Поле "Индекс" не должно превышать 6 символов</span>
+        <div class="input-group">
+          <label for="address">Адрес</label>
+          <input v-model.trim="bicDirectoryEntry.participantInfo.address" type="text" placeholder="Адрес" name="address">
+          <span class="error" v-if="v$.bicDirectoryEntry.participantInfo.address.$dirty
+            && v$.bicDirectoryEntry.participantInfo.address.$error">Не более 160 символов</span>
+        </div>
 
+        <div class="input-group">
+          <label for="parentBIC">БИК головной организации</label>
+          <input v-model.trim="bicDirectoryEntry.participantInfo.parentBIC" type="number"
+            placeholder="БИК головной организации" name="parentBIC">
+          <span class="error" v-if="v$.bicDirectoryEntry.participantInfo.parentBIC.$dirty
+            && v$.bicDirectoryEntry.participantInfo.parentBIC.$error">Требуется 9-значный БИК</span>
+        </div>
 
-        <label for="typeLocation">Тип населенного пункта</label>
-        <input v-model.trim="bicDirectoryEntry.participantInfo.typeLocation" type="text"
-          placeholder="тип населенного пункта" name="typeLocation">
-        <span class="error" v-if="v$.bicDirectoryEntry.participantInfo.typeLocation.$dirty
-          && v$.bicDirectoryEntry.participantInfo.typeLocation.$error">Поле "Тип населенного пункта"не должно превышать 6
-          символов</span>
+        <div class="input-group">
+          <label class="required-field" for="dateIn">Дата включения *</label>
+          <input v-model.trim="bicDirectoryEntry.participantInfo.dateIn" type="date" name="dateIn">
+          <span class="error" v-if="v$.bicDirectoryEntry.participantInfo.dateIn.$dirty
+            && v$.bicDirectoryEntry.participantInfo.dateIn.$error">Требуется дата</span>
+        </div>
 
+        <div class="input-group">
+          <label for="dateOut">Дата исключения</label>
+          <input v-model.trim="bicDirectoryEntry.participantInfo.dateOut" type="date" name="dateOut">
+        </div>
 
-        <label for="nameLocation">Населенный пункт</label>
-        <input v-model.trim="bicDirectoryEntry.participantInfo.nameLocation" type="text"
-          placeholder="Название населенного пункта" name="nameLocation">
-        <span class="error" v-if="v$.bicDirectoryEntry.participantInfo.nameLocation.$dirty
-          && v$.bicDirectoryEntry.participantInfo.nameLocation.$error">Поле "Населенный пункт" не должно превышать 25
-          символов</span>
+        <div class="input-group">
+          <label class="required-field" for="participantType">Тип перевода участника *</label>
+          <select v-model="bicDirectoryEntry.participantInfo.participantType" name="participantType">
+            <option v-for="(type, index) in participantTypes" :value="type.code" :key="index">
+              {{ type.code }}
+            </option>
+          </select>
+          <span class="error" v-if="v$.bicDirectoryEntry.participantInfo.participantType.$dirty
+            && v$.bicDirectoryEntry.participantInfo.participantType.$error">Выберите тип</span>
+        </div>
 
+        <div class="input-group">
+          <label class="required-field" for="availableTransferService">Доступные серв. перевода *</label>
+          <select v-model="bicDirectoryEntry.participantInfo.availableTransferService" name="availableTransferService">
+            <option v-for="(type, index) in availableTransferServices" :value="type.code" :key="index">
+              {{ type.code }}
+            </option>
+          </select>
+          <span class="error" v-if="v$.bicDirectoryEntry.participantInfo.availableTransferService.$dirty
+            && v$.bicDirectoryEntry.participantInfo.availableTransferService.$error">Выберите сервис</span>
+        </div>
 
-        <label for="address">Адрес</label>
-        <input v-model.trim="bicDirectoryEntry.participantInfo.address" type="text" placeholder="Адрес" name="address">
-        <span class="error" v-if="v$.bicDirectoryEntry.participantInfo.address.$dirty
-          && v$.bicDirectoryEntry.participantInfo.address.$error">Поле "Адрес" не должно превышать 160 символов</span>
-
-
-        <label for="parentBIC">БИК головной организации</label>
-        <input v-model.trim="bicDirectoryEntry.participantInfo.parentBIC" type="number"
-          placeholder="БИК головной организации" name="parentBIC">
-        <span class="error" v-if="v$.bicDirectoryEntry.participantInfo.parentBIC.$dirty
-          && v$.bicDirectoryEntry.participantInfo.parentBIC.$error">Поле "БИК головной организации" должно быть числом от
-          0 до 999999999</span>
-
-
-        <label class="required-field" for="dateIn">Дата включения *</label>
-        <input v-model.trim="bicDirectoryEntry.participantInfo.dateIn" type="date" name="dateIn">
-        <span class="error" v-if="v$.bicDirectoryEntry.participantInfo.dateIn.$dirty
-          && v$.bicDirectoryEntry.participantInfo.dateIn.$error">Поле "Дата включения" обязательно</span>
-
-
-        <label for="dateOut">Дата исключения</label>
-        <input v-model.trim="bicDirectoryEntry.participantInfo.dateOut" type="date" name="dateOut">
-
-        <label class="required-field" for="participantType">Тип перевода участника *</label>
-        <select v-model="bicDirectoryEntry.participantInfo.participantType" name="participantType">
-          <option v-for="(type, index) in participantTypes" :value="type.code" :key="index">
-            {{ type.code }}
-          </option>
-        </select>
-        <span class="error" v-if="v$.bicDirectoryEntry.participantInfo.participantType.$dirty
-          && v$.bicDirectoryEntry.participantInfo.participantType.$error">Поле "Тип перевода
-          участника" обязательно</span>
-
-        <label class="required-field" for="availableTransferService">Доступные серв. перевода *</label>
-        <select v-model="bicDirectoryEntry.participantInfo.availableTransferService" name="availableTransferService">
-          <option v-for="(type, index) in availableTransferServices" :value="type.code" :key="index">
-            {{ type.code }}
-          </option>
-        </select>
-        <span class="error" v-if="v$.bicDirectoryEntry.participantInfo.availableTransferService.$dirty
-          && v$.bicDirectoryEntry.participantInfo.availableTransferService.$error">Поле "Доступные серв. перевода"
-          обязательно</span>
-
-        <label class="required-field" for="exchangeParticipant">Участник обмена *</label>
-        <input type="checkbox" :checked="bicDirectoryEntry.participantInfo.exchangeParticipant == 1"
-          @change="bicDirectoryEntry.participantInfo.exchangeParticipant = $event.target.checked ? 1 : 0"
-          name="exchangeParticipant">
-        <span class="error" v-if="v$.bicDirectoryEntry.participantInfo.exchangeParticipant.$dirty
-          && v$.bicDirectoryEntry.participantInfo.exchangeParticipant.$error">Поле "Участник обмена"
-          обязательно</span>
-
+        <div class="input-group">
+          <label class="required-field" for="exchangeParticipant">Участник обмена *</label>
+          <input type="checkbox" :checked="bicDirectoryEntry.participantInfo.exchangeParticipant == 1"
+            @change="bicDirectoryEntry.participantInfo.exchangeParticipant = $event.target.checked ? 1 : 0"
+            name="exchangeParticipant">
+          <span class="error" v-if="v$.bicDirectoryEntry.participantInfo.exchangeParticipant.$dirty
+            && v$.bicDirectoryEntry.participantInfo.exchangeParticipant.$error">Выберите статус</span>
+        </div>
         <div class="button-row">
-          <input type="submit" value="Submit" />
+          <button type="submit"> Submit</button>
           <button @click="closeModal">Close</button>
         </div>
 
@@ -129,9 +139,10 @@
 import axios from 'axios';
 import { required, maxLength, between } from '@vuelidate/validators';
 import { useVuelidate } from '@vuelidate/core';
+import { UNREF } from '@vue/compiler-core';
 export default {
 
-  props: ['visible', 'participantTypes', 'availableTransferServices', 'participantStatuses'],
+  props: ['visible', 'participantTypes', 'availableTransferServices', 'participantStatuses', 'editingItem'],
   setup() {
     return { v$: useVuelidate() }
   },
@@ -142,8 +153,43 @@ export default {
       } else {
         document.body.style.overflow = 'auto';
       }
+    },
+    editingItem: {
+    handler(newValue) {
+        if(newValue){
+          this.bicDirectoryEntry.bic = newValue.bic || '';
+          for(let key in this.bicDirectoryEntry.participantInfo){
+            if(newValue && newValue.hasOwnProperty(key)){
+              this.bicDirectoryEntry.participantInfo[key] = newValue[key];
+            }
+            else {
+            this.bicDirectoryEntry.participantInfo[key] = '';
+          }
+          }
+        }
+        else{
+          this.bicDirectoryEntry.bic = '';
+        this.bicDirectoryEntry.participantInfo = { // Инициализация полей по умолчанию
+          nameParticipant: '',
+          registrationNumber: '',
+          countryCode: '',
+          regionCode: '',
+          index: '',
+          typeLocation: '',
+          nameLocation: '',
+          address: '',
+          parentBIC: '',
+          dateIn: '',
+          dateOut: '',
+          participantType: '',
+          availableTransferService: '',
+          exchangeParticipant: 0,
+        }
     }
-  },
+    deep: true // глубокое отслеживание, чтобы обрабатывать изменения свойств объекта
+  }
+  }
+},
   data() {
     return {
       bicDirectoryEntry: {
@@ -194,6 +240,28 @@ export default {
 
   methods: {
     closeModal() {
+      // Сброс полей формы
+      this.bicDirectoryEntry = {
+        bic: '',
+        participantInfo: {
+          nameParticipant: '',
+          registrationNumber: '',
+          countryCode: '',
+          regionCode: '',
+          index: '',
+          typeLocation: '',
+          nameLocation: '',
+          address: '',
+          parentBIC: '',
+          dateIn: '',
+          dateOut: '',
+          participantType: '',
+          availableTransferService: '',
+          exchangeParticipant: 0,
+        }
+      }
+      this.v$.bicDirectoryEntry.$reset();
+
       this.$emit('close');
     },
     async submitForm() {
@@ -203,20 +271,26 @@ export default {
         return;
       }
       try {
-        const response = await axios.post('http://localhost:8080/api/save', this.bicDirectoryEntry);
+        if (this.editingItem) {
+      response = await axios.put(`http://localhost:8080/api/update/${this.editingItem.bic}`, this.bicDirectoryEntry);
+    } else {
+      response = await axios.post('http://localhost:8080/api/save', this.bicDirectoryEntry);
+    }
+    console.log("xui")
         if (response.status === 200) {
           // Если запрос успешный, закройте модальное окно и очистите форму
           this.inputData = { name: '', age: '' };
-
         } else {
           console.error('Error:', response);
         }
       }
       catch (error) {
-        console.log(error)
-        return;
+      console.log(error)
+       
       }
+
       this.closeModal();
+      location.reload();
     },
 
   },
@@ -244,7 +318,7 @@ export default {
   box-sizing: border-box;
   padding: 48px;
   width: 561px;
-  height: 599px;
+  height: 691px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -295,4 +369,10 @@ export default {
 .error {
   color: red;
   font-size: 0.8rem;
-}</style>
+}
+
+.input-group {
+  height: 60px;
+  margin-left: 4px;
+}
+</style>

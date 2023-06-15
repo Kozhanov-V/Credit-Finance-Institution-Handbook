@@ -45,9 +45,8 @@ public class BICDirectoryEntry{
     public BICDirectoryEntry() {
     }
 
-    @Id
+@Id
     @Column(name = "bic")
-    @Min(100000000)
     @Max(999999999)
     @NotNull
     private int BIC;

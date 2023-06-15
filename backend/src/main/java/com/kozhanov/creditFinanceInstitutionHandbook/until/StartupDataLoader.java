@@ -206,7 +206,7 @@ public class StartupDataLoader implements
         accounts.setAccount("40116810100000010010");
         accounts.setRegulationAccountType(regulationAccountTypeRepository.findByCode("TRSA").get());
         accounts.setControlKey("99");
-        accounts.setAccountCBRBIC("041280002");
+        accounts.setAccountCBRBIC(41280002);
         accounts.setAccountStatus(accountStatusRepository.findByCode("ACAC").get());
 
         accountsRepository.save(accounts);

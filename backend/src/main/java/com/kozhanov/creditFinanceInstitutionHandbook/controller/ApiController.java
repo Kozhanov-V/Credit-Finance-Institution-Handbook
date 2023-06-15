@@ -1,20 +1,16 @@
 package com.kozhanov.creditFinanceInstitutionHandbook.controller;
 
-import com.kozhanov.creditFinanceInstitutionHandbook.model.codeValue.AvailableTransferService;
-import com.kozhanov.creditFinanceInstitutionHandbook.model.codeValue.ExchangeParticipant;
 import com.kozhanov.creditFinanceInstitutionHandbook.model.xml.BICDirectoryEntry;
-import com.kozhanov.creditFinanceInstitutionHandbook.model.xml.ElectronicDocuments;
 import com.kozhanov.creditFinanceInstitutionHandbook.model.xml.ParticipantInfo;
 import com.kozhanov.creditFinanceInstitutionHandbook.repository.codeValue.*;
-import com.kozhanov.creditFinanceInstitutionHandbook.repository.xml.BICDirectoryEntryRepository;
-import com.kozhanov.creditFinanceInstitutionHandbook.repository.xml.ParticipantInfoRepository;
-import com.kozhanov.creditFinanceInstitutionHandbook.service.ElectronicDocumentsService;
+import com.kozhanov.creditFinanceInstitutionHandbook.service.BICDirectoryEntryService;
+import com.kozhanov.creditFinanceInstitutionHandbook.service.ElectronicDocumentsServiceImpl;
+import com.kozhanov.creditFinanceInstitutionHandbook.service.ParticipantInfoService;
 import com.kozhanov.creditFinanceInstitutionHandbook.until.FilterParameters;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
-import springfox.documentation.spring.web.json.Json;
 
 import java.util.*;
 
@@ -22,12 +18,10 @@ import java.util.*;
 @RequestMapping("/api")
 public class ApiController {
 
-    @Autowired
-    private BICDirectoryEntryRepository bicDirectoryEntryRepository;
+
 
     @Autowired
     private ParticipantTypeRepository participantTypeRepository;
-
 
     @Autowired
     private ParticipantStatusRepository participantStatusRepository;
@@ -36,15 +30,19 @@ public class ApiController {
     private AvailableTransferServiceRepository availableTransferServiceRepository;
 
     @Autowired
-    private ElectronicDocumentsService electronicDocumentsService;
+    private ElectronicDocumentsServiceImpl electronicDocumentsService;
 
-    @Autowired
-    private ParticipantInfoRepository participantInfoRepository;
+   @Autowired
+   private BICDirectoryEntryService bicDirectoryEntryService;
+
+   @Autowired
+   private ParticipantInfoService participantInfoService;
+
 
     @GetMapping("/data")
     public ResponseEntity<?> getAllData() {
         Map<String,Object> response = new HashMap<>();
-        response.put("bicDirectoryEntries",bicDirectoryEntryRepository.findAll());
+        response.put("bicDirectoryEntries",bicDirectoryEntryService.findAll());
         response.put("participantTypes",participantTypeRepository.findAll());
         response.put("availableTransferServices",availableTransferServiceRepository.findAll());
         response.put("participantStatuses",participantStatusRepository.findAll());
@@ -61,9 +59,15 @@ public class ApiController {
     public ResponseEntity<?> save(@RequestBody BICDirectoryEntry bicDirectoryEntry){
         bicDirectoryEntry.setElectronicDocuments(electronicDocumentsService.getLatestElectronicDocuments());
         ParticipantInfo participantInfo = bicDirectoryEntry.getParticipantInfo();
-        participantInfoRepository.save(participantInfo);
-        bicDirectoryEntryRepository.save(bicDirectoryEntry);
-        return new ResponseEntity<>("в", HttpStatus.OK);
+        participantInfoService.save(participantInfo);
+        bicDirectoryEntryService.save(bicDirectoryEntry);
+        return new ResponseEntity<>("All is good", HttpStatus.OK);
+    }
+    @PutMapping("/update/{bic}")
+    public ResponseEntity<?> updateBicDirectoryEntry(@PathVariable int bic, @RequestBody BICDirectoryEntry bicDirectoryEntry) {
+     bicDirectoryEntryService.update(bic, bicDirectoryEntry);
+        System.out.println("goog gooog");
+        return new ResponseEntity<>("All is good", HttpStatus.OK);
     }
 
 

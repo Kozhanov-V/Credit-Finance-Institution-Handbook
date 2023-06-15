@@ -47,8 +47,10 @@
       <button id="add-item" class="short-button" @click="openSaveModal">Добавить</button>
 
       <SaveModalForm :visible="isSaveModalVisible" @close="isSaveModalVisible = false"
-        :available-transfer-services="availableTransferServices" :participant-types="participantTypes"
-        :participant-statuses="participantStatuses" />
+        :available-transfer-services="availableTransferServices" 
+        :participant-types="participantTypes"
+        :participant-statuses="participantStatuses" 
+        :editing-item="selectedItem"/>
 
     </div>
     <div class="output-info">
@@ -93,7 +95,21 @@
           <td>{{ item.exchangeParticipant }}</td>
           <td>{{ item.UID }}</td>
           <td>{{ item.participantStatus }}</td>
-          <td><button><img src="/more_horiz.png" /></button></td>
+          <td>
+            <button @click="openPopover(item)">
+              <img src="/more_horiz.png" />
+            </button>
+
+            <popover v-if="selectedItem && selectedItem.bic === item.bic" @close="closePopover">
+              <div class="popover">
+                <button @click="openSaveModal()">Обновить</button>
+                <button @click="deleteItem(selectedItem)">Удалить</button>
+                <button @click="openAccounts(selectedItem)">Открыть счета</button>
+                <button @click="closePopover">Отменить</button>
+              </div>
+
+            </popover>
+          </td>
         </tr>
 
       </table>
@@ -132,6 +148,7 @@ export default {
 
       },
       tableData: [],
+      selectedItem: null,
       isSaveModalVisible: false
     };
   },
@@ -143,6 +160,14 @@ export default {
     }
   },
   methods: {
+
+    openPopover(item) {
+      console.log(item)
+      this.selectedItem = item;
+    },
+    closePopover() {
+      this.selectedItem = null;
+    },
 
     openSaveModal() {
       this.isSaveModalVisible = true;
@@ -214,3 +239,33 @@ export default {
   }
 };
 </script>
+<style>
+.popover {
+  position: absolute;
+  width: 96px;
+  height: 116px;
+  padding: 0px 0px;
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.15);
+  background-color: #E6E6E9;
+  z-index: 1;
+  display: grid;
+  grid-template-rows: repeat(4, 1fr);
+  gap: 4px;
+  top: 0px;
+}
+
+.popover button {
+  /* Здесь вы можете применить стили для ваших кнопок */
+  width: 100%;
+  height: 100%;
+  border: none;
+  cursor: pointer;
+  background: #E6E6E9;
+  text-align: center;
+  transition: 0.2s;
+}
+.popover button:hover{
+  background: #D4D4D8;
+}
+
+</style>

@@ -14,9 +14,11 @@ import java.util.Date;
 @Table(name = "accounts")
 public class Accounts {
 
-    @Id
+
+
     @Column(name = "account")
     @Size(min = 20, max = 20)
+    @Id
     private String account;
 
     @ManyToOne
@@ -28,9 +30,8 @@ public class Accounts {
     private String controlKey;
 
     @Column(name = "account_cbr_bic")
-    @Min(100000000)
     @Max(999999999)
-    private String accountCBRBIC;
+    private int accountCBRBIC;
 
     @Column(name = "date_in")
     @Temporal(TemporalType.DATE)
@@ -51,13 +52,13 @@ public class Accounts {
     public Accounts() {
     }
 
-    public Accounts(String account, RegulationAccountType regulationAccountType, String controlKey, String accountCBRBIC, Date dateIn, AccountStatus accountStatus) {
+    public Accounts(String account, RegulationAccountType regulationAccountType, String controlKey, int accountCBRBIC, Date dateIn, AccountStatus accountStatus) {
         this.account = account;
         this.regulationAccountType = regulationAccountType;
         this.controlKey = controlKey;
-        this.accountCBRBIC = accountCBRBIC;
         this.dateIn = dateIn;
         this.accountStatus = accountStatus;
+        this.accountCBRBIC=accountCBRBIC;
     }
 
     public String getAccount() {
@@ -84,11 +85,13 @@ public class Accounts {
         this.controlKey = controlKey;
     }
 
-    public String getAccountCBRBIC() {
+
+
+    public int getAccountCBRBIC() {
         return accountCBRBIC;
     }
 
-    public void setAccountCBRBIC(String accountCBRBIC) {
+    public void setAccountCBRBIC(int accountCBRBIC) {
         this.accountCBRBIC = accountCBRBIC;
     }
 
