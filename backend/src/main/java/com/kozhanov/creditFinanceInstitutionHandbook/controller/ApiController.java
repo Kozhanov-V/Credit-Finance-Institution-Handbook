@@ -51,8 +51,11 @@ public class ApiController {
 
     @PostMapping("/filter")
     public ResponseEntity<?> filter(@RequestBody FilterParameters filterParameters) {
-        System.out.println(filterParameters);
-        return new ResponseEntity<>("Все четка filter", HttpStatus.OK);
+        List<BICDirectoryEntry> bicDirectoryEntries = bicDirectoryEntryService.filter(filterParameters.getBic(),filterParameters.getNameRecord(),filterParameters.getTypeTransfer(), filterParameters.getValidFrom(), filterParameters.getValidUntil());
+        for (BICDirectoryEntry item: bicDirectoryEntries) {
+            System.out.println(item);
+        }
+        return new ResponseEntity<>(bicDirectoryEntries, HttpStatus.OK);
     }
 
     @PostMapping("/save")
@@ -66,7 +69,6 @@ public class ApiController {
     @PutMapping("/update/{bic}")
     public ResponseEntity<?> updateBicDirectoryEntry(@PathVariable int bic, @RequestBody BICDirectoryEntry bicDirectoryEntry) {
      bicDirectoryEntryService.update(bic, bicDirectoryEntry);
-        System.out.println("goog gooog");
         return new ResponseEntity<>("All is good", HttpStatus.OK);
     }
 

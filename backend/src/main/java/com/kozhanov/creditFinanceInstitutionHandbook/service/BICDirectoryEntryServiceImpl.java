@@ -7,6 +7,7 @@ import com.kozhanov.creditFinanceInstitutionHandbook.repository.xml.ParticipantI
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -41,13 +42,18 @@ public class BICDirectoryEntryServiceImpl implements BICDirectoryEntryService{
         BICDirectoryEntry existingEntry = bicDirectoryEntryRepository.findByBIC(bic)
                 .orElseThrow(() -> new RuntimeException("No entry found with id: " + bic));
 
-        // Обновить поля существующей записи данными из newEntryData
+
         bicDirectoryEntryRepository.delete(existingEntry);
         bicDirectoryEntry.setChangeType(changeTypeRepository.findByCode("CHGD").get());
 
-        // Сохранить обновленную запись
         participantInfoService.save(bicDirectoryEntry.getParticipantInfo());
         bicDirectoryEntry.setElectronicDocuments(existingEntry.getElectronicDocuments());
         bicDirectoryEntryRepository.save(bicDirectoryEntry);
+    }
+
+    @Override
+    public List<BICDirectoryEntry> filter(Integer bic, String nameRecord, Integer typeTransfer, Date validFrom, Date validUntil) {
+        System.out.println(bic + " " + nameRecord + " " + typeTransfer + " " + validFrom + " " + validUntil);
+        return bicDirectoryEntryRepository.filter(bic, nameRecord, typeTransfer, validFrom, validUntil);
     }
 }

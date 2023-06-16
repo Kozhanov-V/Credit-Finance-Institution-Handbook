@@ -1,22 +1,30 @@
 package com.kozhanov.creditFinanceInstitutionHandbook.until;
 
 import java.time.LocalDate;
+import java.util.Date;
 
 public class FilterParameters {
 
     private String orderBy;
-    private String bic;
+    private Integer bic;
     private String nameRecord;
-    private String typeTransfer;
-    private LocalDate validFrom;
-    private LocalDate validUntil;
+    private Integer typeTransfer;
+    private Date validFrom;
+    private Date validUntil;
 
 
     public FilterParameters() {
     }
 
-    public FilterParameters(String orderBy, String bic, String nameRecord, String typeTransfer, LocalDate validFrom, LocalDate validUntil) {
+    public int getBic() {
+        return bic;
+    }
 
+    public void setBic(int bic) {
+        this.bic = bic;
+    }
+
+    public FilterParameters(String orderBy, Integer bic, String nameRecord, Integer typeTransfer, Date validFrom, Date validUntil) {
         this.orderBy = orderBy;
         this.bic = bic;
         this.nameRecord = nameRecord;
@@ -24,7 +32,6 @@ public class FilterParameters {
         this.validFrom = validFrom;
         this.validUntil = validUntil;
     }
-
 
     public String getOrderBy() {
         return orderBy;
@@ -34,13 +41,6 @@ public class FilterParameters {
         this.orderBy = orderBy;
     }
 
-    public String getBic() {
-        return bic;
-    }
-
-    public void setBic(String bic) {
-        this.bic = bic;
-    }
 
     public String getNameRecord() {
         return nameRecord;
@@ -50,27 +50,31 @@ public class FilterParameters {
         this.nameRecord = nameRecord;
     }
 
-    public String getTypeTransfer() {
+    public void setBic(Integer bic) {
+        this.bic = bic;
+    }
+
+    public Integer getTypeTransfer() {
         return typeTransfer;
     }
 
-    public void setTypeTransfer(String typeTransfer) {
+    public void setTypeTransfer(Integer typeTransfer) {
         this.typeTransfer = typeTransfer;
     }
 
-    public LocalDate getValidFrom() {
+    public Date getValidFrom() {
         return validFrom;
     }
 
-    public void setValidFrom(LocalDate validFrom) {
+    public void setValidFrom(Date validFrom) {
         this.validFrom = validFrom;
     }
 
-    public LocalDate getValidUntil() {
+    public Date getValidUntil() {
         return validUntil;
     }
 
-    public void setValidUntil(LocalDate validUntil) {
+    public void setValidUntil(Date validUntil) {
         this.validUntil = validUntil;
     }
 

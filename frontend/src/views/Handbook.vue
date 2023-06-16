@@ -43,7 +43,7 @@
 
 
       </div>
-      <button id="update-table" class="short-button">Обновить</button>
+      <button id="update-table" class="short-button" @click="reload">Обновить</button>
       <button id="add-item" class="short-button" @click="openSaveModal">Добавить</button>
 
       <SaveModalForm :visible="isSaveModalVisible" @close="isSaveModalVisible = false"
@@ -160,6 +160,32 @@ export default {
     }
   },
   methods: {
+    reload(){
+      location.reload();
+    },
+    fillTable(bicDirectoryEntries){
+      this.tableData = bicDirectoryEntries.map(item=>({
+        idES: item.electronicDocuments.number,
+          bic: item.bic,
+          nameParticipant: item.participantInfo.nameParticipant,
+          registrationNumber: item.participantInfo.registrationNumber,
+          countryCode: item.participantInfo.countryCode,
+          regionCode: item.participantInfo.regionCode,
+          index: item.participantInfo.index,
+          typeLocation: item.participantInfo.typeLocation,
+          nameLocation: item.participantInfo.nameLocation,
+          address: item.participantInfo.address,
+          parentBIC: item.participantInfo.parentBIC,
+          dateIn: item.participantInfo.dateIn,
+          dateOut: item.participantInfo.dateOut,
+          participantType: item.participantInfo.participantType?.code,
+          availableTransferService: item.participantInfo.availableTransferService?.code,
+          exchangeParticipant: item.participantInfo.exchangeParticipant?.code,
+          UID: item.participantInfo.UID,
+          participantStatus: item.participantInfo.participantStatus?.code,
+        }))
+    },
+
 
     openPopover(item) {
       console.log(item)
@@ -182,11 +208,11 @@ export default {
     },
     async submitForm() {
       try {
-        const response = await axios.post('http://localhost:8080/api/filter', {
-          formFilter,
-        });
-        // обрабатывайте ответ сервера
-        console.log(response.data);
+        const response = await axios.post('http://localhost:8080/api/filter', this.formFilter);
+        this.bicDirectoryEntries = response.data;
+        console.log(this.bicDirectoryEntries);
+       this.fillTable(this.bicDirectoryEntries);
+       
       } catch (error) {
         console.error(error);
       }
@@ -204,37 +230,14 @@ export default {
 
 
         this.typeTransfers = this.participantTypes;
-        this.tableData = this.bicDirectoryEntries.map(item => ({
+        this.fillTable(this.bicDirectoryEntries);
 
-          // Убедитесь, что поля здесь соответствуют полям, которые вы хотите отобразить в таблице
-
-          idES: item.electronicDocuments.number,
-          bic: item.bic,
-          nameParticipant: item.participantInfo.nameParticipant,
-          registrationNumber: item.participantInfo.registrationNumber,
-          countryCode: item.participantInfo.countryCode,
-          regionCode: item.participantInfo.regionCode,
-          index: item.participantInfo.index,
-          typeLocation: item.participantInfo.typeLocation,
-          nameLocation: item.participantInfo.nameLocation,
-          address: item.participantInfo.address,
-          parentBIC: item.participantInfo.parentBIC,
-          dateIn: item.participantInfo.dateIn,
-          dateOut: item.participantInfo.dateOut,
-          participantType: item.participantInfo.participantType?.code,
-          availableTransferService: item.participantInfo.availableTransferService?.code,
-          exchangeParticipant: item.participantInfo.exchangeParticipant?.code,
-          UID: item.participantInfo.UID,
-          participantStatus: item.participantInfo.participantStatus?.code,
-          // и так далее для каждого поля, которое вам нужно
-        }));
       } catch (error) {
         console.error(error);
       }
     }
   },
   created() {
-    // Получаем данные при загрузке страницы
     this.fetchData();
   }
 };

@@ -12,8 +12,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "bic_directory_entry")
-public class BICDirectoryEntry{
-
+public class BICDirectoryEntry {
 
 
     public BICDirectoryEntry(int BIC, ChangeType changeType, ElectronicDocuments electronicDocuments, List<Accounts> accounts, ParticipantInfo participantInfo) {
@@ -45,7 +44,7 @@ public class BICDirectoryEntry{
     public BICDirectoryEntry() {
     }
 
-@Id
+    @Id
     @Column(name = "bic")
     @Max(999999999)
     @NotNull

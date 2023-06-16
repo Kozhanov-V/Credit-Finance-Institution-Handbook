@@ -24,6 +24,14 @@ label {
   font-size: 14px;
 }
 
+button{
+  transition: 0.2s;
+}
+button:hover{
+  background: #666;
+  color: white;
+}
+
 .container {
   position: relative;
   top: -21px;

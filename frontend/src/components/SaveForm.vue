@@ -186,7 +186,6 @@ export default {
           exchangeParticipant: 0,
         }
     }
-    deep: true // глубокое отслеживание, чтобы обрабатывать изменения свойств объекта
   }
   }
 },
@@ -276,7 +275,6 @@ export default {
     } else {
       response = await axios.post('http://localhost:8080/api/save', this.bicDirectoryEntry);
     }
-    console.log("xui")
         if (response.status === 200) {
           // Если запрос успешный, закройте модальное окно и очистите форму
           this.inputData = { name: '', age: '' };
