@@ -34,7 +34,7 @@
           </select>
         </div>
 
-        <div class="block">
+        <div class="block" style="width: 98px; margin-top: 4px; margin-right: 16px;">
           <button id="clear-form" class="short-button" @click="resetForm">Сбросить</button>
           <button type="button" class="short-button" @click="submitForm">Найти</button>
         </div>
@@ -43,16 +43,15 @@
 
 
       </div>
+      
       <button id="update-table" class="short-button" @click="reload">Обновить</button>
       <button id="add-item" class="short-button" @click="openSaveModal">Добавить</button>
-
-      <SaveModalForm :visible="isSaveModalVisible" @close="isSaveModalVisible = false"
-        :available-transfer-services="availableTransferServices" 
-        :participant-types="participantTypes"
-        :participant-statuses="participantStatuses" 
-        :editing-item="selectedItem"/>
-
     </div>
+      <SaveModalForm :visible="isSaveModalVisible" @close="isSaveModalVisible = false"
+        :available-transfer-services="availableTransferServices" :participant-types="participantTypes"
+        :participant-statuses="participantStatuses" :editing-item="selectedItem" />
+
+    
     <div class="output-info">
       <table>
         <tr>
@@ -99,13 +98,13 @@
             <button @click="openPopover(item)">
               <img src="/more_horiz.png" />
             </button>
-
+              
             <popover v-if="selectedItem && selectedItem.bic === item.bic" @close="closePopover">
               <div class="popover">
                 <button @click="openSaveModal()">Обновить</button>
-                <button @click="deleteItem(selectedItem)">Удалить</button>
+                <button @click="deleteItem()">Удалить</button>
                 <button @click="openAccounts(selectedItem)">Открыть счета</button>
-                <button @click="closePopover">Отменить</button>
+                <button @click="closePopover()">Отменить</button>
               </div>
 
             </popover>
@@ -160,35 +159,38 @@ export default {
     }
   },
   methods: {
-    reload(){
+    reload() {
       location.reload();
     },
-    fillTable(bicDirectoryEntries){
-      this.tableData = bicDirectoryEntries.map(item=>({
+    fillTable(bicDirectoryEntries) {
+      this.tableData = bicDirectoryEntries.map(item => ({
         idES: item.electronicDocuments.number,
-          bic: item.bic,
-          nameParticipant: item.participantInfo.nameParticipant,
-          registrationNumber: item.participantInfo.registrationNumber,
-          countryCode: item.participantInfo.countryCode,
-          regionCode: item.participantInfo.regionCode,
-          index: item.participantInfo.index,
-          typeLocation: item.participantInfo.typeLocation,
-          nameLocation: item.participantInfo.nameLocation,
-          address: item.participantInfo.address,
-          parentBIC: item.participantInfo.parentBIC,
-          dateIn: item.participantInfo.dateIn,
-          dateOut: item.participantInfo.dateOut,
-          participantType: item.participantInfo.participantType?.code,
-          availableTransferService: item.participantInfo.availableTransferService?.code,
-          exchangeParticipant: item.participantInfo.exchangeParticipant?.code,
-          UID: item.participantInfo.UID,
-          participantStatus: item.participantInfo.participantStatus?.code,
-        }))
+        bic: item.bic,
+        nameParticipant: item.participantInfo.nameParticipant,
+        registrationNumber: item.participantInfo.registrationNumber,
+        countryCode: item.participantInfo.countryCode,
+        regionCode: item.participantInfo.regionCode,
+        index: item.participantInfo.index,
+        typeLocation: item.participantInfo.typeLocation,
+        nameLocation: item.participantInfo.nameLocation,
+        address: item.participantInfo.address,
+        parentBIC: item.participantInfo.parentBIC,
+        dateIn: item.participantInfo.dateIn,
+        dateOut: item.participantInfo.dateOut,
+        participantType: item.participantInfo.participantType?.code,
+        availableTransferService: item.participantInfo.availableTransferService?.code,
+        exchangeParticipant: item.participantInfo.exchangeParticipant?.code,
+        UID: item.participantInfo.UID,
+        participantStatus: item.participantInfo.participantStatus?.code,
+      }))
     },
 
-
+    async deleteItem() {
+      console.log(this.selectedItem.bic)
+      const response = await axios.delete(`http://localhost:8080/api/delete/${this.selectedItem.bic}`)
+      location.reload();
+    },
     openPopover(item) {
-      console.log(item)
       this.selectedItem = item;
     },
     closePopover() {
@@ -197,6 +199,7 @@ export default {
 
     openSaveModal() {
       this.isSaveModalVisible = true;
+      this.closePopover();
     },
 
     resetForm() {
@@ -211,8 +214,8 @@ export default {
         const response = await axios.post('http://localhost:8080/api/filter', this.formFilter);
         this.bicDirectoryEntries = response.data;
         console.log(this.bicDirectoryEntries);
-       this.fillTable(this.bicDirectoryEntries);
-       
+        this.fillTable(this.bicDirectoryEntries);
+
       } catch (error) {
         console.error(error);
       }
@@ -267,8 +270,8 @@ export default {
   text-align: center;
   transition: 0.2s;
 }
-.popover button:hover{
+
+.popover button:hover {
   background: #D4D4D8;
 }
-
 </style>

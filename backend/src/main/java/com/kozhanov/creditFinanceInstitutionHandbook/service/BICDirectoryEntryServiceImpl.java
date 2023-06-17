@@ -28,6 +28,11 @@ public class BICDirectoryEntryServiceImpl implements BICDirectoryEntryService{
     }
 
     @Override
+    public void delete(int bic) {
+        bicDirectoryEntryRepository.deleteById(bic);
+    }
+
+    @Override
     public List<BICDirectoryEntry> findAll() {
         return bicDirectoryEntryRepository.findAll();
     }

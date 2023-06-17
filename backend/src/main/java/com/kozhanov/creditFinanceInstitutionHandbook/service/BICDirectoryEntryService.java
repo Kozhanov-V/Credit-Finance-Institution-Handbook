@@ -7,6 +7,7 @@ import java.util.List;
 
 public interface BICDirectoryEntryService {
     public void save(BICDirectoryEntry bicDirectoryEntry);
+    public void delete(int bic);
     public List<BICDirectoryEntry> findAll();
     public BICDirectoryEntry findByBic(int bic);
     public void update(int bic, BICDirectoryEntry bicDirectoryEntry);

@@ -38,6 +38,7 @@ button:hover{
   left: 70px;
   width: 1780px;
   min-height: 900px;
+  padding: 0px 4px;
   background: white;
 }
 
