@@ -43,15 +43,15 @@
 
 
       </div>
-      
+
       <button id="update-table" class="short-button" @click="reload">Обновить</button>
       <button id="add-item" class="short-button" @click="openSaveModal">Добавить</button>
     </div>
-      <SaveModalForm :visible="isSaveModalVisible" @close="isSaveModalVisible = false"
-        :available-transfer-services="availableTransferServices" :participant-types="participantTypes"
-        :participant-statuses="participantStatuses" :editing-item="selectedItem" />
+    <SaveModalForm :visible="isSaveModalVisible" @close="isSaveModalVisible = false"
+      :available-transfer-services="availableTransferServices" :participant-types="participantTypes"
+      :participant-statuses="participantStatuses" :editing-item="selectedItem" />
 
-    
+
     <div class="output-info">
       <table>
         <tr>
@@ -98,7 +98,7 @@
             <button @click="openPopover(item)">
               <img src="/more_horiz.png" />
             </button>
-              
+
             <popover v-if="selectedItem && selectedItem.bic === item.bic" @close="closePopover">
               <div class="popover">
                 <button @click="openSaveModal()">Обновить</button>
@@ -187,7 +187,11 @@ export default {
 
     async deleteItem() {
       console.log(this.selectedItem.bic)
-      const response = await axios.delete(`http://localhost:8080/api/delete/${this.selectedItem.bic}`)
+      const response = await axios.delete(`http://localhost:8080/api/delete/${this.selectedItem.bic}`, {
+        headers: {
+          'Authorization': 'Bearer ' + localStorage.getItem('token')
+        }
+      })
       location.reload();
     },
     openPopover(item) {
@@ -211,7 +215,11 @@ export default {
     },
     async submitForm() {
       try {
-        const response = await axios.post('http://localhost:8080/api/filter', this.formFilter);
+        const response = await axios.post('http://localhost:8080/api/filter', this.formFilter, {
+          headers: {
+            'Authorization': 'Bearer ' + localStorage.getItem('token')
+          }
+        });
         this.bicDirectoryEntries = response.data;
         console.log(this.bicDirectoryEntries);
         this.fillTable(this.bicDirectoryEntries);
@@ -224,7 +232,11 @@ export default {
     async fetchData() {
 
       try {
-        const response = await axios.get('http://localhost:8080/api/data');
+        const response = await axios.get('http://localhost:8080/api/data', {
+          headers: {
+            'Authorization': 'Bearer ' + localStorage.getItem('token')
+          }
+        });
 
         this.bicDirectoryEntries = response.data.bicDirectoryEntries;
         this.participantTypes = response.data.participantTypes;

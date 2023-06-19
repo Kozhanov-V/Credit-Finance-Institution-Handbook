@@ -24,10 +24,10 @@ label {
   font-size: 14px;
 }
 
-button{
+button {
   transition: 0.2s;
 }
-button:hover{
+button:hover {
   background: #666;
   color: white;
 }

@@ -1,10 +1,15 @@
 package com.kozhanov.creditFinanceInstitutionHandbook.until;
 
+import com.kozhanov.creditFinanceInstitutionHandbook.config.WebSecurityConfig;
+import com.kozhanov.creditFinanceInstitutionHandbook.model.auth.Role;
+import com.kozhanov.creditFinanceInstitutionHandbook.model.auth.User;
 import com.kozhanov.creditFinanceInstitutionHandbook.model.codeValue.*;
 import com.kozhanov.creditFinanceInstitutionHandbook.model.xml.Accounts;
 import com.kozhanov.creditFinanceInstitutionHandbook.model.xml.BICDirectoryEntry;
 import com.kozhanov.creditFinanceInstitutionHandbook.model.xml.ElectronicDocuments;
 import com.kozhanov.creditFinanceInstitutionHandbook.model.xml.ParticipantInfo;
+import com.kozhanov.creditFinanceInstitutionHandbook.repository.auth.RoleReposiroty;
+import com.kozhanov.creditFinanceInstitutionHandbook.repository.auth.UserRepository;
 import com.kozhanov.creditFinanceInstitutionHandbook.repository.codeValue.*;
 import com.kozhanov.creditFinanceInstitutionHandbook.repository.xml.AccountsRepository;
 import com.kozhanov.creditFinanceInstitutionHandbook.repository.xml.BICDirectoryEntryRepository;
@@ -13,6 +18,7 @@ import com.kozhanov.creditFinanceInstitutionHandbook.repository.xml.ParticipantI
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -69,6 +75,12 @@ public class StartupDataLoader implements
 
     @Autowired
     private ParticipantInfoRepository participantInfoRepository;
+
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private RoleReposiroty roleReposiroty;
 
 
     boolean alreadySetup = false;
@@ -240,6 +252,15 @@ public class StartupDataLoader implements
         bicDirectoryEntryRepository.save(bicDirectoryEntry);
 
         System.out.println("---------------------");
+        Role role = new Role("ROLE_USER");
+        User user = new User();
+        user.setUsername("admin");
+        user.setPassword(WebSecurityConfig.passwordEncoder().encode("admin"));
+        user.addRole(role);
+        roleReposiroty.save(role);
+        userRepository.save(user);
+
+
     }
 
 }

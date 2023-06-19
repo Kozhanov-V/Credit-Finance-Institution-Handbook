@@ -155,40 +155,40 @@ export default {
       }
     },
     editingItem: {
-    handler(newValue) {
-        if(newValue){
+      handler(newValue) {
+        if (newValue) {
           this.bicDirectoryEntry.bic = newValue.bic || '';
-          for(let key in this.bicDirectoryEntry.participantInfo){
-            if(newValue && newValue.hasOwnProperty(key)){
+          for (let key in this.bicDirectoryEntry.participantInfo) {
+            if (newValue && newValue.hasOwnProperty(key)) {
               this.bicDirectoryEntry.participantInfo[key] = newValue[key];
             }
             else {
-            this.bicDirectoryEntry.participantInfo[key] = '';
-          }
+              this.bicDirectoryEntry.participantInfo[key] = '';
+            }
           }
         }
-        else{
+        else {
           this.bicDirectoryEntry.bic = '';
-        this.bicDirectoryEntry.participantInfo = { // Инициализация полей по умолчанию
-          nameParticipant: '',
-          registrationNumber: '',
-          countryCode: '',
-          regionCode: '',
-          index: '',
-          typeLocation: '',
-          nameLocation: '',
-          address: '',
-          parentBIC: '',
-          dateIn: '',
-          dateOut: '',
-          participantType: '',
-          availableTransferService: '',
-          exchangeParticipant: 0,
+          this.bicDirectoryEntry.participantInfo = { // Инициализация полей по умолчанию
+            nameParticipant: '',
+            registrationNumber: '',
+            countryCode: '',
+            regionCode: '',
+            index: '',
+            typeLocation: '',
+            nameLocation: '',
+            address: '',
+            parentBIC: '',
+            dateIn: '',
+            dateOut: '',
+            participantType: '',
+            availableTransferService: '',
+            exchangeParticipant: 0,
+          }
         }
+      }
     }
-  }
-  }
-},
+  },
   data() {
     return {
       bicDirectoryEntry: {
@@ -271,10 +271,18 @@ export default {
       }
       try {
         if (this.editingItem) {
-      response = await axios.put(`http://localhost:8080/api/update/${this.editingItem.bic}`, this.bicDirectoryEntry);
-    } else {
-      response = await axios.post('http://localhost:8080/api/save', this.bicDirectoryEntry);
-    }
+          response = await axios.put(`http://localhost:8080/api/update/${this.editingItem.bic}`, this.bicDirectoryEntry, {
+            headers: {
+              'Authorization': 'Bearer ' + localStorage.getItem('token')
+            }
+          });
+        } else {
+          response = await axios.post('http://localhost:8080/api/save', this.bicDirectoryEntry, {
+            headers: {
+              'Authorization': 'Bearer ' + localStorage.getItem('token')
+            }
+          });
+        }
         if (response.status === 200) {
           // Если запрос успешный, закройте модальное окно и очистите форму
           this.inputData = { name: '', age: '' };
@@ -283,8 +291,8 @@ export default {
         }
       }
       catch (error) {
-      console.log(error)
-       
+        console.log(error)
+
       }
 
       this.closeModal();
@@ -372,5 +380,4 @@ export default {
 .input-group {
   height: 60px;
   margin-left: 4px;
-}
-</style>
+}</style>
