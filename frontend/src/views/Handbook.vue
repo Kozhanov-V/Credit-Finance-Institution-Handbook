@@ -49,7 +49,7 @@
     </div>
     <SaveModalForm :visible="isSaveModalVisible" @close="isSaveModalVisible = false"
       :available-transfer-services="availableTransferServices" :participant-types="participantTypes"
-      :participant-statuses="participantStatuses" :editing-item="selectedItem" />
+      :participant-statuses="participantStatuses" :editingItem="selectedItem" />
 
 
     <div class="output-info">
@@ -203,7 +203,7 @@ export default {
 
     openSaveModal() {
       this.isSaveModalVisible = true;
-      this.closePopover();
+      // this.closePopover();
     },
 
     resetForm() {

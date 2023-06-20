@@ -7,7 +7,7 @@
 
 
         <h2>USERNAME</h2>
-        <button>LOG OUT</button>
+        <router-link to="/logout"><span>LOG OUT</span></router-link>
     </header>
 </template>
 <script>

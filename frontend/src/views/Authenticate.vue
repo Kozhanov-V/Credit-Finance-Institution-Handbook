@@ -9,9 +9,7 @@
     </div>
 </template>
 <script>
-import axios from 'axios';
 export default {
-
     data() {
         return {
             username: '',
@@ -20,22 +18,18 @@ export default {
     },
     methods: {
         async submitForm() {
-            // отправить запрос на аутентификацию с помощью axios и сохранить полученный токен JWT.
-            await axios.post('http://localhost:8080/authenticate', {
-                username: this.username,
-                password: this.password,
-
-            })
-                .then(response => {
-                    // Сохраняем токен в localStorage
-                    console.log(response.data.token)
-                    localStorage.setItem('token', response.data.token);
-                    this.$store.commit('setToken', response.data.token);
-                    this.$router.push('/');
-                })
-                .catch(error => {
-                    console.log(error);
+            try {
+                // отправить запрос на аутентификацию с помощью axios и сохранить полученный токен JWT.
+                await this.$store.dispatch('login', {
+                    username: this.username,
+                    password: this.password
                 });
+                this.$router.push("/")
+            } catch (error) {
+                // Показать пользователю сообщение об ошибке
+                alert("Неверные учетные данные");
+                console.error(error);
+            }
 
         },
     }
