@@ -8,6 +8,10 @@ import Import from '@/views/Import.vue'
 import Authenticate from '@/views/Authenticate.vue'
 import NotFound from '@/views/NotFound.vue'
 import Logout from '@/views/Logout.vue'
+import Home from '@/views/Home.vue'
+
+
+
 import createPersistedState from 'vuex-persistedstate'
 const store = createStore({
     state: {
@@ -58,10 +62,11 @@ const router = createRouter({
     history: createWebHistory(),
     routes: [
       
-        {path: '/', name: 'Handbook', component: Handbook},
+        {path: '/', name: 'Home', component: Home},
         {path: '/import', name: 'Import', component: Import},
         {path: '/login', name: 'Authenticate', component: Authenticate},
         {path: '/logout', name: 'Logout', component: Logout},
+        {path: '/handbook', name: 'Handbook', component: Handbook},
         {path: '/:pathMatch(.*)*', name: 'NotFound', component: NotFound},
      
      

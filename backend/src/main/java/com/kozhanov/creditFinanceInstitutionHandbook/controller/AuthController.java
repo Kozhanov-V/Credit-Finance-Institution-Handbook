@@ -1,6 +1,5 @@
 package com.kozhanov.creditFinanceInstitutionHandbook.controller;
 
-import com.kozhanov.creditFinanceInstitutionHandbook.model.auth.User;
 import com.kozhanov.creditFinanceInstitutionHandbook.security.JwtRequest;
 import com.kozhanov.creditFinanceInstitutionHandbook.security.JwtResponse;
 import com.kozhanov.creditFinanceInstitutionHandbook.security.JwtTokenUtil;
@@ -40,4 +39,5 @@ public class AuthController {
         System.out.println(jwt);
         return ResponseEntity.ok(new JwtResponse(jwt));
     }
+
 }

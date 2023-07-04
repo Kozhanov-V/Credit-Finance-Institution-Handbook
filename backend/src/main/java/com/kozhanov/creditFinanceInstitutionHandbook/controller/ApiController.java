@@ -1,8 +1,10 @@
 package com.kozhanov.creditFinanceInstitutionHandbook.controller;
 
-import com.kozhanov.creditFinanceInstitutionHandbook.model.xml.BICDirectoryEntry;
-import com.kozhanov.creditFinanceInstitutionHandbook.model.xml.ParticipantInfo;
+import com.kozhanov.creditFinanceInstitutionHandbook.model.handbook.Accounts;
+import com.kozhanov.creditFinanceInstitutionHandbook.model.handbook.BICDirectoryEntry;
+import com.kozhanov.creditFinanceInstitutionHandbook.model.handbook.ParticipantInfo;
 import com.kozhanov.creditFinanceInstitutionHandbook.repository.codeValue.*;
+import com.kozhanov.creditFinanceInstitutionHandbook.service.AccountsService;
 import com.kozhanov.creditFinanceInstitutionHandbook.service.BICDirectoryEntryService;
 import com.kozhanov.creditFinanceInstitutionHandbook.service.ElectronicDocumentsServiceImpl;
 import com.kozhanov.creditFinanceInstitutionHandbook.service.ParticipantInfoService;
@@ -38,6 +40,8 @@ public class ApiController {
    @Autowired
    private ParticipantInfoService participantInfoService;
 
+   @Autowired
+   private AccountsService accountsService;
 
     @GetMapping("/data")
     public ResponseEntity<?> getAllData() {
@@ -49,22 +53,10 @@ public class ApiController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @GetMapping("/dat")
-    public ResponseEntity<?> getlDat() {
-        Map<String,Object> response = new HashMap<>();
-        response.put("bicDirectoryEntries",bicDirectoryEntryService.findAll());
-        response.put("participantTypes",participantTypeRepository.findAll());
-        response.put("availableTransferServices",availableTransferServiceRepository.findAll());
-        response.put("participantStatuses",participantStatusRepository.findAll());
-        return new ResponseEntity<>(response, HttpStatus.OK);
-    }
-
     @PostMapping("/filter")
     public ResponseEntity<?> filter(@RequestBody FilterParameters filterParameters) {
         List<BICDirectoryEntry> bicDirectoryEntries = bicDirectoryEntryService.filter(filterParameters.getBic(),filterParameters.getNameRecord(),filterParameters.getTypeTransfer(), filterParameters.getValidFrom(), filterParameters.getValidUntil());
-        for (BICDirectoryEntry item: bicDirectoryEntries) {
-            System.out.println(item);
-        }
+
         return new ResponseEntity<>(bicDirectoryEntries, HttpStatus.OK);
     }
 
@@ -79,20 +71,31 @@ public class ApiController {
 
     @DeleteMapping("/delete/{bic}")
     public ResponseEntity<?> deleteBicDirectoryEntry(@PathVariable int bic) {
-        System.out.println("hui");
         bicDirectoryEntryService.delete(bic);
-        return new ResponseEntity<>("All is good", HttpStatus.OK);
-    }
-    @DeleteMapping("/delete")
-    public ResponseEntity<?> delete() {
-        System.out.println("hui2222");
         return new ResponseEntity<>("All is good", HttpStatus.OK);
     }
 
     @PutMapping("/update/{bic}")
     public ResponseEntity<?> updateBicDirectoryEntry(@PathVariable int bic, @RequestBody BICDirectoryEntry bicDirectoryEntry) {
      bicDirectoryEntryService.update(bic, bicDirectoryEntry);
-        return new ResponseEntity<>("All is good", HttpStatus.OK);
+        return new ResponseEntity<>(bicDirectoryEntry, HttpStatus.OK);
+    }
+
+    @GetMapping("/accounts/{bic}")
+    public ResponseEntity<?> getAccounts(@PathVariable int bic){
+        List<Accounts> accountsList =accountsService.findByBic(bic);
+        return new ResponseEntity<>(accountsList,HttpStatus.OK);
+    }
+
+    @GetMapping("/findBy/bic/{bic}")
+    public ResponseEntity<?> getEntryByBic(@PathVariable int bic){
+        List<BICDirectoryEntry> bicDirectoryEntries = bicDirectoryEntryService.findByBicLike(bic);
+        return new ResponseEntity<>(bicDirectoryEntries,HttpStatus.OK);
+    }
+    @GetMapping("/findBy/name/{name}")
+    public ResponseEntity<?> getEntryByName(@PathVariable String name){
+        List<BICDirectoryEntry> bicDirectoryEntries = bicDirectoryEntryService.findByName(name);
+        return new ResponseEntity<>(bicDirectoryEntries,HttpStatus.OK);
     }
 
 

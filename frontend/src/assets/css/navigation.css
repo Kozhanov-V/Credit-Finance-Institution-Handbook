@@ -1,0 +1,60 @@
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+
+}
+
+nav{
+	position: fixed;
+	height: 100vh;
+	width: 7vw;
+	left: -2vw;
+	background-color: #5A77DF;
+	z-index: 999;
+	border-radius: 20px;
+	transition: 1s;
+}
+nav:hover{
+	
+}
+.logo{
+	position: absolute;
+	top: 6vh;
+	left: calc(50% - 0.4vw);
+	width: 3.2vw;
+	height: 3.2vw;
+	background-repeat: no-repeat;
+}
+.navigation-elements {
+	position: absolute;
+	top: 19vh;
+	left: 3.5vw;
+	height: 9vw;
+	width: 2vw;
+	display: block;
+}
+.element-item {
+	margin-top: calc(var(--index)*0.5 );
+	position: relative;
+	width: 2vw;
+	height: 2vw;
+	background: none;
+	border: none;
+	cursor: pointer;
+	background-repeat: no-repeat;
+}
+
+/* Код для полосы активного элемента */
+.active-indicator {
+	position: absolute;
+	height: 2vw; 
+	width: 7px;
+	background: white; 
+	left: calc(var(--index)*-0.5 );
+	top: calc(var(--top) * 1vw); 
+	transition: top 0.5s ease-in-out; 
+	border-radius: 5px;
+}
+
+

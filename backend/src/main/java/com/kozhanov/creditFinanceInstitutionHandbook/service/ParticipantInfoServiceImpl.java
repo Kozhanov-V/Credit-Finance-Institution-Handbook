@@ -1,9 +1,8 @@
 package com.kozhanov.creditFinanceInstitutionHandbook.service;
 
-import com.kozhanov.creditFinanceInstitutionHandbook.model.codeValue.ParticipantStatus;
-import com.kozhanov.creditFinanceInstitutionHandbook.model.xml.ParticipantInfo;
+import com.kozhanov.creditFinanceInstitutionHandbook.model.handbook.ParticipantInfo;
 import com.kozhanov.creditFinanceInstitutionHandbook.repository.codeValue.ParticipantStatusRepository;
-import com.kozhanov.creditFinanceInstitutionHandbook.repository.xml.ParticipantInfoRepository;
+import com.kozhanov.creditFinanceInstitutionHandbook.repository.handbook.ParticipantInfoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

@@ -1,23 +1,30 @@
 <template>
     <header>
-        <RouterLink class="import" to="/import"><span>ИМПОРТИРОВАТЬ ЭС</span></RouterLink>
-        <div class="logo">
-            <img src="/headerLogo.svg" width="680" height="90" />
+        <div class="logo" style="background-image: url(img/headerLogo.svg);">
+            
         </div>
-
-
-        <h2>USERNAME</h2>
-        <router-link to="/logout"><span>LOG OUT</span></router-link>
+        <h2 v-if="windowWidth > 600">USERNAME</h2>
     </header>
 </template>
 <script>
 export default {
-    methods: {
-        // Когда пользователь выходит из системы, вы можете удалить токен из localStorage.
-        logout() {
-            localStorage.removeItem('token');
-        }
-
-    }
-}
+  data() {
+    return {
+      windowWidth: 0,
+    };
+  },
+  mounted() {
+    this.getWindowWidth();
+    window.addEventListener('resize', this.getWindowWidth);
+  },
+  beforeDestroy() {
+    window.removeEventListener('resize', this.getWindowWidth);
+  },
+  methods: {
+    getWindowWidth(event) {
+      this.windowWidth = document.documentElement.clientWidth;
+    },
+  },
+};
 </script>
+<style scoped>@import '@/assets/css/header.css';</style>

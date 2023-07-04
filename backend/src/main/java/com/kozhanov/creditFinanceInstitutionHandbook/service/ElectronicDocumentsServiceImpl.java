@@ -1,7 +1,7 @@
 package com.kozhanov.creditFinanceInstitutionHandbook.service;
 
-import com.kozhanov.creditFinanceInstitutionHandbook.model.xml.ElectronicDocuments;
-import com.kozhanov.creditFinanceInstitutionHandbook.repository.xml.ElectronicDocumentsRepository;
+import com.kozhanov.creditFinanceInstitutionHandbook.model.handbook.ElectronicDocuments;
+import com.kozhanov.creditFinanceInstitutionHandbook.repository.handbook.ElectronicDocumentsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

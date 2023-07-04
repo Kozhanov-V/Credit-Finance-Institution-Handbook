@@ -1,6 +1,6 @@
 package com.kozhanov.creditFinanceInstitutionHandbook.security;
 
-import com.kozhanov.creditFinanceInstitutionHandbook.model.auth.User;
+import com.kozhanov.creditFinanceInstitutionHandbook.model.users.User;
 import com.kozhanov.creditFinanceInstitutionHandbook.repository.auth.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;

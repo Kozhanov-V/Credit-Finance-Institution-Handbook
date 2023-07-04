@@ -1,24 +1,23 @@
 package com.kozhanov.creditFinanceInstitutionHandbook.until;
 
 import com.kozhanov.creditFinanceInstitutionHandbook.config.WebSecurityConfig;
-import com.kozhanov.creditFinanceInstitutionHandbook.model.auth.Role;
-import com.kozhanov.creditFinanceInstitutionHandbook.model.auth.User;
+import com.kozhanov.creditFinanceInstitutionHandbook.model.users.Role;
+import com.kozhanov.creditFinanceInstitutionHandbook.model.users.User;
 import com.kozhanov.creditFinanceInstitutionHandbook.model.codeValue.*;
-import com.kozhanov.creditFinanceInstitutionHandbook.model.xml.Accounts;
-import com.kozhanov.creditFinanceInstitutionHandbook.model.xml.BICDirectoryEntry;
-import com.kozhanov.creditFinanceInstitutionHandbook.model.xml.ElectronicDocuments;
-import com.kozhanov.creditFinanceInstitutionHandbook.model.xml.ParticipantInfo;
+import com.kozhanov.creditFinanceInstitutionHandbook.model.handbook.Accounts;
+import com.kozhanov.creditFinanceInstitutionHandbook.model.handbook.BICDirectoryEntry;
+import com.kozhanov.creditFinanceInstitutionHandbook.model.handbook.ElectronicDocuments;
+import com.kozhanov.creditFinanceInstitutionHandbook.model.handbook.ParticipantInfo;
 import com.kozhanov.creditFinanceInstitutionHandbook.repository.auth.RoleReposiroty;
 import com.kozhanov.creditFinanceInstitutionHandbook.repository.auth.UserRepository;
 import com.kozhanov.creditFinanceInstitutionHandbook.repository.codeValue.*;
-import com.kozhanov.creditFinanceInstitutionHandbook.repository.xml.AccountsRepository;
-import com.kozhanov.creditFinanceInstitutionHandbook.repository.xml.BICDirectoryEntryRepository;
-import com.kozhanov.creditFinanceInstitutionHandbook.repository.xml.ElectronicDocumentsRepository;
-import com.kozhanov.creditFinanceInstitutionHandbook.repository.xml.ParticipantInfoRepository;
+import com.kozhanov.creditFinanceInstitutionHandbook.repository.handbook.AccountsRepository;
+import com.kozhanov.creditFinanceInstitutionHandbook.repository.handbook.BICDirectoryEntryRepository;
+import com.kozhanov.creditFinanceInstitutionHandbook.repository.handbook.ElectronicDocumentsRepository;
+import com.kozhanov.creditFinanceInstitutionHandbook.repository.handbook.ParticipantInfoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -221,7 +220,6 @@ public class StartupDataLoader implements
         accounts.setAccountCBRBIC(41280002);
         accounts.setAccountStatus(accountStatusRepository.findByCode("ACAC").get());
 
-        accountsRepository.save(accounts);
         String dateStr = "2023-06-15";
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
         Date date = null;
@@ -240,18 +238,65 @@ public class StartupDataLoader implements
                 .build();
 
 
-        participantInfoRepository.save(participantInfo);
-
-        BICDirectoryEntry bicDirectoryEntry = new BICDirectoryEntry(040173001, electronicDocuments, participantInfo);
+        BICDirectoryEntry bicDirectoryEntry = new BICDirectoryEntry(40173001, electronicDocuments, participantInfo);
         bicDirectoryEntry.addAccount(accounts);
+        bicDirectoryEntryRepository.save(bicDirectoryEntry);
+        accounts.setAccount("40116810100000010012");
+        bicDirectoryEntry.addAccount(accounts);
+        bicDirectoryEntryRepository.save(bicDirectoryEntry);
+        accounts.setAccount("40116810100000010015");
+        bicDirectoryEntry.addAccount(accounts);
+        bicDirectoryEntryRepository.save(bicDirectoryEntry);
+        bicDirectoryEntry.setBic(4324234);
+        bicDirectoryEntryRepository.save(bicDirectoryEntry);
+        bicDirectoryEntry.setBic(43242214);
+        bicDirectoryEntryRepository.save(bicDirectoryEntry);
+        bicDirectoryEntry.setBic(43242);
+        bicDirectoryEntryRepository.save(bicDirectoryEntry);
+        bicDirectoryEntry.setBic(43289734);
+        bicDirectoryEntryRepository.save(bicDirectoryEntry);
+        bicDirectoryEntry.setBic(6978234);
+        bicDirectoryEntryRepository.save(bicDirectoryEntry);
+        bicDirectoryEntry.setBic(13521345);
+        bicDirectoryEntryRepository.save(bicDirectoryEntry);
+        bicDirectoryEntry.setBic(40173011);
+        bicDirectoryEntryRepository.save(bicDirectoryEntry);
 
         bicDirectoryEntryRepository.save(bicDirectoryEntry);
-        bicDirectoryEntry.setBic(040173011);
+        bicDirectoryEntry.setBic(432423536);
         bicDirectoryEntryRepository.save(bicDirectoryEntry);
+        bicDirectoryEntry.setBic(431239824);
+        bicDirectoryEntryRepository.save(bicDirectoryEntry);
+        bicDirectoryEntry.setBic(4321087);
+        bicDirectoryEntryRepository.save(bicDirectoryEntry);
+        bicDirectoryEntry.setBic(14353245);
+        bicDirectoryEntryRepository.save(bicDirectoryEntry);
+        bicDirectoryEntry.setBic(692345);
+        bicDirectoryEntryRepository.save(bicDirectoryEntry);
+        bicDirectoryEntry.setBic(138765);
+        bicDirectoryEntryRepository.save(bicDirectoryEntry);
+        bicDirectoryEntry.setBic(48216445);
+        bicDirectoryEntryRepository.save(bicDirectoryEntry);
+
+        bicDirectoryEntryRepository.save(bicDirectoryEntry);
+        bicDirectoryEntry.setBic(432134);
+        bicDirectoryEntryRepository.save(bicDirectoryEntry);
+        bicDirectoryEntry.setBic(486754);
+        bicDirectoryEntryRepository.save(bicDirectoryEntry);
+        bicDirectoryEntry.setBic(12521087);
+        bicDirectoryEntryRepository.save(bicDirectoryEntry);
+        bicDirectoryEntry.setBic(54635);
+        bicDirectoryEntryRepository.save(bicDirectoryEntry);
+        bicDirectoryEntry.setBic(98765);
+        bicDirectoryEntryRepository.save(bicDirectoryEntry);
+        bicDirectoryEntry.setBic(1234654);
+        bicDirectoryEntryRepository.save(bicDirectoryEntry);
+        bicDirectoryEntry.setBic(6534532);
+        bicDirectoryEntry.getParticipantInfo().setUID(99999);
+        bicDirectoryEntryRepository.save(bicDirectoryEntry);
+
         bicDirectoryEntry.setChangeType(changeTypeRepository.findByCode("ADDD").get());
         bicDirectoryEntryRepository.save(bicDirectoryEntry);
-
-        System.out.println("---------------------");
         Role role = new Role("ROLE_USER");
         User user = new User();
         user.setUsername("admin");

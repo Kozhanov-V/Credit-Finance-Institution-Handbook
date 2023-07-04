@@ -1,289 +1,421 @@
 <template>
-  <div class="container">
-    <div class="handbook">
-      <h1>СПРАВОЧНИК</h1>
-    </div>
+	<div class="container">
+		<SaveModalForm :visible="isSaveModalVisible" :participantTypes="participantTypes"
+			:availableTransferServices="availableTransferServices" :participantStatuses="participantStatuses"
+			@close="isSaveModalVisible = false" @entryCreated="addEntry" />
+		<AccountsInfo :visible="isAccountsFormVisible" :entryAccounts="selectedItem" @close="isAccountsFormVisible = false" />
 
-    <div class="filter">
-      <div id="filter-form">
+		<div class="functional-panel">
+			<div class="filter-element" id="bic">
+				<input v-model="formFilter.bicInput" type="number" name="bic" placeholder="Поиск по BIC"
+					@keyup.enter="filterByBic">
+				<input @click="filterByBic" type="submit" id="submitBic" />
+			</div>
+			<div class="filter-element" id="name">
+				<input v-model="formFilter.nameInput" type="text" name="name" placeholder="Поиск по наименованию"
+					@keyup.enter="filterByName">
+				<input @click="filterByName" type="submit" id="submitName" />
+			</div>
+			<button @click="resetAllFilter" class="filter-element" id="clear-filter" ><img src="img/clear.svg" alt="c"> Сбросить</button>
 
-        <div class="block">
-          <label for="bic-input">БИК</label>
-          <input id="bic-input" type="number" class="long-button" v-model="formFilter.bic">
+			<button @click="openFilterMenu" class="filter-element" id="filterBtn"><img src="img/filter.png" alt="">
+				Фильтр</button>
 
-          <label for="name-record-input">Наименование</label>
-          <input id="name-record-input" type="text" class="long-button" v-model="formFilter.nameRecord">
-        </div>
+			<Filter :visible="isFilterVisible" :participantTypes="participantTypes" @apply-filter="applyFilter"
+				@reset-filter="resetFilter" />
 
+			<button @click="openSaveModal" class="filter-element" id="addBtn"><img src="img/plus.png" alt=""> Добавить
+				запись</button>
+		</div>
+		<div class="table-container">
+			<table>
+				<thead>
+					<tr class="sticky-header">
+						<th style="background-color: white; border: none;"></th>
+						<th>БИК</th>
+						<th>ID ЭС</th>
+						<th>Наименование</th>
+						<th>Рег. поряд. номер</th>
+						<th>Код страны</th>
+						<th>Код региона</th>
+						<th>Индекс</th>
+						<th>Тип нас. пункта</th>
+						<th>Населенный пункт</th>
+						<th>Адрес</th>
+						<th>БИК голов. организации</th>
+						<th>Дата включения</th>
+						<th>Дата исключения</th>
+						<th>Тип участника</th>
+						<th>Доступные серв. перевода</th>
+						<th>Участник обмена</th>
+						<th>УИС</th>
+						<th>Статус участника</th>
+					</tr>
+				</thead>
+				<tbody>
+					<template :key="item.bic" v-for="item in tableData">
+						<tr @mouseover="selectedItem = item">
+							<td class="actions_container">
+								<div class="actions">
+									<button v-if="!item.editMode" @click="deleteItem(item)"><img src="img/delete.svg" alt="d"></button>
+									<button v-if="!item.editMode" @click="item.editMode = true"><img src="img/settings.svg"
+											alt="u"></button>
 
-        <div class="block">
-          <label for="valid-from-datepicker">Действует на дату с:</label>
-          <input id="valid-from-datepicker" type="date" class="long-button" v-model="formFilter.validFrom">
+									<button v-if="!item.editMode" @click="this.isAccountsFormVisible=true"><img src="img/accounts.svg"
+											alt="a"></button>
+									<button v-if="!item.editMode"><img src="img/favorites.svg" alt="f"></button>
+								</div>
+								<div class="edit_mode_action">
+									<button v-if="item.editMode" @click="item.editMode = false"><img src="img/cancel.svg" alt="c"></button>
+									<button v-if="item.editMode" @click="saveItem(item)"><img src="img/save.svg" alt="s"></button>
+								</div>
 
-          <label for="valid-until-datepicker">по:</label>
-          <input id="valid-until-datepicker" type="date" class="long-button" v-model="formFilter.validUntil">
-        </div>
+							</td>
+							<td>{{ item.bic }}</td>
+							<td>{{ item.idES }}</td>
+							<td v-if="!item.editMode">{{ item.nameParticipant }}</td>
+							<td v-else><input v-model="item.nameParticipant" type="text"></td>
+							<td v-if="!item.editMode">{{ item.registrationNumber }}</td>
+							<td v-else><input v-model="item.registrationNumber" type="text"></td>
+							<td v-if="!item.editMode">{{ item.countryCode }}</td>
+							<td v-else><input v-model="item.countryCode" type="text"></td>
+							<td v-if="!item.editMode">{{ item.regionCode }}</td>
+							<td v-else><input v-model="item.regionCode" type="text"></td>
+							<td v-if="!item.editMode">{{ item.index }}</td>
+							<td v-else><input v-model="item.index" type="text"></td>
+							<td v-if="!item.editMode">{{ item.typeLocation }}</td>
+							<td v-else><input v-model="item.typeLocation" type="text"></td>
+							<td v-if="!item.editMode">{{ item.nameLocation }}</td>
+							<td v-else><input v-model="item.nameLocation" type="text"></td>
+							<td v-if="!item.editMode">{{ item.address }}</td>
+							<td v-else><input v-model="item.address" type="text"></td>
+							<td v-if="!item.editMode">{{ item.parentBIC }}</td>
+							<td v-else><input v-model="item.parentBIC" type="number"></td>
+							<td v-if="!item.editMode">{{ item.dateIn }}</td>
+							<td v-else><input v-model="item.dateIn" type="date"></td>
+							<td v-if="!item.editMode">{{ item.dateOut }}</td>
+							<td v-else><input v-model="item.dateOut" type="date"></td>
+							<td v-if="!item.editMode">{{ item.participantType }}</td>
+							<td v-else>
+								<select v-model="item.participantType" name="participantType">
+									<option v-for="(type, index) in participantTypes" :value="type.code" :key="index">
+										{{ type.code }}
+									</option>
+								</select>
+							</td>
+							<td v-if="!item.editMode">{{ item.availableTransferService }}</td>
+							<td v-else>
+								<select v-model="item.availableTransferService" name="availableTransferService">
+									<option v-for="(type, index) in availableTransferServices" :value="type.code" :key="index">
+										{{ type.code }}
+									</option>
+								</select>
+							</td>
+							<td v-if="!item.editMode">{{ item.exchangeParticipant }}</td>
+							<td v-else>
+								<input type="checkbox" :checked="item.exchangeParticipant == 1"
+									@change="item.exchangeParticipant = $event.target.checked ? 1 : 0" name="exchangeParticipant">
+							</td>
+							<td v-if="!item.editMode">{{ item.uid }}</td>
+							<td v-else><input v-model="item.uid" type="number"></td>
+							<td>{{ item.participantStatus }}</td>
 
-        <div class="block">
-          <label for="type-organization-select">Тип участника</label>
-          <select id="type-organization-select" class="long-button" v-model="formFilter.typeTransfer">
-            <option v-for="(type, index) in participantTypes" :value="type.code" :key="index">
-              {{ type.code }}
-            </option>
+				
+						</tr>
 
-          </select>
-        </div>
-
-        <div class="block" style="width: 98px; margin-top: 4px; margin-right: 16px;">
-          <button id="clear-form" class="short-button" @click="resetForm">Сбросить</button>
-          <button type="button" class="short-button" @click="submitForm">Найти</button>
-        </div>
-
-
-
-
-      </div>
-
-      <button id="update-table" class="short-button" @click="reload">Обновить</button>
-      <button id="add-item" class="short-button" @click="openSaveModal">Добавить</button>
-    </div>
-    <SaveModalForm :visible="isSaveModalVisible" @close="isSaveModalVisible = false"
-      :available-transfer-services="availableTransferServices" :participant-types="participantTypes"
-      :participant-statuses="participantStatuses" :editingItem="selectedItem" />
-
-
-    <div class="output-info">
-      <table>
-        <tr>
-          <th>ID ЭС</th>
-          <th>БИК</th>
-          <th>Наименование</th>
-          <th>Рег. поряд. номер</th>
-          <th>Код страны</th>
-          <th>Код региона</th>
-          <th>Индекс</th>
-          <th>Тип нас. пункта</th>
-          <th>Населенный пункт</th>
-          <th>Адрес</th>
-          <th>БИК голов. организации</th>
-          <th>Дата включения</th>
-          <th>Дата исключения</th>
-          <th>Тип участника</th>
-          <th>Доступные серв. перевода</th>
-          <th>Участник обмена</th>
-          <th>УИС</th>
-          <th>Статус участника</th>
-          <th>Actions</th>
-        </tr>
-        <tr v v-for="item in tableData" :key="item.bic">
-          <td>{{ item.idES }}</td>
-          <td>{{ item.bic }}</td>
-          <td>{{ item.nameParticipant }}</td>
-          <td>{{ item.registrationNumber }}</td>
-          <td>{{ item.countryCode }}</td>
-          <td>{{ item.regionCode }}</td>
-          <td>{{ item.index }}</td>
-          <td>{{ item.typeLocation }}</td>
-          <td>{{ item.nameLocation }}</td>
-          <td>{{ item.address }}</td>
-          <td>{{ item.parentBIC }}</td>
-          <td>{{ item.dateIn }}</td>
-          <td>{{ item.dateOut }}</td>
-          <td>{{ item.participantType }}</td>
-          <td>{{ item.availableTransferService }}</td>
-          <td>{{ item.exchangeParticipant }}</td>
-          <td>{{ item.UID }}</td>
-          <td>{{ item.participantStatus }}</td>
-          <td>
-            <button @click="openPopover(item)">
-              <img src="/more_horiz.png" />
-            </button>
-
-            <popover v-if="selectedItem && selectedItem.bic === item.bic" @close="closePopover">
-              <div class="popover">
-                <button @click="openSaveModal()">Обновить</button>
-                <button @click="deleteItem()">Удалить</button>
-                <button @click="openAccounts(selectedItem)">Открыть счета</button>
-                <button @click="closePopover()">Отменить</button>
-              </div>
-
-            </popover>
-          </td>
-        </tr>
-
-      </table>
-    </div>
-  </div>
+					</template>
+				</tbody>
+			</table>
+		</div>
+	</div>
 </template>
 
-<script>
 
+
+<style scoped>
+@import '@/assets/css/handbook.css';
+</style>
+
+
+
+<script>
 import { useVuelidate } from '@vuelidate/core'
 import { required, between } from '@vuelidate/validators'
+import Filter from '@/components/Filter.vue';
 
 import SaveModalForm from '@/components/SaveForm.vue';
+import AccountsInfo from '@/components/AccountsInfo.vue';
 
 import axios from 'axios';
 
 export default {
-  components: {
-    SaveModalForm
-  },
-  setup() {
-    return { v$: useVuelidate() }
-  },
-  data() {
-    return {
-      bicDirectoryEntries: [],
-      participantTypes: [],
-      availableTransferServices: [],
-      participantStatuses: [],
-      formFilter: {
-        bic: '',
-        nameRecord: '',
-        typeTransfer: '',
-        validFrom: '',
-        validUntil: '',
+	components: {
+		SaveModalForm,
+		AccountsInfo,
+		Filter,
+	},
+	setup() {
+		return { v$: useVuelidate() }
+	},
 
-      },
-      tableData: [],
-      selectedItem: null,
-      isSaveModalVisible: false
-    };
-  },
-  validations() {
-    return {
-      formFilter: {
-        bic: { between: between(0, 999999999) }
-      }
-    }
-  },
-  methods: {
-    reload() {
-      location.reload();
-    },
-    fillTable(bicDirectoryEntries) {
-      this.tableData = bicDirectoryEntries.map(item => ({
-        idES: item.electronicDocuments.number,
-        bic: item.bic,
-        nameParticipant: item.participantInfo.nameParticipant,
-        registrationNumber: item.participantInfo.registrationNumber,
-        countryCode: item.participantInfo.countryCode,
-        regionCode: item.participantInfo.regionCode,
-        index: item.participantInfo.index,
-        typeLocation: item.participantInfo.typeLocation,
-        nameLocation: item.participantInfo.nameLocation,
-        address: item.participantInfo.address,
-        parentBIC: item.participantInfo.parentBIC,
-        dateIn: item.participantInfo.dateIn,
-        dateOut: item.participantInfo.dateOut,
-        participantType: item.participantInfo.participantType?.code,
-        availableTransferService: item.participantInfo.availableTransferService?.code,
-        exchangeParticipant: item.participantInfo.exchangeParticipant?.code,
-        UID: item.participantInfo.UID,
-        participantStatus: item.participantInfo.participantStatus?.code,
-      }))
-    },
+	data() {
+		return {
+			bicDirectoryEntries: [],
+			participantTypes: [],
+			availableTransferServices: [],
+			participantStatuses: [],
+			formFilter: {
+				bicInput: '',
+				nameInput: '',
+				typeTransfer: '',
+				validFrom: '',
+				validUntil: '',
 
-    async deleteItem() {
-      console.log(this.selectedItem.bic)
-      const response = await axios.delete(`http://localhost:8080/api/delete/${this.selectedItem.bic}`, {
-        headers: {
-          'Authorization': 'Bearer ' + localStorage.getItem('token')
-        }
-      })
-      location.reload();
-    },
-    openPopover(item) {
-      this.selectedItem = item;
-    },
-    closePopover() {
-      this.selectedItem = null;
-    },
+			},
+			idES: '',
+			tableData: [],
+			selectedItem: null,
+			isSaveModalVisible: false,
+			isFilterVisible: false,
+			isAccountsFormVisible:false,
+		};
+	},
+	validations() {
+		return {
+			formFilter: {
+				bic: { between: between(0, 999999999) }
+			}
+		}
+	},
+	methods: {
+		fillTable(bicDirectoryEntries) {
+			this.tableData = bicDirectoryEntries.map(item => ({
+				idES: item.electronicDocuments.number,
+				bic: item.bic,
+				nameParticipant: item.participantInfo.nameParticipant,
+				registrationNumber: item.participantInfo.registrationNumber,
+				countryCode: item.participantInfo.countryCode,
+				regionCode: item.participantInfo.regionCode,
+				index: item.participantInfo.index,
+				typeLocation: item.participantInfo.typeLocation,
+				nameLocation: item.participantInfo.nameLocation,
+				address: item.participantInfo.address,
+				parentBIC: item.participantInfo.parentBIC,
+				dateIn: item.participantInfo.dateIn,
+				dateOut: item.participantInfo.dateOut,
+				participantType: item.participantInfo.participantType?.code,
+				availableTransferService: item.participantInfo.availableTransferService?.code,
+				exchangeParticipant: item.participantInfo.exchangeParticipant?.code,
+				uid: item.participantInfo.uid,
+				participantStatus: item.participantInfo.participantStatus?.code,
+				accounts: item.accounts,
+				editMode: false,
+			}))
 
-    openSaveModal() {
-      this.isSaveModalVisible = true;
-      // this.closePopover();
-    },
+		},
 
-    resetForm() {
-      this.formFilter.bic = '';
-      this.formFilter.nameRecord = '';
-      this.formFilter.typeTransfer = '';
-      this.formFilter.validFrom = '';
-      this.formFilter.validUntil = '';
-    },
-    async submitForm() {
-      try {
-        const response = await axios.post('http://localhost:8080/api/filter', this.formFilter, {
-          headers: {
-            'Authorization': 'Bearer ' + localStorage.getItem('token')
-          }
-        });
-        this.bicDirectoryEntries = response.data;
-        console.log(this.bicDirectoryEntries);
-        this.fillTable(this.bicDirectoryEntries);
+		async saveItem(item) {
+			try {
+				const response = await axios.put(`http://localhost:8080/api/update/${item.bic}`, {
+					bic: item.bic,
+					participantInfo: {
+						nameParticipant: item.nameParticipant,
+						registrationNumber: item.registrationNumber,
+						countryCode: item.countryCode,
+						regionCode: item.regionCode,
+						index: item.index,
+						typeLocation: item.typeLocation,
+						nameLocation: item.nameLocation,
+						address: item.address,
+						parentBIC: item.parentBIC,
+						dateIn: item.dateIn,
+						dateOut: item.dateOut,
+						participantType: item.participantType,
+						availableTransferService: item.availableTransferService,
+						uid: item.uid,
+						exchangeParticipant: item.exchangeParticipant,
+					}
+				}
+					, {
+						headers: {
+							'Authorization': 'Bearer ' + localStorage.getItem('token')
+						}
+					});
 
-      } catch (error) {
-        console.error(error);
-      }
-    },
+				// Проверяем, успешно ли выполнился запрос
+				if (response.status === 200) {
+					console.log('Item successfully updated');
+				} else {
+					console.error('Error updating item:', response);
+				}
+			} catch (error) {
+				console.error('Error updating item:', error);
+			}
 
-    async fetchData() {
+			// В любом случае выходим из режима редактирования
+			item.editMode = false;
+		},
 
-      try {
-        const response = await axios.get('http://localhost:8080/api/data', {
-          headers: {
-            'Authorization': 'Bearer ' + localStorage.getItem('token')
-          }
-        });
+		async deleteItem() {
+			if (!this.selectedItem) {
+				console.error("No item selected");
+				return;
+			}
+			try {
+				const response = await axios.delete(`http://localhost:8080/api/delete/${this.selectedItem.bic}`, {
+					headers: {
+						'Authorization': 'Bearer ' + localStorage.getItem('token')
+					}
+				})
+				if (response.status === 200) {
+					// Удаление элемента из списка
+					const index = this.tableData.findIndex(item => item.bic === this.selectedItem.bic);
+					if (index !== -1) {
+						this.tableData.splice(index, 1);
+					}
+					// Сброс выбранного элемента
+					this.selectedItem = null;
+				} else {
+					console.error("Error deleting item:", response);
+				}
+			} catch (error) {
+				console.error("Error deleting item:", error);
+			}
+		},
 
-        this.bicDirectoryEntries = response.data.bicDirectoryEntries;
-        this.participantTypes = response.data.participantTypes;
-        this.availableTransferServices = response.data.availableTransferServices;
-        this.participantStatuses = response.data.participantStatuses;
+
+		openSaveModal() {
+			this.isSaveModalVisible = true;
+		},
+
+		async fetchData() {
+			
+			try {
+				const response = await axios.get('http://localhost:8080/api/data', {
+					headers: {
+						'Authorization': 'Bearer ' + localStorage.getItem('token')
+					}
+				});
+				this.bicDirectoryEntries = response.data.bicDirectoryEntries;
+				this.idES = this.bicDirectoryEntries.pop(0).electronicDocuments.number;
+				this.participantTypes = response.data.participantTypes;
+				this.availableTransferServices = response.data.availableTransferServices;
+				this.participantStatuses = response.data.participantStatuses;
 
 
-        this.typeTransfers = this.participantTypes;
-        this.fillTable(this.bicDirectoryEntries);
+				this.typeTransfers = this.participantTypes;
+				this.fillTable(this.bicDirectoryEntries);
 
-      } catch (error) {
-        console.error(error);
-      }
-    }
-  },
-  created() {
-    this.fetchData();
-  }
+			} catch (error) {
+				console.error(error);
+			}
+		},
+
+		openFilterMenu() {
+			this.isFilterVisible = true;
+		},
+		resetAllFilter(){
+			this.formFilter.bicInput='';
+			this.formFilter.nameInput='';
+			this.formFilter.typeTransfer='';
+			this.formFilter.validFrom='';
+			this.formFilter.validUntil='';
+			this.fetchData();
+		},
+		async filterByBic() {
+			let bic = this.formFilter.bicInput;
+
+			try {
+				let response;
+				if (bic !== "") {
+					response = await axios.get(`http://localhost:8080/api/findBy/bic/${bic}`, {
+						headers: {
+							'Authorization': 'Bearer ' + localStorage.getItem('token')
+						}
+					});
+
+				} else {
+
+					await this.fetchData();
+				}
+				this.nameInput = "";
+				this.fillTable(response.data)
+			} catch (error) {
+				console.error(error);
+			}
+		},
+
+		async filterByName() {
+			let name = this.formFilter.nameInput;
+
+			try {
+				let response;
+				if (name !== "") {
+					response = await axios.get(`http://localhost:8080/api/findBy/name/${name}`, {
+						headers: {
+							'Authorization': 'Bearer ' + localStorage.getItem('token')
+						}
+					});
+
+				} else {
+
+					await this.fetchData();
+				}
+				this.bicInput = "";
+				this.fillTable(response.data)
+			} catch (error) {
+				console.error(error);
+			}
+		},
+
+
+		async applyFilter(filter) {
+			this.formFilter.typeTransfer = filter.participantType;
+			this.formFilter.validFrom = filter.validFrom;
+			this.formFilter.validUntil = filter.validUntil;
+			try {
+				const response = await axios.post('http://localhost:8080/api/filter', this.formFilter, {
+					headers: {
+						'Authorization': 'Bearer ' + localStorage.getItem('token')
+					}
+				});
+				this.fillTable(response.data);
+
+			} catch (error) {
+				console.error(error);
+			}
+			this.isFilterVisible = false;
+		},
+		async resetFilter() {
+			await this.fetchData();
+			this.isFilterVisible = false;
+		},
+		addEntry(newEntry) {
+			this.tableData.push({
+				bic: newEntry.bic,
+				idES: this.idES,
+				nameParticipant: newEntry.participantInfo.nameParticipant,
+				registrationNumber: newEntry.participantInfo.registrationNumber,
+				countryCode: newEntry.participantInfo.countryCode,
+				regionCode: newEntry.participantInfo.regionCode,
+				index: newEntry.participantInfo.index,
+				typeLocation: newEntry.participantInfo.typeLocation,
+				nameLocation: newEntry.participantInfo.nameLocation,
+				address: newEntry.participantInfo.address,
+				parentBIC: newEntry.participantInfo.parentBIC,
+				dateIn: newEntry.participantInfo.dateIn,
+				dateOut: newEntry.participantInfo.dateOut,
+				participantType: newEntry.participantInfo.participantType?.code,
+				availableTransferService: newEntry.participantInfo.availableTransferService?.code,
+				exchangeParticipant: newEntry.participantInfo.exchangeParticipant?.code,
+				uid: newEntry.participantInfo.uid,
+				participantStatus: newEntry.participantInfo.participantStatus?.code,
+				editMode: false,
+			})
+		},
+	},
+	created() {
+		this.fetchData();
+	}
 };
 </script>
-<style>
-.popover {
-  position: absolute;
-  width: 96px;
-  height: 116px;
-  padding: 0px 0px;
-  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.15);
-  background-color: #E6E6E9;
-  z-index: 1;
-  display: grid;
-  grid-template-rows: repeat(4, 1fr);
-  gap: 4px;
-  top: 0px;
-}
-
-.popover button {
-  /* Здесь вы можете применить стили для ваших кнопок */
-  width: 100%;
-  height: 100%;
-  border: none;
-  cursor: pointer;
-  background: #E6E6E9;
-  text-align: center;
-  transition: 0.2s;
-}
-
-.popover button:hover {
-  background: #D4D4D8;
-}
-</style>

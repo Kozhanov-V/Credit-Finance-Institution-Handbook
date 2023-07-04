@@ -1,0 +1,129 @@
+
+.accounts-container {
+	color: black;
+	position: fixed;
+	z-index: 1000;
+	top: 0;
+	left: 0;
+	width: 100vw;
+	height: 100vh;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	background: rgba(0, 0, 0, 0.5);
+	backdrop-filter: blur(5px);
+}
+
+.table-accounts {
+	overflow: auto;
+	left: -4vw;
+	padding-bottom: 10px; 
+	margin-bottom: 10vh;
+	font-size: calc(var(--index)*0.6);
+	width: 55vw;
+	height: 100vh;
+	overflow: auto;
+}
+.table-accounts table{
+	width: 90vw;
+	border-radius: 15px; 
+	border-spacing: 0; 
+	border-collapse: collapse; 
+	table-layout: fixed;
+	padding-right: 0px;
+}
+.table-accounts tr {
+	
+	height: 40px;
+}
+.table-accounts tr td {
+	padding: calc(var(--index)*0.5) calc(var(--index)*1);
+	text-align: center;
+}
+.table-accounts tr td:first-child{
+	border-top-left-radius: 15px;
+	border-bottom-left-radius: 15px;
+}
+.table-accounts tr td:last-child {
+
+	border-top-right-radius: 15px;
+	border-bottom-right-radius: 15px;
+	position: sticky; 
+	right: 0;
+	background-color: inherit; 
+	z-index: 2; 
+	width: 5vw;
+
+}
+.table-accounts tr th{
+	background-color: #EDEDEF;
+}
+.table-accounts tr th:last-child{
+	border-top-right-radius: 15px;
+	border-bottom-right-radius: 15px;
+	position: sticky; 
+	right: 0; 
+	background-color: #EDEDEF;
+	z-index: 2; 
+}
+.table-accounts tr{
+	border-radius: 15px; /* Закругленные углы для ячеек таблицы */
+	background-color: #EDEDEF;
+}
+
+
+.table-accounts tr:nth-child(even) {
+	background: #CCD4DE;
+	border-radius: 15px; /* Закругленные углы для ячеек таблицы */
+}
+
+.main-info--accounts{
+	box-sizing: border-box;
+	padding: 2.5vw;
+	width: 62.5vw;
+	height: 74vh;
+	background-color: #EDEDEF;
+	border-radius: 30px; 
+	position: relative;
+	display: flex;
+	flex-direction: column; /* Добавлено */
+	justify-content: center;
+	align-items: center; /* Добавлено */
+}
+
+#add-account{
+	background-color: #5A77DF;
+	color:white;
+	border: 1px solid #5A77DF
+}
+.button-container button{
+	width: calc(var(--index)*5);
+	height: calc(var(--index)*1.5);
+	border-radius: calc(var(--index)*1);
+	border: 1px solid black;
+	background-color: transparent;
+	left: calc(50% - calc(var(--index)*5)/2);
+	top: calc(100% - calc(var(--index)*8));
+	cursor: pointer;
+	margin-right: 1vw;
+}
+.button-container {
+	display: flex;
+	justify-content: center;
+	position: relative;
+	bottom: 10px;
+	width: 100%;
+}
+
+.buttons button{
+	width: 1vw;
+	margin-right: 4px;
+	border: none;
+	background-color: transparent;
+	cursor: pointer;
+}
+.table-accounts input, .table-accounts select {
+	border-radius: 5px;
+	border: 1px solid black;
+}
+

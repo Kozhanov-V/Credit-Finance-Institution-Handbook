@@ -1,12 +1,17 @@
 
 <template>
-  <Header v-if="route.path !== '/login'" />
+	  <Navigation v-if="route.path !== '/login' && route.path!=='/'" />
+  <Header v-if="route.path !== '/login' && route.path!=='/'"  />
+
+
   <RouterView></RouterView>
+	<Footer v-if="route.path !== '/login'"  />
 </template>
 
 <script>
-
+import Navigation from './components/Navigation.vue';
 import Header from './components/Header.vue';
+import Footer from './components/Footer.vue';
 import { useRoute } from 'vue-router'
 
 export default {
@@ -14,13 +19,12 @@ export default {
     const route = useRoute();
     return { route }
   },
-  components: { Header }
+  components: { Header, Navigation,Footer }
 }
 
 </script>
 <style>
 #app {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  color: #333333;
+
 }
 </style>

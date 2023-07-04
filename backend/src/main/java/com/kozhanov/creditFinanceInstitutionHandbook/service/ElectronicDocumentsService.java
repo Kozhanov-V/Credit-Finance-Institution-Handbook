@@ -1,6 +1,6 @@
 package com.kozhanov.creditFinanceInstitutionHandbook.service;
 
-import com.kozhanov.creditFinanceInstitutionHandbook.model.xml.ElectronicDocuments;
+import com.kozhanov.creditFinanceInstitutionHandbook.model.handbook.ElectronicDocuments;
 
 import java.util.List;
 

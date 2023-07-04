@@ -5,7 +5,6 @@ import java.util.Date;
 
 public class FilterParameters {
 
-    private String orderBy;
     private Integer bic;
     private String nameRecord;
     private Integer typeTransfer;
@@ -16,29 +15,17 @@ public class FilterParameters {
     public FilterParameters() {
     }
 
-    public int getBic() {
+    public Integer getBic() {
         return bic;
     }
 
-    public void setBic(int bic) {
-        this.bic = bic;
-    }
 
-    public FilterParameters(String orderBy, Integer bic, String nameRecord, Integer typeTransfer, Date validFrom, Date validUntil) {
-        this.orderBy = orderBy;
+    public FilterParameters( Integer bic, String nameRecord, Integer typeTransfer, Date validFrom, Date validUntil) {
         this.bic = bic;
         this.nameRecord = nameRecord;
         this.typeTransfer = typeTransfer;
         this.validFrom = validFrom;
         this.validUntil = validUntil;
-    }
-
-    public String getOrderBy() {
-        return orderBy;
-    }
-
-    public void setOrderBy(String orderBy) {
-        this.orderBy = orderBy;
     }
 
 
@@ -81,8 +68,7 @@ public class FilterParameters {
     @Override
     public String toString() {
         return "FilterParameters{" +
-                ", orderBy='" + orderBy + '\'' +
-                ", bic='" + bic + '\'' +
+                "bic='" + bic + '\'' +
                 ", nameRecord='" + nameRecord + '\'' +
                 ", typeTransfer='" + typeTransfer + '\'' +
                 ", validFrom=" + validFrom +
