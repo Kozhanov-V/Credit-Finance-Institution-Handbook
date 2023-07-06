@@ -248,7 +248,7 @@ public class StartupDataLoader implements
         bicDirectoryEntryRepository.save(bicDirectoryEntry);
         accounts.setAccount("40116810100000010015");
         bicDirectoryEntry.addAccount(accounts);
-        bicDirectoryEntry.setBIC(342432423);
+        bicDirectoryEntry.setBIC(342);
         bicDirectoryEntryRepository.save(bicDirectoryEntry);
 
         bicDirectoryEntry.setChangeType(changeTypeRepository.findByCode("ADDD").get());

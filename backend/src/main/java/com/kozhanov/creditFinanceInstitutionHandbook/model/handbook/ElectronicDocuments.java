@@ -66,8 +66,7 @@ public class ElectronicDocuments {
     private int directoryVersion;
 
     @OneToMany(mappedBy = "electronicDocuments", cascade = {CascadeType.PERSIST,CascadeType.MERGE,CascadeType.REMOVE})
-    @JsonManagedReference
-    private List<BICDirectoryEntry> bicDirectoryEntryList;
+    private List<BICDirectoryEntry> bicDirectoryEntryList = new ArrayList<>();
 
     public void addBicDirectoryEntry(BICDirectoryEntry bicDirectoryEntry){
         if(bicDirectoryEntryList==null){
@@ -98,7 +97,11 @@ public class ElectronicDocuments {
         this.infoTypeCode = electroncDocumentsDeserializer.getInfoTypeCode();
         this.businessDay = electroncDocumentsDeserializer.getBusinessDay();
         this.directoryVersion = electroncDocumentsDeserializer.getDirectoryVersion();
-        this.bicDirectoryEntryList = electroncDocumentsDeserializer.getBicDirectoryEntryDeserializer().stream().map(BICDirectoryEntry::new).collect(Collectors.toList());
+        this.bicDirectoryEntryList = electroncDocumentsDeserializer.getBicDirectoryEntryDeserializer().stream().map(bicDirectoryEntry->{
+            BICDirectoryEntry bicDirEnt = new BICDirectoryEntry(bicDirectoryEntry);
+            bicDirEnt.setElectronicDocuments(this);
+            return bicDirEnt;
+        }).collect(Collectors.toList());
     }
 
 

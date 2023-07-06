@@ -28,6 +28,9 @@ public class ImportServiceImpl implements ImportService{
     @Autowired
     private BICDirectoryEntryService bicDirectoryEntryService;
 
+    @Autowired
+    private AccountsService accountsService;
+
     @Override
     public void importFromCB() {
         String url = "http://cbr.ru/s/newbik";
@@ -94,9 +97,7 @@ public class ImportServiceImpl implements ImportService{
                 ElectroncDocumentsDeserializer electronicDocumentsDeserializer = xmlMapper.readValue(readContent, ElectroncDocumentsDeserializer.class);
                 ElectronicDocuments electronicDocuments = new ElectronicDocuments(electronicDocumentsDeserializer);
 
-
-                electronicDocumentsService.save(electronicDocuments);
-
+                   electronicDocumentsService.save(electronicDocuments);
 
             }
         } catch (IOException e) {

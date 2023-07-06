@@ -5,6 +5,7 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 import com.kozhanov.creditFinanceInstitutionHandbook.model.codeValue.ChangeType;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @JacksonXmlRootElement(localName = "BICDirectoryEntry")
@@ -21,11 +22,11 @@ public class BICDirectoryEntryDeserializer {
 
     @JacksonXmlElementWrapper(useWrapping = false)
     @JacksonXmlProperty(localName = "Accounts")
-    private List<AccountsDeserializer> accountsDeserializer;
+    private List<AccountsDeserializer> accountsDeserializer = new ArrayList<>();
 
     @JacksonXmlProperty(localName = "SWBICS")
     @JacksonXmlElementWrapper(useWrapping = false)
-    private List<SWBICSDeserializer> swbicsDeserializer;
+    private List<SWBICSDeserializer> swbicsDeserializer = new ArrayList<>();
 
 
     public int getBic() {

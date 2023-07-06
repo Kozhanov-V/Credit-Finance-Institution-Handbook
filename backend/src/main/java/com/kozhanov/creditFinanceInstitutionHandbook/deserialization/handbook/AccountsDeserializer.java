@@ -13,6 +13,7 @@ import com.kozhanov.creditFinanceInstitutionHandbook.model.handbook.BICDirectory
 import javax.persistence.*;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Size;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -43,7 +44,7 @@ public class AccountsDeserializer {
 
     @JacksonXmlProperty(localName = "AccRstrList", isAttribute = true)
     @JacksonXmlElementWrapper(useWrapping = false)
-    private List<AccountRestrictionDeserializer> accountRestrictionsDeserializer;
+    private List<AccountRestrictionDeserializer> accountRestrictionsDeserializer = new ArrayList<>();
 
     public List<AccountRestrictionDeserializer> getAccountRestrictionsDeserializer() {
         return accountRestrictionsDeserializer;

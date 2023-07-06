@@ -58,13 +58,13 @@ public class Accounts {
     @JoinColumn(name = "account_status_code")
     private AccountStatus accountStatus;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "bic")
     @JsonBackReference
     private BICDirectoryEntry bicDirectoryEntry;
 
     @OneToMany(cascade = {CascadeType.PERSIST,CascadeType.MERGE,CascadeType.REMOVE})
-    private List<AccountRestriction> accountRestrictions;
+    private List<AccountRestriction> accountRestrictions = new ArrayList<>();
 
     public long getId() {
         return id;

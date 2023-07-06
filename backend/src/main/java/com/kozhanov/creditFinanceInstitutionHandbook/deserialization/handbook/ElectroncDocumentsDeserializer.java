@@ -42,7 +42,7 @@ public class ElectroncDocumentsDeserializer {
 
     @JacksonXmlProperty(localName = "BICDirectoryEntry")
     @JacksonXmlElementWrapper(useWrapping = false)
-    private List<BICDirectoryEntryDeserializer> bicDirectoryEntryDeserializer ;
+    private List<BICDirectoryEntryDeserializer> bicDirectoryEntryDeserializer =new ArrayList<>();
 
     public ElectroncDocumentsDeserializer() {
     }

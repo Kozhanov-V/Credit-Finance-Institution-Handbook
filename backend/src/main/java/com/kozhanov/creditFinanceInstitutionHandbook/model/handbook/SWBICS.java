@@ -22,6 +22,19 @@ public class SWBICS {
     @Column(name = "DefaultSWBIC")
     private boolean defaultSWBIC;
 
+    @ManyToOne(cascade = CascadeType.MERGE)
+    @JoinColumn(name = "bic")
+    @JsonBackReference
+    private BICDirectoryEntry bicDirectoryEntry;
+
+    public BICDirectoryEntry getBicDirectoryEntry() {
+        return bicDirectoryEntry;
+    }
+
+    public void setBicDirectoryEntry(BICDirectoryEntry bicDirectoryEntry) {
+        this.bicDirectoryEntry = bicDirectoryEntry;
+    }
+
     public SWBICS(SWBICSDeserializer swbicsDeserializer) {
         this.SWBIC = swbicsDeserializer.getSwbic();
         if(swbicsDeserializer.getDefaultSWBIC()>0){

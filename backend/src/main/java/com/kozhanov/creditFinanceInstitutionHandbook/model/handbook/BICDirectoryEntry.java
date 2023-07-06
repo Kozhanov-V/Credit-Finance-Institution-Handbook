@@ -52,13 +52,13 @@ public class BICDirectoryEntry {
     @JsonBackReference
     private ElectronicDocuments electronicDocuments;
 
-    @OneToMany(cascade = {CascadeType.PERSIST,CascadeType.MERGE,CascadeType.REMOVE})
+    @OneToMany(mappedBy = "bicDirectoryEntry", cascade = {CascadeType.PERSIST,CascadeType.MERGE,CascadeType.REMOVE})
     @LazyCollection(LazyCollectionOption.FALSE)
     private List<Accounts> accounts = new ArrayList<>();
 
     @OneToMany(cascade = {CascadeType.PERSIST,CascadeType.MERGE,CascadeType.REMOVE})
     @LazyCollection(LazyCollectionOption.TRUE)
-    private List<SWBICS> swbicsList;
+    private List<SWBICS> swbicsList = new ArrayList<>();
 
 
 
@@ -85,10 +85,16 @@ public class BICDirectoryEntry {
                 .participantStatus(participantInfoDes.getParticipantStatus())
                 .build();
         this.changeType = bicDirectoryEntryDeserializer.getChangeType();
-        if(bicDirectoryEntryDeserializer.getAccountsDeserializer()!=null)
-        this.accounts = bicDirectoryEntryDeserializer.getAccountsDeserializer().stream().map(Accounts::new).collect(Collectors.toList());
-        if(bicDirectoryEntryDeserializer.getSwbicsDeserializer()!=null)
-        this.swbicsList = bicDirectoryEntryDeserializer.getSwbicsDeserializer().stream().map(SWBICS::new).collect(Collectors.toList());
+        this.accounts = bicDirectoryEntryDeserializer.getAccountsDeserializer().stream().map(account->{
+            Accounts acc = new Accounts(account);
+            acc.setBicDirectoryEntry(this);
+            return acc;
+        }).collect(Collectors.toList());
+        this.swbicsList = bicDirectoryEntryDeserializer.getSwbicsDeserializer().stream().map(swbic->{
+            SWBICS SWBIC = new SWBICS(swbic);
+            SWBIC.setBicDirectoryEntry(this);
+            return SWBIC;
+        }).collect(Collectors.toList());
     }
 
     public int getBIC() {
@@ -159,5 +165,15 @@ public class BICDirectoryEntry {
         this.participantInfo = participantInfo;
     }
 
-
+    @Override
+    public String toString() {
+        return "BICDirectoryEntry{" +
+                "BIC=" + BIC +
+                ", participantInfo=" + participantInfo +
+                ", changeType=" + changeType +
+                ", electronicDocuments=" + electronicDocuments +
+                ", accounts=" + accounts +
+                ", swbicsList=" + swbicsList +
+                '}';
+    }
 }

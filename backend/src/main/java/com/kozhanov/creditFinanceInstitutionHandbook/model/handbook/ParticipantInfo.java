@@ -6,6 +6,7 @@ import com.kozhanov.creditFinanceInstitutionHandbook.deserialization.handbook.Rs
 import com.kozhanov.creditFinanceInstitutionHandbook.model.codeValue.*;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -97,7 +98,7 @@ public class ParticipantInfo {
 
 
     @OneToMany(cascade = {CascadeType.PERSIST,CascadeType.MERGE,CascadeType.REMOVE})
-    private List<RestrictionEntry> rstrList;
+    private List<RestrictionEntry> rstrList = new ArrayList<>();
 
     public ParticipantInfo(String nameParticipant, Date dateIn, ParticipantType participantType, AvailableTransferService availableTransferService, ExchangeParticipant exchangeParticipant) {
         this.nameParticipant = nameParticipant;
@@ -390,6 +391,32 @@ public class ParticipantInfo {
         }
 
 
+    }
+
+    @Override
+    public String toString() {
+        return "ParticipantInfo{" +
+                "id=" + id +
+                ", nameParticipant='" + nameParticipant + '\'' +
+                ", engNameParticipant='" + engNameParticipant + '\'' +
+                ", registrationNumber='" + registrationNumber + '\'' +
+                ", countryCode='" + countryCode + '\'' +
+                ", regionCode='" + regionCode + '\'' +
+                ", index='" + index + '\'' +
+                ", typeLocation='" + typeLocation + '\'' +
+                ", nameLocation='" + nameLocation + '\'' +
+                ", address='" + address + '\'' +
+                ", parentBIC=" + parentBIC +
+                ", dateIn=" + dateIn +
+                ", dateOut=" + dateOut +
+                ", participantType=" + participantType +
+                ", availableTransferService=" + availableTransferService +
+                ", exchangeParticipant=" + exchangeParticipant +
+                ", UID=" + UID +
+                ", participantStatus=" + participantStatus +
+                ", bicDirectoryEntry=" + bicDirectoryEntry +
+                ", rstrList=" + rstrList +
+                '}';
     }
 }
 

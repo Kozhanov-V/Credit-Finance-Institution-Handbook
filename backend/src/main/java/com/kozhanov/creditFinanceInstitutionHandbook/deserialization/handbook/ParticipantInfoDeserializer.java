@@ -8,6 +8,7 @@ import com.kozhanov.creditFinanceInstitutionHandbook.model.codeValue.ExchangePar
 import com.kozhanov.creditFinanceInstitutionHandbook.model.codeValue.ParticipantStatus;
 import com.kozhanov.creditFinanceInstitutionHandbook.model.codeValue.ParticipantType;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -67,7 +68,7 @@ public class ParticipantInfoDeserializer {
 
     @JacksonXmlProperty(localName = "RstrList")
     @JacksonXmlElementWrapper(useWrapping = false)
-    private List<RstrListDeserializer> rstrList;
+    private List<RstrListDeserializer> rstrList = new ArrayList<>();
 
     public long getUid() {
         return uid;
