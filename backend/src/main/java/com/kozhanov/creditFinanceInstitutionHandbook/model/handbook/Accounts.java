@@ -1,13 +1,23 @@
 package com.kozhanov.creditFinanceInstitutionHandbook.model.handbook;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
+import com.kozhanov.creditFinanceInstitutionHandbook.deserialization.codeValue.AccountStatusDeserializer;
+import com.kozhanov.creditFinanceInstitutionHandbook.deserialization.codeValue.RegulationAccountTypeDeserializer;
 import com.kozhanov.creditFinanceInstitutionHandbook.model.codeValue.AccountStatus;
 import com.kozhanov.creditFinanceInstitutionHandbook.model.codeValue.RegulationAccountType;
 
 import javax.persistence.*;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Size;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "accounts")
@@ -49,17 +59,38 @@ public class Accounts {
     @JsonBackReference
     private BICDirectoryEntry bicDirectoryEntry;
 
+    @OneToMany(mappedBy = "account",cascade = {CascadeType.PERSIST,CascadeType.MERGE,CascadeType.REMOVE})
+    @JsonManagedReference
+    private List<AccountRestriction> accountRestrictions;
+
+    public List<AccountRestriction> getAccountRestrictions() {
+        return accountRestrictions;
+    }
+
+    public void addAccountRestriction(AccountRestriction accountRestriction){
+        if(accountRestrictions==null){
+            accountRestrictions = new ArrayList<>();
+        }
+        accountRestrictions.add(accountRestriction);
+    }
+
     public Accounts() {
     }
 
-    public Accounts(String account, RegulationAccountType regulationAccountType, String controlKey, int accountCBRBIC, Date dateIn, AccountStatus accountStatus) {
+    public Accounts(String account, RegulationAccountType regulationAccountType, String controlKey, int accountCBRBIC, Date dateIn, Date dateOut, AccountStatus accountStatus, BICDirectoryEntry bicDirectoryEntry) {
         this.account = account;
         this.regulationAccountType = regulationAccountType;
         this.controlKey = controlKey;
+        this.accountCBRBIC = accountCBRBIC;
         this.dateIn = dateIn;
+        this.dateOut = dateOut;
         this.accountStatus = accountStatus;
-        this.accountCBRBIC=accountCBRBIC;
+        this.bicDirectoryEntry = bicDirectoryEntry;
     }
+
+
+
+
 
     public String getAccount() {
         return account;
@@ -127,17 +158,20 @@ public class Accounts {
         this.bicDirectoryEntry = bicDirectoryEntry;
     }
 
+    public void setAccountRestrictions(List<AccountRestriction> accountRestrictions) {
+        this.accountRestrictions = accountRestrictions;
+    }
+
     @Override
     public String toString() {
         return "Accounts{" +
                 "account='" + account + '\'' +
                 ", regulationAccountType=" + regulationAccountType +
                 ", controlKey='" + controlKey + '\'' +
-                ", accountCBRBIC='" + accountCBRBIC + '\'' +
+                ", accountCBRBIC=" + accountCBRBIC +
                 ", dateIn=" + dateIn +
                 ", dateOut=" + dateOut +
                 ", accountStatus=" + accountStatus +
-                ", bicDirectoryEntryBIC=" + bicDirectoryEntry.getBic() +
                 '}';
     }
 }

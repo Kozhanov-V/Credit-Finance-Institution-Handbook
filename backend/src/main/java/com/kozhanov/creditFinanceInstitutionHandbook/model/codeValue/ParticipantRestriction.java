@@ -1,5 +1,9 @@
 package com.kozhanov.creditFinanceInstitutionHandbook.model.codeValue;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.kozhanov.creditFinanceInstitutionHandbook.deserialization.codeValue.AccountStatusDeserializer;
+import com.kozhanov.creditFinanceInstitutionHandbook.deserialization.codeValue.ParticipantRestrictionDeserializer;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -10,6 +14,7 @@ import javax.validation.constraints.Size;
 
 @Entity
 @Table(name = "participant_restriction")
+@JsonDeserialize(using = ParticipantRestrictionDeserializer.class)
 public class ParticipantRestriction {
     @Column(name = "code")
     @Id

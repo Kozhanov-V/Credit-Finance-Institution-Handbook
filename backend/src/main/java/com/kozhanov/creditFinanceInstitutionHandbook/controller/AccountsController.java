@@ -1,12 +1,13 @@
 package com.kozhanov.creditFinanceInstitutionHandbook.controller;
 
+import com.kozhanov.creditFinanceInstitutionHandbook.model.codeValue.AccountOperationRestriction;
 import com.kozhanov.creditFinanceInstitutionHandbook.model.codeValue.AccountStatus;
 import com.kozhanov.creditFinanceInstitutionHandbook.model.codeValue.RegulationAccountType;
 import com.kozhanov.creditFinanceInstitutionHandbook.model.handbook.Accounts;
 import com.kozhanov.creditFinanceInstitutionHandbook.model.handbook.BICDirectoryEntry;
+import com.kozhanov.creditFinanceInstitutionHandbook.repository.codeValue.AccountOperationRestrictionRepository;
 import com.kozhanov.creditFinanceInstitutionHandbook.repository.codeValue.AccountStatusRepository;
 import com.kozhanov.creditFinanceInstitutionHandbook.repository.codeValue.RegulationAccountTypeRepository;
-import com.kozhanov.creditFinanceInstitutionHandbook.repository.handbook.BICDirectoryEntryRepository;
 import com.kozhanov.creditFinanceInstitutionHandbook.service.AccountsService;
 import com.kozhanov.creditFinanceInstitutionHandbook.service.BICDirectoryEntryService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +33,9 @@ public class AccountsController {
 
     @Autowired
     private AccountStatusRepository accountStatusRepository;
+
+    @Autowired
+    private AccountOperationRestrictionRepository accountOperationRestrictionRepository;
 
     @PutMapping("/update/{accountNumber}")
     public ResponseEntity<?> updateAccount(@PathVariable String accountNumber, @RequestBody Accounts accounts) {
@@ -62,6 +66,12 @@ public class AccountsController {
     public ResponseEntity<List<AccountStatus>> getAccountStatuses() {
         List<AccountStatus> accountStatusList = accountStatusRepository.findAll();
         return new ResponseEntity<>(accountStatusList, HttpStatus.OK);
+    }
+
+    @GetMapping("/accountRestrictions")
+    public ResponseEntity<?> getAccountRestrictions(){
+        List<AccountOperationRestriction> accountRestrictionList = accountOperationRestrictionRepository.findAll();
+        return new ResponseEntity<>(accountRestrictionList, HttpStatus.OK);
     }
 
 }

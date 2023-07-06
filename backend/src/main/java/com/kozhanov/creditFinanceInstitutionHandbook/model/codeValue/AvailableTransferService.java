@@ -1,5 +1,9 @@
 package com.kozhanov.creditFinanceInstitutionHandbook.model.codeValue;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.kozhanov.creditFinanceInstitutionHandbook.deserialization.codeValue.AccountStatusDeserializer;
+import com.kozhanov.creditFinanceInstitutionHandbook.deserialization.codeValue.AvailableTransferServiceDeserializer;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -9,6 +13,7 @@ import javax.validation.constraints.Size;
 // Srvcs - name in doc about codes
 @Entity
 @Table(name = "available_transfer_service")
+@JsonDeserialize(using = AvailableTransferServiceDeserializer.class)
 public class AvailableTransferService {
     @Column(name = "code")
     @Id

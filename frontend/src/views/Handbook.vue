@@ -190,7 +190,6 @@ export default {
 	methods: {
 		fillTable(bicDirectoryEntries) {
 			this.tableData = bicDirectoryEntries.map(item => ({
-				idES: item.electronicDocuments.number,
 				bic: item.bic,
 				nameParticipant: item.participantInfo.nameParticipant,
 				registrationNumber: item.participantInfo.registrationNumber,
@@ -297,7 +296,6 @@ export default {
 					}
 				});
 				this.bicDirectoryEntries = response.data.bicDirectoryEntries;
-				this.idES = this.bicDirectoryEntries.pop(0).electronicDocuments.number;
 				this.participantTypes = response.data.participantTypes;
 				this.availableTransferServices = response.data.availableTransferServices;
 				this.participantStatuses = response.data.participantStatuses;

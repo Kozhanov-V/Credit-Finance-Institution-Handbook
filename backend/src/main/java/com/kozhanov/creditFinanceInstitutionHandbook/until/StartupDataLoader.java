@@ -1,13 +1,10 @@
 package com.kozhanov.creditFinanceInstitutionHandbook.until;
 
 import com.kozhanov.creditFinanceInstitutionHandbook.config.WebSecurityConfig;
+import com.kozhanov.creditFinanceInstitutionHandbook.model.handbook.*;
 import com.kozhanov.creditFinanceInstitutionHandbook.model.users.Role;
 import com.kozhanov.creditFinanceInstitutionHandbook.model.users.User;
 import com.kozhanov.creditFinanceInstitutionHandbook.model.codeValue.*;
-import com.kozhanov.creditFinanceInstitutionHandbook.model.handbook.Accounts;
-import com.kozhanov.creditFinanceInstitutionHandbook.model.handbook.BICDirectoryEntry;
-import com.kozhanov.creditFinanceInstitutionHandbook.model.handbook.ElectronicDocuments;
-import com.kozhanov.creditFinanceInstitutionHandbook.model.handbook.ParticipantInfo;
 import com.kozhanov.creditFinanceInstitutionHandbook.repository.auth.RoleReposiroty;
 import com.kozhanov.creditFinanceInstitutionHandbook.repository.auth.UserRepository;
 import com.kozhanov.creditFinanceInstitutionHandbook.repository.codeValue.*;
@@ -98,6 +95,7 @@ public class StartupDataLoader implements
     }
 
     public void insertIntoCodeValues() {
+        System.out.println("ыфвфыв");
         // AccRstr
         accountOperationRestrictionRepository.save(new AccountOperationRestriction("LMRS", "Временное сохранение счета" +
                 " с его функционированием в ограниченном режиме", "ED807"));
@@ -242,57 +240,16 @@ public class StartupDataLoader implements
         bicDirectoryEntry.addAccount(accounts);
         bicDirectoryEntryRepository.save(bicDirectoryEntry);
         accounts.setAccount("40116810100000010012");
+        AccountRestriction accountRestriction = new AccountRestriction();
+        accountRestriction.setAccount(accounts);
+        accountRestriction.setAccountRestriction(accountOperationRestrictionRepository.findByCode("URRS").get());
+        accountRestriction.setRestrictionDate(new Date(System.currentTimeMillis()));
+        accounts.addAccountRestriction(accountRestriction);
         bicDirectoryEntry.addAccount(accounts);
         bicDirectoryEntryRepository.save(bicDirectoryEntry);
         accounts.setAccount("40116810100000010015");
         bicDirectoryEntry.addAccount(accounts);
-        bicDirectoryEntryRepository.save(bicDirectoryEntry);
-        bicDirectoryEntry.setBic(4324234);
-        bicDirectoryEntryRepository.save(bicDirectoryEntry);
-        bicDirectoryEntry.setBic(43242214);
-        bicDirectoryEntryRepository.save(bicDirectoryEntry);
-        bicDirectoryEntry.setBic(43242);
-        bicDirectoryEntryRepository.save(bicDirectoryEntry);
-        bicDirectoryEntry.setBic(43289734);
-        bicDirectoryEntryRepository.save(bicDirectoryEntry);
-        bicDirectoryEntry.setBic(6978234);
-        bicDirectoryEntryRepository.save(bicDirectoryEntry);
-        bicDirectoryEntry.setBic(13521345);
-        bicDirectoryEntryRepository.save(bicDirectoryEntry);
-        bicDirectoryEntry.setBic(40173011);
-        bicDirectoryEntryRepository.save(bicDirectoryEntry);
-
-        bicDirectoryEntryRepository.save(bicDirectoryEntry);
-        bicDirectoryEntry.setBic(432423536);
-        bicDirectoryEntryRepository.save(bicDirectoryEntry);
-        bicDirectoryEntry.setBic(431239824);
-        bicDirectoryEntryRepository.save(bicDirectoryEntry);
-        bicDirectoryEntry.setBic(4321087);
-        bicDirectoryEntryRepository.save(bicDirectoryEntry);
-        bicDirectoryEntry.setBic(14353245);
-        bicDirectoryEntryRepository.save(bicDirectoryEntry);
-        bicDirectoryEntry.setBic(692345);
-        bicDirectoryEntryRepository.save(bicDirectoryEntry);
-        bicDirectoryEntry.setBic(138765);
-        bicDirectoryEntryRepository.save(bicDirectoryEntry);
-        bicDirectoryEntry.setBic(48216445);
-        bicDirectoryEntryRepository.save(bicDirectoryEntry);
-
-        bicDirectoryEntryRepository.save(bicDirectoryEntry);
-        bicDirectoryEntry.setBic(432134);
-        bicDirectoryEntryRepository.save(bicDirectoryEntry);
-        bicDirectoryEntry.setBic(486754);
-        bicDirectoryEntryRepository.save(bicDirectoryEntry);
-        bicDirectoryEntry.setBic(12521087);
-        bicDirectoryEntryRepository.save(bicDirectoryEntry);
-        bicDirectoryEntry.setBic(54635);
-        bicDirectoryEntryRepository.save(bicDirectoryEntry);
-        bicDirectoryEntry.setBic(98765);
-        bicDirectoryEntryRepository.save(bicDirectoryEntry);
-        bicDirectoryEntry.setBic(1234654);
-        bicDirectoryEntryRepository.save(bicDirectoryEntry);
-        bicDirectoryEntry.setBic(6534532);
-        bicDirectoryEntry.getParticipantInfo().setUID(99999);
+        bicDirectoryEntry.setBIC(342432423);
         bicDirectoryEntryRepository.save(bicDirectoryEntry);
 
         bicDirectoryEntry.setChangeType(changeTypeRepository.findByCode("ADDD").get());

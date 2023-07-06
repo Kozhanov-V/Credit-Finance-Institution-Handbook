@@ -1,5 +1,9 @@
 package com.kozhanov.creditFinanceInstitutionHandbook.model.codeValue;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.kozhanov.creditFinanceInstitutionHandbook.deserialization.codeValue.AccountStatusDeserializer;
+import com.kozhanov.creditFinanceInstitutionHandbook.deserialization.codeValue.CreationReasonDeserializer;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -8,6 +12,7 @@ import javax.validation.constraints.Size;
 
 @Entity
 @Table(name = "creation_reason")
+@JsonDeserialize(using = CreationReasonDeserializer.class)
 public class CreationReason {
     @Column(name = "code")
     @Id

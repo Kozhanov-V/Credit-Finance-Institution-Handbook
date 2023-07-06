@@ -32,6 +32,7 @@ public class AccountsServiceImpl implements AccountsService{
         existingAccounts.setControlKey(accounts.getControlKey());
         existingAccounts.setDateIn(accounts.getDateIn());
         existingAccounts.setDateOut(accounts.getDateOut());
+        existingAccounts.setAccountRestrictions(accounts.getAccountRestrictions());
         accountsRepository.save(existingAccounts);
     }
 

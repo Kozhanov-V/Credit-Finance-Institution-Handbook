@@ -1,20 +1,17 @@
 package com.kozhanov.creditFinanceInstitutionHandbook.model.handbook;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.kozhanov.creditFinanceInstitutionHandbook.deserialization.AvailableTransferServiceDeserializer;
-import com.kozhanov.creditFinanceInstitutionHandbook.deserialization.ExchangeParticipantDeserializer;
-import com.kozhanov.creditFinanceInstitutionHandbook.deserialization.ParticipantTypeDeserializer;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.kozhanov.creditFinanceInstitutionHandbook.model.codeValue.*;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 import javax.validation.constraints.*;
 
 @Entity
 @Table(name = "participant_info")
 public class ParticipantInfo {
-
 
 
     @Id
@@ -73,17 +70,14 @@ public class ParticipantInfo {
 
     @ManyToOne
     @JoinColumn(name = "participant_type_code",nullable = false)
-    @JsonDeserialize(using = ParticipantTypeDeserializer.class)
     private ParticipantType participantType;
 
     @ManyToOne
     @JoinColumn(name = "available_transfer_service_code",nullable = false)
-    @JsonDeserialize(using = AvailableTransferServiceDeserializer.class)
     private AvailableTransferService availableTransferService;
 
     @ManyToOne
     @JoinColumn(name = "exchange_participant_code",nullable = false)
-    @JsonDeserialize(using = ExchangeParticipantDeserializer.class)
     private ExchangeParticipant exchangeParticipant;
 
     @Column(name = "uid")
@@ -99,6 +93,10 @@ public class ParticipantInfo {
     @JsonBackReference
     private BICDirectoryEntry bicDirectoryEntry;
 
+
+    @OneToMany(mappedBy = "bicDirectoryEntry", cascade = {CascadeType.PERSIST,CascadeType.MERGE,CascadeType.REMOVE})
+    @JsonManagedReference
+    private List<RestrictionEntry> rstrList;
 
     public ParticipantInfo(String nameParticipant, Date dateIn, ParticipantType participantType, AvailableTransferService availableTransferService, ExchangeParticipant exchangeParticipant) {
         this.nameParticipant = nameParticipant;
@@ -132,6 +130,14 @@ public class ParticipantInfo {
 
 
     public ParticipantInfo() {
+    }
+
+    public List<RestrictionEntry> getRstrList() {
+        return rstrList;
+    }
+
+    public void setRstrList(List<RestrictionEntry> rstrList) {
+        this.rstrList = rstrList;
     }
 
     public Integer getId() {
@@ -276,6 +282,14 @@ public class ParticipantInfo {
 
     public void setParticipantStatus(ParticipantStatus participantStatus) {
         this.participantStatus = participantStatus;
+    }
+
+    public BICDirectoryEntry getBicDirectoryEntry() {
+        return bicDirectoryEntry;
+    }
+
+    public void setBicDirectoryEntry(BICDirectoryEntry bicDirectoryEntry) {
+        this.bicDirectoryEntry = bicDirectoryEntry;
     }
 
     @Override

@@ -1,5 +1,13 @@
 package com.kozhanov.creditFinanceInstitutionHandbook.model.handbook;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
+import com.kozhanov.creditFinanceInstitutionHandbook.deserialization.codeValue.CreationReasonDeserializer;
+import com.kozhanov.creditFinanceInstitutionHandbook.deserialization.codeValue.InfoTypeCodeDeserializer;
 import com.kozhanov.creditFinanceInstitutionHandbook.model.codeValue.CreationReason;
 import com.kozhanov.creditFinanceInstitutionHandbook.model.codeValue.InfoTypeCode;
 
@@ -7,7 +15,9 @@ import javax.persistence.*;
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "electronic_documents")
@@ -53,6 +63,17 @@ public class ElectronicDocuments {
     @Max(99)
     private int directoryVersion;
 
+    @OneToMany(mappedBy = "electronicDocuments", cascade = {CascadeType.PERSIST,CascadeType.MERGE,CascadeType.REMOVE})
+    @JsonManagedReference
+    private List<BICDirectoryEntry> bicDirectoryEntryList;
+
+    public void addBicDirectoryEntry(BICDirectoryEntry bicDirectoryEntry){
+        if(bicDirectoryEntryList==null){
+            bicDirectoryEntryList = new ArrayList<>();
+        }
+        bicDirectoryEntryList.add(bicDirectoryEntry);
+    }
+
     public ElectronicDocuments(Integer number, Date date, long author, long receiver, CreationReason creationReason, Date creationDateTime, InfoTypeCode infoTypeCode, Date businessDay, int directoryVersion) {
         this.number = number;
         this.date = date;
@@ -77,6 +98,14 @@ public class ElectronicDocuments {
         this.infoTypeCode = infoTypeCode;
         this.businessDay = businessDay;
         this.directoryVersion = directoryVersion;
+    }
+
+    public List<BICDirectoryEntry> getBicDirectoryEntryList() {
+        return bicDirectoryEntryList;
+    }
+
+    public void setBicDirectoryEntryList(List<BICDirectoryEntry> bicDirectoryEntryList) {
+        this.bicDirectoryEntryList = bicDirectoryEntryList;
     }
 
     public Integer getNumber() {

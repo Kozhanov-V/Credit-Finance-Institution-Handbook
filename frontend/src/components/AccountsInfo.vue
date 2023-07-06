@@ -60,6 +60,9 @@
 
 						</td>
 
+						
+
+
 						<td>
 
 							
@@ -95,7 +98,7 @@
 									{{ type.code }}
 								</option>
 							</select>
-						</td>
+						</td>	
 						<td><button @click="saveAccount">С</button> <button @click="closeAddMode">О</button></td>
 					</tr>
 				</table>
@@ -118,6 +121,7 @@ export default {
 			activeItem: null,
 			editItem: null,
 			addMode: false,
+			accountRestrictions:[],
 			accountStatuses: [],
 			regulationAccountTypes: [],
 			addItem: {
@@ -128,7 +132,7 @@ export default {
 				dateOut: '',
 				accountStatus: '',
 				accountCBRBIC: '',
-
+				accountRestrictions: [],
 			},
 			tableData:[]
 		}
@@ -165,7 +169,20 @@ export default {
 					this.accountStatuses = response.data;
 				})
 
+				axios.get(`http://localhost:8080/api/account/accountRestrictions`, {
+					headers: {
+						'Authorization': 'Bearer ' + localStorage.getItem('token')
+					}
+				}).then((response) => {
+					this.accountRestrictions = response.data;
+					console.log(this.accountRestrictions)
+				})
+
 			}
+
+			
+
+			
 			catch (error) {
 				console.log(error)
 			}
@@ -180,6 +197,7 @@ export default {
 				dateOut: item.dateOut,
 				accountStatus: item.accountStatus?.code,
 				accountCBRBIC: item.accountCBRBIC,
+				accountRestrictions: item.accountRestrictions,
 			}))
 		},
 
@@ -212,6 +230,7 @@ export default {
 			addItem.dateOut = '';
 			addItem.accountStatus = '';
 			addItem.accountCBRBIC = '';
+			accountRestrictions = [];
 		},
 		editAccount() {
 			this.editItem = this.activeItem;
@@ -237,7 +256,6 @@ export default {
 				})
 				.finally(() => {
 					this.editItem = null;
-					this.closePopover();
 				});
 
 		},
@@ -253,9 +271,6 @@ export default {
 				})
 				.catch(error => {
 					console.error(error);
-				})
-				.finally(() => {
-					this.closePopover();
 				});
 		},
 		closeModal() {

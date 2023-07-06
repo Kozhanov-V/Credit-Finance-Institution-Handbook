@@ -1,7 +1,7 @@
 package com.kozhanov.creditFinanceInstitutionHandbook.model.codeValue;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.kozhanov.creditFinanceInstitutionHandbook.deserialization.RegulationAccountTypeDeserializer;
+import com.kozhanov.creditFinanceInstitutionHandbook.deserialization.codeValue.RegulationAccountTypeDeserializer;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;

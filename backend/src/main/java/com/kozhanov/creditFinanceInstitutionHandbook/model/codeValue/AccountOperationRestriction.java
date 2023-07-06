@@ -1,5 +1,8 @@
 package com.kozhanov.creditFinanceInstitutionHandbook.model.codeValue;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.kozhanov.creditFinanceInstitutionHandbook.deserialization.codeValue.AccountOperationRestrictionDeserializer;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -10,6 +13,7 @@ import javax.validation.constraints.Size;
 
 @Entity
 @Table(name = "account_operations_restriction")
+@JsonDeserialize(using = AccountOperationRestrictionDeserializer.class)
 public class AccountOperationRestriction {
     @Column(name = "code")
     @Id

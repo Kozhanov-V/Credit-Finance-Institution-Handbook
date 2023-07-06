@@ -4,10 +4,7 @@ import com.kozhanov.creditFinanceInstitutionHandbook.model.handbook.Accounts;
 import com.kozhanov.creditFinanceInstitutionHandbook.model.handbook.BICDirectoryEntry;
 import com.kozhanov.creditFinanceInstitutionHandbook.model.handbook.ParticipantInfo;
 import com.kozhanov.creditFinanceInstitutionHandbook.repository.codeValue.*;
-import com.kozhanov.creditFinanceInstitutionHandbook.service.AccountsService;
-import com.kozhanov.creditFinanceInstitutionHandbook.service.BICDirectoryEntryService;
-import com.kozhanov.creditFinanceInstitutionHandbook.service.ElectronicDocumentsServiceImpl;
-import com.kozhanov.creditFinanceInstitutionHandbook.service.ParticipantInfoService;
+import com.kozhanov.creditFinanceInstitutionHandbook.service.*;
 import com.kozhanov.creditFinanceInstitutionHandbook.until.FilterParameters;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -42,6 +39,9 @@ public class ApiController {
 
    @Autowired
    private AccountsService accountsService;
+
+   @Autowired
+   private ImportService importService;
 
     @GetMapping("/data")
     public ResponseEntity<?> getAllData() {
@@ -102,7 +102,13 @@ public class ApiController {
 
 
 
-
+    @PostMapping("/import/update")
+    public ResponseEntity<?> updateFromCB(){
+        System.out.println("1");
+        importService.importFromCB();
+        System.out.println("2");
+        return new ResponseEntity<>("bicDirectoryEntries",HttpStatus.OK);
+    }
 
 
 

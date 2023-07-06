@@ -1,5 +1,9 @@
 package com.kozhanov.creditFinanceInstitutionHandbook.model.codeValue;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.kozhanov.creditFinanceInstitutionHandbook.deserialization.codeValue.AccountStatusDeserializer;
+import com.kozhanov.creditFinanceInstitutionHandbook.deserialization.codeValue.ExchangeParticipantDeserializer;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -9,6 +13,7 @@ import javax.validation.constraints.Size;
 // XchType
 @Entity
 @Table(name = "exchange_participant")
+@JsonDeserialize(using = ExchangeParticipantDeserializer.class)
 public class ExchangeParticipant {
     @Column(name = "code")
     @Id

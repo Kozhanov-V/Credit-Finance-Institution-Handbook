@@ -4,8 +4,9 @@
     <div class="navigation-elements" :style="{'--top': `${(hoverItem !== null ? hoverItem : activeItem)* 2.9 + 0.85}`}">
       <!-- We added 19 to account for initial top offset of .navigation-elements -->
       <div class="active-indicator"></div>
-			<button 
-        v-for="(item, index) in items" 
+			<div  v-for="(item, index) in items" >
+				<router-link :to= item.url>
+					<button 
         :key="index"
         class="element-item" 
         :id="item.id"
@@ -14,6 +15,10 @@
         @mouseover="hoverItem = index"
         @mouseout="hoverItem = null">
       </button>
+				</router-link>
+				
+			</div>
+			
     </div>
   </nav>
 </template>
@@ -26,9 +31,9 @@ export default {
       activeItem: null,
       hoverItem: null, // Add this new data property
       items: [
-        {id: 'handbookBtn', img: 'img/handbook.png'},
-        {id: 'importBtn', img: 'img/import.png'},
-        {id: 'favoritesBtn', img: 'img/favorites.png'},
+        {id: 'handbookBtn', img: 'img/handbook.png', url: "/handbook" },
+        {id: 'importBtn', img: 'img/import.png', url: "/import"}, 
+        {id: 'favoritesBtn', img: 'img/favorites.png', url: "/" },
         // Add more items as required
       ]
     }
