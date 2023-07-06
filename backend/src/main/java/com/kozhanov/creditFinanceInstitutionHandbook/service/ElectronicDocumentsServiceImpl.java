@@ -1,5 +1,6 @@
 package com.kozhanov.creditFinanceInstitutionHandbook.service;
 
+import com.kozhanov.creditFinanceInstitutionHandbook.deserialization.handbook.ElectroncDocumentsDeserializer;
 import com.kozhanov.creditFinanceInstitutionHandbook.model.handbook.ElectronicDocuments;
 import com.kozhanov.creditFinanceInstitutionHandbook.repository.handbook.ElectronicDocumentsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,5 +43,7 @@ public class ElectronicDocumentsServiceImpl implements ElectronicDocumentsServic
     public void save(ElectronicDocuments electronicDocuments) {
         electronicDocumentsRepository.save(electronicDocuments);
     }
+
+
 }
 

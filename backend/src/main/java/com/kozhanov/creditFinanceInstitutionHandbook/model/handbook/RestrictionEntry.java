@@ -20,11 +20,6 @@ public class RestrictionEntry {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "bic", nullable = false)
-    @JsonBackReference
-    private BICDirectoryEntry bicDirectoryEntry;
-
-    @ManyToOne
     @JoinColumn(name = "participant_restriction_code")
     private ParticipantRestriction Rstr;
 
@@ -52,15 +47,6 @@ public class RestrictionEntry {
     public void setId(Long id) {
         this.id = id;
     }
-
-    public BICDirectoryEntry getBicDirectoryEntry() {
-        return bicDirectoryEntry;
-    }
-
-    public void setBicDirectoryEntry(BICDirectoryEntry bicDirectoryEntry) {
-        this.bicDirectoryEntry = bicDirectoryEntry;
-    }
-
 
     public Date getRstrDate() {
         return RstrDate;

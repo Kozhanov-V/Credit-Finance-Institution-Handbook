@@ -4,6 +4,9 @@ import com.kozhanov.creditFinanceInstitutionHandbook.model.handbook.BICDirectory
 import com.kozhanov.creditFinanceInstitutionHandbook.repository.codeValue.ChangeTypeRepository;
 import com.kozhanov.creditFinanceInstitutionHandbook.repository.handbook.BICDirectoryEntryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -33,7 +36,9 @@ public class BICDirectoryEntryServiceImpl implements BICDirectoryEntryService {
 
     @Override
     public List<BICDirectoryEntry> findAll() {
-        return bicDirectoryEntryRepository.findAll();
+        Pageable pageable = PageRequest.of(0,24);
+        Page<BICDirectoryEntry> page = bicDirectoryEntryRepository.findAll(pageable);
+        return page.toList();
     }
 
     @Override

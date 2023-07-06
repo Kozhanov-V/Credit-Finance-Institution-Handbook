@@ -8,6 +8,7 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 import com.kozhanov.creditFinanceInstitutionHandbook.deserialization.codeValue.CreationReasonDeserializer;
 import com.kozhanov.creditFinanceInstitutionHandbook.deserialization.codeValue.InfoTypeCodeDeserializer;
+import com.kozhanov.creditFinanceInstitutionHandbook.deserialization.handbook.ElectroncDocumentsDeserializer;
 import com.kozhanov.creditFinanceInstitutionHandbook.model.codeValue.CreationReason;
 import com.kozhanov.creditFinanceInstitutionHandbook.model.codeValue.InfoTypeCode;
 
@@ -18,6 +19,7 @@ import javax.validation.constraints.Min;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "electronic_documents")
@@ -85,6 +87,21 @@ public class ElectronicDocuments {
         this.businessDay = businessDay;
         this.directoryVersion = directoryVersion;
     }
+
+    public ElectronicDocuments(ElectroncDocumentsDeserializer electroncDocumentsDeserializer){
+        this.number = electroncDocumentsDeserializer.getEdNo();
+        this.date = electroncDocumentsDeserializer.getEdDate();
+        this.author = electroncDocumentsDeserializer.getEdAuthor();
+        this.receiver = electroncDocumentsDeserializer.geteDReceiver();
+        this.creationReason = electroncDocumentsDeserializer.getCreationReason();
+        this.creationDateTime = electroncDocumentsDeserializer.getCreationDateTime();
+        this.infoTypeCode = electroncDocumentsDeserializer.getInfoTypeCode();
+        this.businessDay = electroncDocumentsDeserializer.getBusinessDay();
+        this.directoryVersion = electroncDocumentsDeserializer.getDirectoryVersion();
+        this.bicDirectoryEntryList = electroncDocumentsDeserializer.getBicDirectoryEntryDeserializer().stream().map(BICDirectoryEntry::new).collect(Collectors.toList());
+    }
+
+
 
     public ElectronicDocuments() {
     }

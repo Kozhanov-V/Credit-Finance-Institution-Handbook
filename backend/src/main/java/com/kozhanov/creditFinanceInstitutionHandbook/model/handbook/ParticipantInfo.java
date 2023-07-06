@@ -2,11 +2,13 @@ package com.kozhanov.creditFinanceInstitutionHandbook.model.handbook;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.kozhanov.creditFinanceInstitutionHandbook.deserialization.handbook.RstrListDeserializer;
 import com.kozhanov.creditFinanceInstitutionHandbook.model.codeValue.*;
 
 import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 import javax.validation.constraints.*;
 
 @Entity
@@ -94,8 +96,7 @@ public class ParticipantInfo {
     private BICDirectoryEntry bicDirectoryEntry;
 
 
-    @OneToMany(mappedBy = "bicDirectoryEntry", cascade = {CascadeType.PERSIST,CascadeType.MERGE,CascadeType.REMOVE})
-    @JsonManagedReference
+    @OneToMany(cascade = {CascadeType.PERSIST,CascadeType.MERGE,CascadeType.REMOVE})
     private List<RestrictionEntry> rstrList;
 
     public ParticipantInfo(String nameParticipant, Date dateIn, ParticipantType participantType, AvailableTransferService availableTransferService, ExchangeParticipant exchangeParticipant) {
@@ -292,29 +293,6 @@ public class ParticipantInfo {
         this.bicDirectoryEntry = bicDirectoryEntry;
     }
 
-    @Override
-    public String toString() {
-        return "ParticipantInfo{" +
-                "id=" + id +
-                ", nameParticipant='" + nameParticipant + '\'' +
-                ", engNameParticipant='" + engNameParticipant + '\'' +
-                ", registrationNumber='" + registrationNumber + '\'' +
-                ", countryCode='" + countryCode + '\'' +
-                ", regionCode='" + regionCode + '\'' +
-                ", index='" + index + '\'' +
-                ", typeLocation='" + typeLocation + '\'' +
-                ", nameLocation='" + nameLocation + '\'' +
-                ", address='" + address + '\'' +
-                ", parentBIC=" + parentBIC +
-                ", dateIn=" + dateIn +
-                ", dateOut=" + dateOut +
-                ", participantType=" + participantType +
-                ", availableTransferService=" + availableTransferService +
-                ", exchangeParticipant=" + exchangeParticipant +
-                ", UID=" + UID +
-                ", participantStatus=" + participantStatus +
-                '}';
-    }
     public static class Builder {
         private String nameParticipant;
         private String engNameParticipant;
@@ -333,6 +311,7 @@ public class ParticipantInfo {
         private ExchangeParticipant exchangeParticipant;
         private long UID;
         private ParticipantStatus participantStatus;
+        private List<RestrictionEntry> rstrList;
 
         public Builder nameParticipant(String nameParticipant) {
             this.nameParticipant = nameParticipant;
@@ -409,6 +388,7 @@ public class ParticipantInfo {
 
             return participantInfo;
         }
+
 
     }
 }

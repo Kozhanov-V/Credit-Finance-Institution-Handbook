@@ -6,31 +6,26 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 import com.kozhanov.creditFinanceInstitutionHandbook.model.codeValue.ChangeType;
 
 import java.util.List;
+
 @JacksonXmlRootElement(localName = "BICDirectoryEntry")
 public class BICDirectoryEntryDeserializer {
+
     @JacksonXmlProperty(localName = "BIC", isAttribute = true)
     private int bic;
 
     @JacksonXmlProperty(localName = "ChangeType", isAttribute = true)
-    private ChangeType changeType;
+    private ChangeType ChangeType;
 
     @JacksonXmlProperty(localName = "ParticipantInfo")
     private ParticipantInfoDeserializer participantInfoDeserializer;
 
     @JacksonXmlElementWrapper(useWrapping = false)
     @JacksonXmlProperty(localName = "Accounts")
-    private List<AccountsDeserializer> accounts;
+    private List<AccountsDeserializer> accountsDeserializer;
 
     @JacksonXmlProperty(localName = "SWBICS")
-    private SWBICSDeserializer swbics;
-
-    public List<AccountsDeserializer> getAccounts() {
-        return accounts;
-    }
-
-    public void setAccounts(List<AccountsDeserializer> accounts) {
-        this.accounts = accounts;
-    }
+    @JacksonXmlElementWrapper(useWrapping = false)
+    private List<SWBICSDeserializer> swbicsDeserializer;
 
 
     public int getBic() {
@@ -41,36 +36,39 @@ public class BICDirectoryEntryDeserializer {
         this.bic = bic;
     }
 
-    public ChangeType getChangeType() {
-        return changeType;
+    public com.kozhanov.creditFinanceInstitutionHandbook.model.codeValue.ChangeType getChangeType() {
+        return ChangeType;
     }
 
-    public void setChangeType(ChangeType changeType) {
-        this.changeType = changeType;
+    public void setChangeType(com.kozhanov.creditFinanceInstitutionHandbook.model.codeValue.ChangeType changeType) {
+        ChangeType = changeType;
     }
 
-    public ParticipantInfoDeserializer getParticipantInfo() {
+    public ParticipantInfoDeserializer getParticipantInfoDeserializer() {
         return participantInfoDeserializer;
     }
 
-    public void setParticipantInfo(ParticipantInfoDeserializer participantInfoDeserializer) {
+    public void setParticipantInfoDeserializer(ParticipantInfoDeserializer participantInfoDeserializer) {
         this.participantInfoDeserializer = participantInfoDeserializer;
     }
 
-    public SWBICSDeserializer getSwbics() {
-        return swbics;
+    public List<SWBICSDeserializer> getSwbicsDeserializer() {
+        return swbicsDeserializer;
     }
 
-    public void setSwbics(SWBICSDeserializer swbics) {
-        this.swbics = swbics;
+    public void setSwbicsDeserializer(List<SWBICSDeserializer> swbicsDeserializer) {
+        this.swbicsDeserializer = swbicsDeserializer;
     }
 
-    @Override
-    public String toString() {
-        return "BICDirectoryEntry{" +
-                "bic='" + bic + '\'' +
-                ", participantInfo=" + participantInfoDeserializer.getNameP() +
-                ", swbics=" + swbics +
-                '}';
+    public List<AccountsDeserializer> getAccountsDeserializer() {
+        return accountsDeserializer;
     }
+
+    public void setAccountsDeserializer(List<AccountsDeserializer> accountsDeserializer) {
+        this.accountsDeserializer = accountsDeserializer;
+    }
+
+    public BICDirectoryEntryDeserializer() {
+    }
+
 }

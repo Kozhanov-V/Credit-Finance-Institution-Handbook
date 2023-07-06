@@ -23,6 +23,11 @@ export default {
 					this.regulationAccountTypes = response.data;
 				})
 		}
-  }
+  },
+	mounted() {
+    this.$nextTick(function() {
+      document.getElementById('importBtn').click();
+    })
+  },
 }
 </script>

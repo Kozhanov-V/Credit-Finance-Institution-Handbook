@@ -241,10 +241,9 @@ public class StartupDataLoader implements
         bicDirectoryEntryRepository.save(bicDirectoryEntry);
         accounts.setAccount("40116810100000010012");
         AccountRestriction accountRestriction = new AccountRestriction();
-        accountRestriction.setAccount(accounts);
         accountRestriction.setAccountRestriction(accountOperationRestrictionRepository.findByCode("URRS").get());
         accountRestriction.setRestrictionDate(new Date(System.currentTimeMillis()));
-        accounts.addAccountRestriction(accountRestriction);
+       // accounts.addAccountRestriction(accountRestriction);
         bicDirectoryEntry.addAccount(accounts);
         bicDirectoryEntryRepository.save(bicDirectoryEntry);
         accounts.setAccount("40116810100000010015");

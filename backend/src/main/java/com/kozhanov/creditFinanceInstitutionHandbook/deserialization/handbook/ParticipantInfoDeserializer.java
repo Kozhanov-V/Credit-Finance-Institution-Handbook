@@ -1,15 +1,27 @@
 package com.kozhanov.creditFinanceInstitutionHandbook.deserialization.handbook;
 
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
+import com.kozhanov.creditFinanceInstitutionHandbook.model.codeValue.AvailableTransferService;
+import com.kozhanov.creditFinanceInstitutionHandbook.model.codeValue.ExchangeParticipant;
+import com.kozhanov.creditFinanceInstitutionHandbook.model.codeValue.ParticipantStatus;
+import com.kozhanov.creditFinanceInstitutionHandbook.model.codeValue.ParticipantType;
 
-@JacksonXmlRootElement(localName = " ParticipantInfo")
+import java.util.Date;
+import java.util.List;
+
+@JacksonXmlRootElement(localName = "ParticipantInfo")
 public class ParticipantInfoDeserializer {
+
     @JacksonXmlProperty(localName = "NameP", isAttribute = true)
     private String nameP;
 
     @JacksonXmlProperty(localName = "EnglName", isAttribute = true)
     private String EnglName;
+
+    @JacksonXmlProperty(localName = "RegN", isAttribute = true)
+    private String RegN;
 
     @JacksonXmlProperty(localName = "CntrCd", isAttribute = true)
     private String cntrCd;
@@ -20,9 +32,6 @@ public class ParticipantInfoDeserializer {
     @JacksonXmlProperty(localName = "Ind", isAttribute = true)
     private String ind;
 
-    @JacksonXmlProperty(localName = "RegN", isAttribute = true)
-    private String RegN;
-
     @JacksonXmlProperty(localName = "Tnp", isAttribute = true)
     private String tnp;
 
@@ -32,29 +41,41 @@ public class ParticipantInfoDeserializer {
     @JacksonXmlProperty(localName = "Adr", isAttribute = true)
     private String adr;
 
+    @JacksonXmlProperty(localName = "PrntBIC", isAttribute = true)
+    private int PrntBIC;
+
     @JacksonXmlProperty(localName = "DateIn", isAttribute = true)
-    private String dateIn;
+    private Date dateIn;
+
+    @JacksonXmlProperty(localName = "DateOut", isAttribute = true)
+    private Date dateOut;
 
     @JacksonXmlProperty(localName = "PtType", isAttribute = true)
-    private String ptType;
+    private ParticipantType ptType;
 
     @JacksonXmlProperty(localName = "Srvcs", isAttribute = true)
-    private String srvcs;
+    private AvailableTransferService srvcs;
 
     @JacksonXmlProperty(localName = "XchType", isAttribute = true)
-    private String xchType;
+    private ExchangeParticipant xchType;
 
     @JacksonXmlProperty(localName = "UID", isAttribute = true)
-    private String uid;
+    private long uid;
 
     @JacksonXmlProperty(localName = "ParticipantStatus", isAttribute = true)
-    private String participantStatus;
-
-    @JacksonXmlProperty(localName = "PrntBIC", isAttribute = true)
-    private String PrntBIC;
+    private ParticipantStatus participantStatus;
 
     @JacksonXmlProperty(localName = "RstrList")
-    private RstrListDeserializer rstrListDeserializer;
+    @JacksonXmlElementWrapper(useWrapping = false)
+    private List<RstrListDeserializer> rstrList;
+
+    public long getUid() {
+        return uid;
+    }
+
+    public void setUid(long uid) {
+        this.uid = uid;
+    }
 
     public String getEnglName() {
         return EnglName;
@@ -71,16 +92,6 @@ public class ParticipantInfoDeserializer {
     public void setRegN(String regN) {
         RegN = regN;
     }
-
-    public String getPrntBIC() {
-        return PrntBIC;
-    }
-
-    public void setPrntBIC(String prntBIC) {
-        PrntBIC = prntBIC;
-    }
-
-
 
     public String getNameP() {
         return nameP;
@@ -138,59 +149,69 @@ public class ParticipantInfoDeserializer {
         this.adr = adr;
     }
 
-    public String getDateIn() {
+    public int getPrntBIC() {
+        return PrntBIC;
+    }
+
+    public void setPrntBIC(int prntBIC) {
+        PrntBIC = prntBIC;
+    }
+
+    public Date getDateIn() {
         return dateIn;
     }
 
-    public void setDateIn(String dateIn) {
+    public void setDateIn(Date dateIn) {
         this.dateIn = dateIn;
     }
 
-    public String getPtType() {
+    public Date getDateOut() {
+        return dateOut;
+    }
+
+    public void setDateOut(Date dateOut) {
+        this.dateOut = dateOut;
+    }
+
+    public ParticipantType getPtType() {
         return ptType;
     }
 
-    public void setPtType(String ptType) {
+    public void setPtType(ParticipantType ptType) {
         this.ptType = ptType;
     }
 
-    public String getSrvcs() {
+    public AvailableTransferService getSrvcs() {
         return srvcs;
     }
 
-    public void setSrvcs(String srvcs) {
+    public void setSrvcs(AvailableTransferService srvcs) {
         this.srvcs = srvcs;
     }
 
-    public String getXchType() {
+    public ExchangeParticipant getXchType() {
         return xchType;
     }
 
-    public void setXchType(String xchType) {
+    public void setXchType(ExchangeParticipant xchType) {
         this.xchType = xchType;
     }
 
-    public String getUid() {
-        return uid;
-    }
 
-    public void setUid(String uid) {
-        this.uid = uid;
-    }
 
-    public String getParticipantStatus() {
+    public ParticipantStatus getParticipantStatus() {
         return participantStatus;
     }
 
-    public void setParticipantStatus(String participantStatus) {
+    public void setParticipantStatus(ParticipantStatus participantStatus) {
         this.participantStatus = participantStatus;
     }
 
-    public RstrListDeserializer getRstrList() {
-        return rstrListDeserializer;
+    public List<RstrListDeserializer> getRstrList() {
+        return rstrList;
     }
 
-    public void setRstrList(RstrListDeserializer rstrListDeserializer) {
-        this.rstrListDeserializer = rstrListDeserializer;
+    public void setRstrList(List<RstrListDeserializer> rstrList) {
+        this.rstrList = rstrList;
     }
 }

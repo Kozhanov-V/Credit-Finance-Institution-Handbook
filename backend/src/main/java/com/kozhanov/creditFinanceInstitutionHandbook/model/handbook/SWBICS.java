@@ -3,6 +3,7 @@ package com.kozhanov.creditFinanceInstitutionHandbook.model.handbook;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
+import com.kozhanov.creditFinanceInstitutionHandbook.deserialization.handbook.SWBICSDeserializer;
 
 import javax.persistence.*;
 import javax.validation.constraints.Size;
@@ -15,18 +16,30 @@ public class SWBICS {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "bic", nullable = false)
-    @JsonBackReference
-    private BICDirectoryEntry bicDirectoryEntry;
-
     @Column(name = "SWBIC")
     private String SWBIC;
 
     @Column(name = "DefaultSWBIC")
-    private Boolean DefaultSWBIC;
+    private boolean defaultSWBIC;
 
+    public SWBICS(SWBICSDeserializer swbicsDeserializer) {
+        this.SWBIC = swbicsDeserializer.getSwbic();
+        if(swbicsDeserializer.getDefaultSWBIC()>0){
+            defaultSWBIC=true;
+        }
+        else{
+            defaultSWBIC=false;
+        }
+    }
 
+    public SWBICS() {
+    }
+
+    public SWBICS(Long id, String SWBIC, boolean defaultSWBIC) {
+        this.id = id;
+        this.SWBIC = SWBIC;
+        this.defaultSWBIC = defaultSWBIC;
+    }
 
     public Long getId() {
         return id;
@@ -34,14 +47,6 @@ public class SWBICS {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public BICDirectoryEntry getBicDirectoryEntry() {
-        return bicDirectoryEntry;
-    }
-
-    public void setBicDirectoryEntry(BICDirectoryEntry bicDirectoryEntry) {
-        this.bicDirectoryEntry = bicDirectoryEntry;
     }
 
     public String getSWBIC() {
@@ -52,20 +57,11 @@ public class SWBICS {
         this.SWBIC = SWBIC;
     }
 
-    public Boolean getDefaultSWBIC() {
-        return DefaultSWBIC;
+    public boolean isDefaultSWBIC() {
+        return defaultSWBIC;
     }
 
-    public void setDefaultSWBIC(Boolean defaultSWBIC) {
-        DefaultSWBIC = defaultSWBIC;
-    }
-
-    public SWBICS() {
-    }
-
-    public SWBICS(BICDirectoryEntry bicDirectoryEntry, String SWBIC, Boolean defaultSWBIC) {
-        this.bicDirectoryEntry = bicDirectoryEntry;
-        this.SWBIC = SWBIC;
-        DefaultSWBIC = defaultSWBIC;
+    public void setDefaultSWBIC(boolean defaultSWBIC) {
+        this.defaultSWBIC = defaultSWBIC;
     }
 }

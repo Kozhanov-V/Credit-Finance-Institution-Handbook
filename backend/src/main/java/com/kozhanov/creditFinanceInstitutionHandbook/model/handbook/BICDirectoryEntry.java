@@ -6,13 +6,22 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.dataformat.xml.annotation.*;
 import com.kozhanov.creditFinanceInstitutionHandbook.deserialization.codeValue.ChangeTypeDeserializer;
+import com.kozhanov.creditFinanceInstitutionHandbook.deserialization.handbook.BICDirectoryEntryDeserializer;
+import com.kozhanov.creditFinanceInstitutionHandbook.deserialization.handbook.ParticipantInfoDeserializer;
 import com.kozhanov.creditFinanceInstitutionHandbook.model.codeValue.ChangeType;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 
 import javax.persistence.*;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 
 @Entity
@@ -39,21 +48,48 @@ public class BICDirectoryEntry {
     private ChangeType changeType;
 
     @ManyToOne(cascade = CascadeType.MERGE)
-    @JoinColumn(name = "electronic_documents_number", nullable = false)
+    @JoinColumn(name = "electronic_documents_number")
     @JsonBackReference
     private ElectronicDocuments electronicDocuments;
 
-    @OneToMany(mappedBy = "bicDirectoryEntry", cascade = {CascadeType.PERSIST,CascadeType.MERGE,CascadeType.REMOVE})
-    @JsonManagedReference
-    private List<Accounts> accounts;
+    @OneToMany(cascade = {CascadeType.PERSIST,CascadeType.MERGE,CascadeType.REMOVE})
+    @LazyCollection(LazyCollectionOption.FALSE)
+    private List<Accounts> accounts = new ArrayList<>();
 
-    @OneToMany(mappedBy = "bicDirectoryEntry", cascade = {CascadeType.PERSIST,CascadeType.MERGE,CascadeType.REMOVE})
-    @JsonManagedReference
+    @OneToMany(cascade = {CascadeType.PERSIST,CascadeType.MERGE,CascadeType.REMOVE})
+    @LazyCollection(LazyCollectionOption.TRUE)
     private List<SWBICS> swbicsList;
 
-    @OneToMany(mappedBy = "bicDirectoryEntry", cascade = {CascadeType.PERSIST,CascadeType.MERGE,CascadeType.REMOVE})
-    @JsonManagedReference
-    private List<RestrictionEntry> restrictionEntryList;
+
+
+    public BICDirectoryEntry(BICDirectoryEntryDeserializer bicDirectoryEntryDeserializer) {
+        ParticipantInfoDeserializer participantInfoDes = bicDirectoryEntryDeserializer.getParticipantInfoDeserializer();
+        this.BIC = bicDirectoryEntryDeserializer.getBic();
+        this.participantInfo = new ParticipantInfo.Builder()
+                .nameParticipant(participantInfoDes.getNameP())
+                .engNameParticipant(participantInfoDes.getEnglName())
+                .registrationNumber(participantInfoDes.getRegN())
+                .countryCode(participantInfoDes.getCntrCd())
+                .regionCode(participantInfoDes.getRgn())
+                .index(participantInfoDes.getInd())
+                .typeLocation(participantInfoDes.getTnp())
+                .nameLocation(participantInfoDes.getNnp())
+                .address(participantInfoDes.getAdr())
+                .parentBIC(participantInfoDes.getPrntBIC())
+                .dateIn(participantInfoDes.getDateIn())
+                .dateOut(participantInfoDes.getDateOut())
+                .participantType(participantInfoDes.getPtType())
+                .availableTransferService(participantInfoDes.getSrvcs())
+                .exchangeParticipant(participantInfoDes.getXchType())
+                .UID(participantInfoDes.getUid())
+                .participantStatus(participantInfoDes.getParticipantStatus())
+                .build();
+        this.changeType = bicDirectoryEntryDeserializer.getChangeType();
+        if(bicDirectoryEntryDeserializer.getAccountsDeserializer()!=null)
+        this.accounts = bicDirectoryEntryDeserializer.getAccountsDeserializer().stream().map(Accounts::new).collect(Collectors.toList());
+        if(bicDirectoryEntryDeserializer.getSwbicsDeserializer()!=null)
+        this.swbicsList = bicDirectoryEntryDeserializer.getSwbicsDeserializer().stream().map(SWBICS::new).collect(Collectors.toList());
+    }
 
     public int getBIC() {
         return BIC;
@@ -75,13 +111,7 @@ public class BICDirectoryEntry {
         this.swbicsList = swbicsList;
     }
 
-    public List<RestrictionEntry> getRestrictionEntryList() {
-        return restrictionEntryList;
-    }
 
-    public void setRestrictionEntryList(List<RestrictionEntry> restrictionEntryList) {
-        this.restrictionEntryList = restrictionEntryList;
-    }
 
     public BICDirectoryEntry() {
     }
@@ -91,14 +121,7 @@ public class BICDirectoryEntry {
         this.electronicDocuments = electronicDocuments;
         this.participantInfo = participantInfo;
     }
-    public BICDirectoryEntry(int BIC, ChangeType changeType, ElectronicDocuments electronicDocuments, List<Accounts> accounts, List<Accounts> accounts1, ParticipantInfo participantInfo) {
-        this.BIC = BIC;
-        this.changeType = changeType;
-        this.electronicDocuments = electronicDocuments;
-        this.accounts = accounts;
-        this.accounts = accounts1;
-        this.participantInfo = participantInfo;
-    }
+
 
     public ChangeType getChangeType() {
         return changeType;
@@ -136,14 +159,5 @@ public class BICDirectoryEntry {
         this.participantInfo = participantInfo;
     }
 
-    @Override
-    public String toString() {
-        return "BICDirectoryEntry{" +
-                "BIC=" + BIC +
-                ", changeType=" + changeType +
-                ", electronicDocuments=" + electronicDocuments +
-                ", accountsId=" + accounts +
-                ", participantInfo=" + participantInfo +
-                '}';
-    }
+
 }

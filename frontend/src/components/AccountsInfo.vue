@@ -125,7 +125,6 @@ export default {
 			accountStatuses: [],
 			regulationAccountTypes: [],
 			addItem: {
-				account: '',
 				regulationAccountType: '',
 				controlKey: '',
 				dateIn: '',

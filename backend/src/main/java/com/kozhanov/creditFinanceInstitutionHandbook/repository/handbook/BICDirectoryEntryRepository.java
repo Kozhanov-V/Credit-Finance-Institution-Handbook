@@ -1,6 +1,7 @@
 package com.kozhanov.creditFinanceInstitutionHandbook.repository.handbook;
 
 import com.kozhanov.creditFinanceInstitutionHandbook.model.handbook.BICDirectoryEntry;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -11,6 +12,8 @@ import java.util.List;
 import java.util.Optional;
 @Repository
 public interface BICDirectoryEntryRepository extends JpaRepository<BICDirectoryEntry, Integer> {
+    @EntityGraph(attributePaths = {"accounts", "swbicsList"})
+    @Override
     public List<BICDirectoryEntry> findAll();
     public Optional<BICDirectoryEntry> findByBIC(int bic);
 

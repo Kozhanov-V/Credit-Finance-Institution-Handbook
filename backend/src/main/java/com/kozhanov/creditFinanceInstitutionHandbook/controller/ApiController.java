@@ -1,5 +1,8 @@
 package com.kozhanov.creditFinanceInstitutionHandbook.controller;
 
+import com.kozhanov.creditFinanceInstitutionHandbook.model.codeValue.AvailableTransferService;
+import com.kozhanov.creditFinanceInstitutionHandbook.model.codeValue.ParticipantStatus;
+import com.kozhanov.creditFinanceInstitutionHandbook.model.codeValue.ParticipantType;
 import com.kozhanov.creditFinanceInstitutionHandbook.model.handbook.Accounts;
 import com.kozhanov.creditFinanceInstitutionHandbook.model.handbook.BICDirectoryEntry;
 import com.kozhanov.creditFinanceInstitutionHandbook.model.handbook.ParticipantInfo;
@@ -7,6 +10,10 @@ import com.kozhanov.creditFinanceInstitutionHandbook.repository.codeValue.*;
 import com.kozhanov.creditFinanceInstitutionHandbook.service.*;
 import com.kozhanov.creditFinanceInstitutionHandbook.until.FilterParameters;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
@@ -45,12 +52,26 @@ public class ApiController {
 
     @GetMapping("/data")
     public ResponseEntity<?> getAllData() {
-        Map<String,Object> response = new HashMap<>();
-        response.put("bicDirectoryEntries",bicDirectoryEntryService.findAll());
-        response.put("participantTypes",participantTypeRepository.findAll());
-        response.put("availableTransferServices",availableTransferServiceRepository.findAll());
-        response.put("participantStatuses",participantStatusRepository.findAll());
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        List<BICDirectoryEntry> bicDirectoryEntries = bicDirectoryEntryService.findAll();
+        return new ResponseEntity<>(bicDirectoryEntries, HttpStatus.OK);
+    }
+
+    @GetMapping("/participantTypes")
+    public ResponseEntity<?> getParticipantTypes(){
+        List<ParticipantType> participantTypes =participantTypeRepository.findAll();
+        return new ResponseEntity<>(participantTypes, HttpStatus.OK);
+    }
+
+    @GetMapping("/availableTransferServices")
+    public ResponseEntity<?> getAvailableTransferServices(){
+        List<AvailableTransferService> availableTransferServices = availableTransferServiceRepository.findAll();
+        return new ResponseEntity<>(availableTransferServices, HttpStatus.OK);
+    }
+
+    @GetMapping("/participantStatuses")
+    public ResponseEntity<?> getParticipantStatuses(){
+        List<ParticipantStatus>  participantStatuses = participantStatusRepository.findAll();
+        return new ResponseEntity<>(participantStatuses, HttpStatus.OK);
     }
 
     @PostMapping("/filter")
@@ -62,7 +83,6 @@ public class ApiController {
 
     @PostMapping("/save")
     public ResponseEntity<?> save(@RequestBody BICDirectoryEntry bicDirectoryEntry){
-        bicDirectoryEntry.setElectronicDocuments(electronicDocumentsService.getLatestElectronicDocuments());
         ParticipantInfo participantInfo = bicDirectoryEntry.getParticipantInfo();
         participantInfoService.save(participantInfo);
         bicDirectoryEntryService.save(bicDirectoryEntry);

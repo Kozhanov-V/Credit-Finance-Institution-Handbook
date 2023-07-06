@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 import com.kozhanov.creditFinanceInstitutionHandbook.deserialization.codeValue.AccountOperationRestrictionDeserializer;
+import com.kozhanov.creditFinanceInstitutionHandbook.deserialization.handbook.AccountRestrictionDeserializer;
 import com.kozhanov.creditFinanceInstitutionHandbook.model.codeValue.AccountOperationRestriction;
 
 import javax.persistence.*;
@@ -18,12 +19,6 @@ public class AccountRestriction {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @ManyToOne
-    @JoinColumn(name = "account_id", nullable = false)
-    @JsonBackReference
-    private Accounts account;
-
     @ManyToOne
     @JoinColumn(name = "account_restriction_code")
     private AccountOperationRestriction accountRestriction;
@@ -35,11 +30,13 @@ public class AccountRestriction {
     public AccountRestriction() {
     }
 
-    public AccountRestriction(Accounts account, AccountOperationRestriction accountRestriction, Date restrictionDate) {
-        this.account = account;
-        this.accountRestriction = accountRestriction;
-        this.restrictionDate = restrictionDate;
+
+
+    public AccountRestriction(AccountRestrictionDeserializer accountRestrictionDeserializer) {
+        this.accountRestriction = accountRestrictionDeserializer.getAccRstr();
+        this.restrictionDate = accountRestrictionDeserializer.getAccRstrDate();
     }
+
 
     public Long getId() {
         return id;
@@ -47,14 +44,6 @@ public class AccountRestriction {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public Accounts getAccount() {
-        return account;
-    }
-
-    public void setAccount(Accounts account) {
-        this.account = account;
     }
 
     public AccountOperationRestriction getAccountRestriction() {

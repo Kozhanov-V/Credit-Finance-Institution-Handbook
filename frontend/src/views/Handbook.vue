@@ -33,7 +33,6 @@
 					<tr class="sticky-header">
 						<th style="background-color: white; border: none;"></th>
 						<th>БИК</th>
-						<th>ID ЭС</th>
 						<th>Наименование</th>
 						<th>Рег. поряд. номер</th>
 						<th>Код страны</th>
@@ -72,7 +71,6 @@
 
 							</td>
 							<td>{{ item.bic }}</td>
-							<td>{{ item.idES }}</td>
 							<td v-if="!item.editMode">{{ item.nameParticipant }}</td>
 							<td v-else><input v-model="item.nameParticipant" type="text"></td>
 							<td v-if="!item.editMode">{{ item.registrationNumber }}</td>
@@ -290,18 +288,41 @@ export default {
 		async fetchData() {
 			
 			try {
-				const response = await axios.get('http://localhost:8080/api/data', {
+				let response = await axios.get('http://localhost:8080/api/data', {
 					headers: {
 						'Authorization': 'Bearer ' + localStorage.getItem('token')
 					}
-				});
-				this.bicDirectoryEntries = response.data.bicDirectoryEntries;
-				this.participantTypes = response.data.participantTypes;
-				this.availableTransferServices = response.data.availableTransferServices;
-				this.participantStatuses = response.data.participantStatuses;
+				}).then(response=>{
+					this.bicDirectoryEntries = response.data;
+				})
+				
 
+				await axios.get('http://localhost:8080/api/participantTypes', {
+					headers: {
+						'Authorization': 'Bearer ' + localStorage.getItem('token')
+					}
+				}).then(response=>{
+					this.participantTypes = response.data;
+				})
 
-				this.typeTransfers = this.participantTypes;
+				await axios.get('http://localhost:8080/api/availableTransferServices', {
+					headers: {
+						'Authorization': 'Bearer ' + localStorage.getItem('token')
+					}
+				}).then(response=>{
+					this.availableTransferServices = response.data;
+				})
+				
+				await axios.get('http://localhost:8080/api/participantStatuses', {
+					headers: {
+						'Authorization': 'Bearer ' + localStorage.getItem('token')
+					}
+				}).then(response=>{
+					this.participantStatuses = response.data;
+				})
+				this.typeTransfer = this.participantTypes;
+
+			
 				this.fillTable(this.bicDirectoryEntries);
 
 			} catch (error) {
@@ -414,6 +435,11 @@ export default {
 	},
 	created() {
 		this.fetchData();
-	}
+	},
+	mounted() {
+    this.$nextTick(function() {
+      document.getElementById('handbookBtn').click();
+    })
+  },
 };
 </script>

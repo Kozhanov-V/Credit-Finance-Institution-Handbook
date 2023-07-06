@@ -1,5 +1,6 @@
 package com.kozhanov.creditFinanceInstitutionHandbook.service;
 
+import com.kozhanov.creditFinanceInstitutionHandbook.deserialization.handbook.ElectroncDocumentsDeserializer;
 import com.kozhanov.creditFinanceInstitutionHandbook.model.handbook.ElectronicDocuments;
 
 import java.util.List;

@@ -1,7 +1,9 @@
 package com.kozhanov.creditFinanceInstitutionHandbook.service;
 
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
-import com.kozhanov.creditFinanceInstitutionHandbook.deserialization.handbook.ElectronicDocumentsDeserializer;
+import com.kozhanov.creditFinanceInstitutionHandbook.deserialization.handbook.ElectroncDocumentsDeserializer;
+import com.kozhanov.creditFinanceInstitutionHandbook.model.handbook.BICDirectoryEntry;
+import com.kozhanov.creditFinanceInstitutionHandbook.model.handbook.ElectronicDocuments;
 import com.kozhanov.creditFinanceInstitutionHandbook.repository.handbook.ElectronicDocumentsRepository;
 import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,8 +11,11 @@ import org.springframework.stereotype.Service;
 
 import java.io.*;
 import java.net.URL;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -18,14 +23,17 @@ import java.util.zip.ZipInputStream;
 public class ImportServiceImpl implements ImportService{
 
     @Autowired
-    private ElectronicDocumentsRepository electronicDocumentsRepository;
+    private ElectronicDocumentsService electronicDocumentsService;
+
+    @Autowired
+    private BICDirectoryEntryService bicDirectoryEntryService;
 
     @Override
     public void importFromCB() {
         String url = "http://cbr.ru/s/newbik";
         String directory = "C:\\Users\\vkozh\\Documents\\GitHub" +
                 "\\Credit-Finance-Institution-Handbook\\backend\\src\\main\\java\\com\\kozhanov\\creditFinanceInstitutionHandbook\\until\\";
-       // String nameFile = "20230705_ED807_full.xml";
+
         String nameFile = "newbik.zip";
 
         try {
@@ -69,20 +77,32 @@ public class ImportServiceImpl implements ImportService{
 
     public void deserializeAndSaveEDFromXml(String xmlFilePath) {
         XmlMapper xmlMapper = new XmlMapper();
+
         try {
-            String readContent = new String(Files.readAllBytes(Paths.get(xmlFilePath)));
-            ElectronicDocumentsDeserializer electronicDocumentsDeserializer = xmlMapper.readValue(readContent,ElectronicDocumentsDeserializer.class);
+            try (InputStream inputStream = new FileInputStream(xmlFilePath);
+                 Reader reader = new InputStreamReader(inputStream, Charset.forName("windows-1251"))) {
+
+                // Use reader to read the data
+                char[] arr = new char[8 * 1024]; // 8K at a time
+                StringBuilder buffer = new StringBuilder();
+                int numCharsRead;
+                while ((numCharsRead = reader.read(arr, 0, arr.length)) != -1) {
+                    buffer.append(arr, 0, numCharsRead);
+                }
+                String readContent = buffer.toString();
+
+                ElectroncDocumentsDeserializer electronicDocumentsDeserializer = xmlMapper.readValue(readContent, ElectroncDocumentsDeserializer.class);
+                ElectronicDocuments electronicDocuments = new ElectronicDocuments(electronicDocumentsDeserializer);
+
+
+                electronicDocumentsService.save(electronicDocuments);
+
+
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-//
-//        try {
-//            String readContent = new String(Files.readAllBytes(Paths.get(xmlFilePath)));
-//            ElectronicDocumentsDeserializer electronicDocuments = xmlMapper.readValue(readContent, ElectronicDocumentsDeserializer.class);
-//            System.out.println(3142412);
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
     }
+
+
 }

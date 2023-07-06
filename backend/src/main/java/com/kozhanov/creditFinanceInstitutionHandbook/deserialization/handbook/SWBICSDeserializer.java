@@ -5,11 +5,12 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 
 @JacksonXmlRootElement(localName = "SWBICS")
 public class SWBICSDeserializer {
+
     @JacksonXmlProperty(localName = "SWBIC", isAttribute = true)
     private String swbic;
 
     @JacksonXmlProperty(localName = "DefaultSWBIC", isAttribute = true)
-    private String defaultSWBIC;
+    private int defaultSWBIC;
 
     public String getSwbic() {
         return swbic;
@@ -19,11 +20,11 @@ public class SWBICSDeserializer {
         this.swbic = swbic;
     }
 
-    public String getDefaultSWBIC() {
+    public int getDefaultSWBIC() {
         return defaultSWBIC;
     }
 
-    public void setDefaultSWBIC(String defaultSWBIC) {
+    public void setDefaultSWBIC(int defaultSWBIC) {
         this.defaultSWBIC = defaultSWBIC;
     }
 }

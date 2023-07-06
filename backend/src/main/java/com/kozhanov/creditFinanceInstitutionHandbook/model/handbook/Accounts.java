@@ -9,6 +9,7 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 import com.kozhanov.creditFinanceInstitutionHandbook.deserialization.codeValue.AccountStatusDeserializer;
 import com.kozhanov.creditFinanceInstitutionHandbook.deserialization.codeValue.RegulationAccountTypeDeserializer;
+import com.kozhanov.creditFinanceInstitutionHandbook.deserialization.handbook.AccountsDeserializer;
 import com.kozhanov.creditFinanceInstitutionHandbook.model.codeValue.AccountStatus;
 import com.kozhanov.creditFinanceInstitutionHandbook.model.codeValue.RegulationAccountType;
 
@@ -18,16 +19,19 @@ import javax.validation.constraints.Size;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "accounts")
 public class Accounts {
-
-
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "id")
+    private long id;
 
     @Column(name = "account")
     @Size(min = 20, max = 20)
-    @Id
+
     private String account;
 
     @ManyToOne
@@ -59,9 +63,30 @@ public class Accounts {
     @JsonBackReference
     private BICDirectoryEntry bicDirectoryEntry;
 
-    @OneToMany(mappedBy = "account",cascade = {CascadeType.PERSIST,CascadeType.MERGE,CascadeType.REMOVE})
-    @JsonManagedReference
+    @OneToMany(cascade = {CascadeType.PERSIST,CascadeType.MERGE,CascadeType.REMOVE})
     private List<AccountRestriction> accountRestrictions;
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public Accounts(AccountsDeserializer accountsDeserializer) {
+        this.account = accountsDeserializer.getAccount();
+        this.regulationAccountType = accountsDeserializer.getRegulationAccountType();
+        this.controlKey = accountsDeserializer.getControlKey();
+        this.accountCBRBIC = accountsDeserializer.getAccountCBRBIC();
+        this.dateIn = accountsDeserializer.getDateIn();
+        this.dateOut = accountsDeserializer.getDateOut();
+        this.accountStatus = accountsDeserializer.getAccountStatus();
+        if(accountsDeserializer.getAccountRestrictionsDeserializer()!=null)
+        this.accountRestrictions = accountsDeserializer.getAccountRestrictionsDeserializer().stream().map(AccountRestriction::new).collect(Collectors.toList());
+
+    }
+
 
     public List<AccountRestriction> getAccountRestrictions() {
         return accountRestrictions;
