@@ -10,6 +10,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 @Service
@@ -36,9 +37,16 @@ public class BICDirectoryEntryServiceImpl implements BICDirectoryEntryService {
 
     @Override
     public List<BICDirectoryEntry> findAll() {
-        Pageable pageable = PageRequest.of(0,24);
+        return bicDirectoryEntryRepository.findAll();
+    }
+
+    @Override
+    public HashMap<String, Object> findAll(Pageable pageable) {
         Page<BICDirectoryEntry> page = bicDirectoryEntryRepository.findAll(pageable);
-        return page.toList();
+        HashMap<String, Object> response = new HashMap<>();
+        response.put("bicDirectoryEntries", page.toList());
+        response.put("totalPage",page.getTotalPages());
+        return response;
     }
 
     @Override

@@ -16,7 +16,8 @@
 					@keyup.enter="filterByName">
 				<input @click="filterByName" type="submit" id="submitName" />
 			</div>
-			<button @click="resetAllFilter" class="filter-element" id="clear-filter" ><img src="img/clear.svg" alt="c"> Сбросить</button>
+			<button @click="resetAllFilter" class="filter-element" id="clear-filter"><img src="img/clear.svg" alt="c">
+				Сбросить</button>
 
 			<button @click="openFilterMenu" class="filter-element" id="filterBtn"><img src="img/filter.png" alt="">
 				Фильтр</button>
@@ -24,7 +25,7 @@
 			<Filter :visible="isFilterVisible" :participantTypes="participantTypes" @apply-filter="applyFilter"
 				@reset-filter="resetFilter" />
 
-			<button @click="openSaveModal" class="filter-element" id="addBtn"><img src="img/plus.png" alt=""> Добавить
+			<button @click="openSaveModal" v-show="isAdmin" class="filter-element" id="addBtn"><img src="img/plus.png" alt=""> Добавить
 				запись</button>
 		</div>
 		<div class="table-container">
@@ -56,17 +57,16 @@
 						<tr @mouseover="selectedItem = item">
 							<td class="actions_container">
 								<div class="actions">
-									<button v-if="!item.editMode" @click="deleteItem(item)"><img src="img/delete.svg" alt="d"></button>
-									<button v-if="!item.editMode" @click="item.editMode = true"><img src="img/settings.svg"
-											alt="u"></button>
-
-									<button v-if="!item.editMode" @click="this.isAccountsFormVisible=true"><img src="img/accounts.svg"
+									<button v-if="!item.editMode" @click="this.isAccountsFormVisible = true"><img src="img/accounts.svg"
 											alt="a"></button>
-									<button v-if="!item.editMode"><img src="img/favorites.svg" alt="f"></button>
+											<button v-if="!item.editMode && isUser"><img src="img/favorites.svg" alt="f"></button>
+									<button v-if="!item.editMode && isAdmin" @click="deleteItem(item)"><img src="img/delete.svg" alt="d"></button>
+									<button v-if="!item.editMode && isAdmin" @click="item.editMode = true"><img src="img/settings.svg"
+											alt="u"></button>
 								</div>
 								<div class="edit_mode_action">
 									<button v-if="item.editMode" @click="item.editMode = false"><img src="img/cancel.svg" alt="c"></button>
-									<button v-if="item.editMode" @click="saveItem(item)"><img src="img/save.svg" alt="s"></button>
+									<button v-if="item.editMode && isAdmin" @click="saveItem(item)"><img src="img/save.svg" alt="s"></button>
 								</div>
 
 							</td>
@@ -118,13 +118,32 @@
 							<td v-else><input v-model="item.uid" type="number"></td>
 							<td>{{ item.participantStatus }}</td>
 
-				
+
 						</tr>
 
 					</template>
 				</tbody>
+
 			</table>
+
 		</div>
+		<div class="control-pages-block">
+			<button @click="previousPage" :disabled="currentPage == 1">
+				<!-- <img src="img/previous_page.png" alt=""> -->
+				&#60;
+			</button>
+			<button @click="firstPage" :disabled="currentPage < 3">1</button>
+			<button @click="previousPage" :disabled="currentPage < 2">{{ currentPage - 1 }}</button>
+			<p class="currentPage">{{ currentPage }}</p>
+			<button @click="nextPage" :disabled="currentPage > totalPage - 1">{{ currentPage + 1 }}</button>
+			<button @click="lastPage" :disabled="currentPage > totalPage - 2">{{ totalPage }}</button>
+			<button @click="nextPage" :disabled="currentPage == totalPage">
+				<!-- <img src="img/next_page.png" alt=""> -->
+				&#62;
+			</button>
+
+		</div>
+
 	</div>
 </template>
 
@@ -175,7 +194,12 @@ export default {
 			selectedItem: null,
 			isSaveModalVisible: false,
 			isFilterVisible: false,
-			isAccountsFormVisible:false,
+			isAccountsFormVisible: false,
+
+			itemsPerPage: 32,
+			currentPage: 1,
+			totalPage: 0,
+			data: [],
 		};
 	},
 	validations() {
@@ -284,61 +308,47 @@ export default {
 		openSaveModal() {
 			this.isSaveModalVisible = true;
 		},
-
-		async fetchData() {
-			
-			try {
-				let response = await axios.get('http://localhost:8080/api/data', {
-					headers: {
-						'Authorization': 'Bearer ' + localStorage.getItem('token')
-					}
-				}).then(response=>{
-					this.bicDirectoryEntries = response.data;
-				})
-				
-
-				await axios.get('http://localhost:8080/api/participantTypes', {
-					headers: {
-						'Authorization': 'Bearer ' + localStorage.getItem('token')
-					}
-				}).then(response=>{
-					this.participantTypes = response.data;
-				})
-
-				await axios.get('http://localhost:8080/api/availableTransferServices', {
-					headers: {
-						'Authorization': 'Bearer ' + localStorage.getItem('token')
-					}
-				}).then(response=>{
-					this.availableTransferServices = response.data;
-				})
-				
-				await axios.get('http://localhost:8080/api/participantStatuses', {
-					headers: {
-						'Authorization': 'Bearer ' + localStorage.getItem('token')
-					}
-				}).then(response=>{
-					this.participantStatuses = response.data;
-				})
-				this.typeTransfer = this.participantTypes;
-
-			
-				this.fillTable(this.bicDirectoryEntries);
-
-			} catch (error) {
-				console.error(error);
+		firstPage() {
+			this.currentPage = 1;
+			this.fetchData(1);
+		},
+		lastPage() {
+			this.currentPage = this.totalPage;
+			this.fetchData(this.totalPage);
+		},
+		previousPage() {
+			if (this.currentPage > 1) {
+				this.currentPage--;
+				this.fetchData(this.currentPage);
 			}
+		},
+		nextPage() {
+			if (this.currentPage < this.totalPage) {
+				this.currentPage++;
+				this.fetchData(this.currentPage);
+			}
+		},
+		async fetchData(currentPage) {
+
+			axios.get(`http://localhost:8080/api/data?page=${currentPage - 1}&size=${this.itemsPerPage}`)
+				.then(response => {
+					this.fillTable(response.data.bicDirectoryEntries);
+					this.bicDirectoryEntries = response.data.bicDirectoryEntries;
+					this.totalPage = response.data.totalPage;
+				}).catch(error => {
+					console.log(error)
+				});
 		},
 
 		openFilterMenu() {
 			this.isFilterVisible = true;
 		},
-		resetAllFilter(){
-			this.formFilter.bicInput='';
-			this.formFilter.nameInput='';
-			this.formFilter.typeTransfer='';
-			this.formFilter.validFrom='';
-			this.formFilter.validUntil='';
+		resetAllFilter() {
+			this.formFilter.bicInput = '';
+			this.formFilter.nameInput = '';
+			this.formFilter.typeTransfer = '';
+			this.formFilter.validFrom = '';
+			this.formFilter.validUntil = '';
 			this.fetchData();
 		},
 		async filterByBic() {
@@ -347,11 +357,7 @@ export default {
 			try {
 				let response;
 				if (bic !== "") {
-					response = await axios.get(`http://localhost:8080/api/findBy/bic/${bic}`, {
-						headers: {
-							'Authorization': 'Bearer ' + localStorage.getItem('token')
-						}
-					});
+					response = await axios.get(`http://localhost:8080/api/findBy/bic/${bic}`);
 
 				} else {
 
@@ -370,11 +376,7 @@ export default {
 			try {
 				let response;
 				if (name !== "") {
-					response = await axios.get(`http://localhost:8080/api/findBy/name/${name}`, {
-						headers: {
-							'Authorization': 'Bearer ' + localStorage.getItem('token')
-						}
-					});
+					response = await axios.get(`http://localhost:8080/api/findBy/name/${name}`);
 
 				} else {
 
@@ -393,11 +395,7 @@ export default {
 			this.formFilter.validFrom = filter.validFrom;
 			this.formFilter.validUntil = filter.validUntil;
 			try {
-				const response = await axios.post('http://localhost:8080/api/filter', this.formFilter, {
-					headers: {
-						'Authorization': 'Bearer ' + localStorage.getItem('token')
-					}
-				});
+				const response = await axios.post('http://localhost:8080/api/filter', this.formFilter);
 				this.fillTable(response.data);
 
 			} catch (error) {
@@ -432,14 +430,46 @@ export default {
 				editMode: false,
 			})
 		},
+		async startupDataLoader() {
+			await axios.get('http://localhost:8080/api/participantTypes', {
+			}).then(response => {
+				this.participantTypes = response.data;
+			})
+
+			await axios.get('http://localhost:8080/api/availableTransferServices').then(response => {
+				this.availableTransferServices = response.data;
+			})
+
+			await axios.get('http://localhost:8080/api/participantStatuses').then(response => {
+				this.participantStatuses = response.data;
+			})
+			this.typeTransfer = this.participantTypes;
+		}
 	},
 	created() {
 		this.fetchData();
+		this.startupDataLoader();
+
 	},
 	mounted() {
-    this.$nextTick(function() {
-      document.getElementById('handbookBtn').click();
-    })
-  },
+		this.$nextTick(function () {
+			document.getElementById('handbookBtn').click();
+		})
+	},
+	computed: {
+		isAdmin() {
+
+			const roles = this.$store.getters.getRoles;
+			return roles ? roles.map(e => e.name).includes('ROLE_ADMIN') : false;
+		},
+		isUser() {
+			const roles = this.$store.getters.getRoles;
+			return roles ? roles.map(e => e.name).includes('ROLE_USER') : false;
+		},
+		isLoggedIn() {
+			return this.$store.getters.isLoggedIn;
+		},
+	},
+
 };
 </script>

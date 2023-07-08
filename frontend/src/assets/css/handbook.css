@@ -285,3 +285,29 @@ input::-webkit-inner-spin-button {
     -webkit-appearance: none;
     margin: 0; 
 }
+
+
+.control-pages-block{
+	width:calc(var(--index)*3.5);
+	position: relative;
+	display: flex;
+	left: calc(50% - calc(var(--index)*3.5) - 5vw);
+	justify-content: center;
+}
+
+.control-pages-block p{
+	background-color: #CCD4DE;
+	padding:4px 8px;
+	border-radius: 16px;
+}
+
+.control-pages-block button{
+	background:none;
+	border: none;
+	cursor: pointer;
+	margin-left: 16px;
+	margin-right: 16px;
+}
+.control-pages-block button:disabled{
+	display: none;
+}

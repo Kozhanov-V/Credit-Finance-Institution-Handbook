@@ -3,9 +3,9 @@
 		<div class="main-info--accounts">
 
 			<h1>Информация о счетах: БИК-{{ entryAccounts.bic }} </h1>
-	
+
 			<div class="table-accounts">
-		
+
 
 				<table>
 					<tr class="sticky-header">
@@ -16,7 +16,7 @@
 						<th>Дата исключения информации о счете</th>
 						<th>БИК ПБР</th>
 						<th>Статус счета</th>
-						<th>Actions</th>
+						<th v-if="isAdmin">Actions</th>
 					</tr>
 					<tr v-for="item in tableData" :key="item.account" @mouseover="activeItem = item">
 
@@ -29,7 +29,7 @@
 								</option>
 							</select>
 						</td>
-						<td v-else>{{ item.regulationAccountType}}</td>
+						<td v-else>{{ item.regulationAccountType }}</td>
 
 
 						<td v-if="editItem && editItem.account === item.account"><input v-model="editItem.controlKey" type="number">
@@ -60,13 +60,13 @@
 
 						</td>
 
-						
+
 
 
 						<td>
 
-							
-							<div class="buttons">
+
+							<div class="buttons" v-if="isAdmin">
 								<div v-if="editItem && editItem.account === item.account">
 									<button @click="cancelEdit()"><img src="img/cancel.svg" alt=""></button>
 									<button @click="saveEdit()"><img src="img/save.svg" alt=""></button>
@@ -77,7 +77,7 @@
 									<button @click="deleteCurrentItem()"><img src="img/delete.svg" alt=""></button>
 								</div>
 							</div>
-						
+
 
 
 						</td>
@@ -98,7 +98,7 @@
 									{{ type.code }}
 								</option>
 							</select>
-						</td>	
+						</td>
 						<td><button @click="saveAccount">С</button> <button @click="closeAddMode">О</button></td>
 					</tr>
 				</table>
@@ -106,7 +106,7 @@
 			</div>
 			<div class="button-container">
 				<button id="back-btn" @click="closeModal">Назад</button>
-				<button @click="addMode = true" id="add-account">Добавить счет</button>
+				<button @click="addMode = true" id="add-account" v-if="isAdmin">Добавить счет</button>
 			</div>
 
 		</div>
@@ -121,7 +121,7 @@ export default {
 			activeItem: null,
 			editItem: null,
 			addMode: false,
-			accountRestrictions:[],
+			accountRestrictions: [],
 			accountStatuses: [],
 			regulationAccountTypes: [],
 			addItem: {
@@ -133,61 +133,48 @@ export default {
 				accountCBRBIC: '',
 				accountRestrictions: [],
 			},
-			tableData:[]
+			tableData: []
 		}
 	},
 	mounted() {
 		this.startupLoader();
 	},
 	watch: {
-    entryAccounts: {
-        handler(newValue) {
-            if (newValue && newValue.accounts) {
-                this.fillAccountTable(newValue.accounts);
-            }
-        },
-        deep: true,
-    },
-},
+		entryAccounts: {
+			handler(newValue) {
+				if (newValue && newValue.accounts) {
+					this.fillAccountTable(newValue.accounts);
+				}
+			},
+			deep: true,
+		},
+	},
 	methods: {
 		async startupLoader() {
 			try {
-				axios.get(`http://localhost:8080/api/account/regulationAccountTypes`, {
-					headers: {
-						'Authorization': 'Bearer ' + localStorage.getItem('token')
-					}
-				}).then((response) => {
+				axios.get(`http://localhost:8080/api/account/regulationAccountTypes`).then((response) => {
 					this.regulationAccountTypes = response.data;
 				})
 
-				axios.get(`http://localhost:8080/api/account/accountStatuses`, {
-					headers: {
-						'Authorization': 'Bearer ' + localStorage.getItem('token')
-					}
-				}).then((response) => {
+				axios.get(`http://localhost:8080/api/account/accountStatuses`).then((response) => {
 					this.accountStatuses = response.data;
 				})
 
-				axios.get(`http://localhost:8080/api/account/accountRestrictions`, {
-					headers: {
-						'Authorization': 'Bearer ' + localStorage.getItem('token')
-					}
-				}).then((response) => {
+				axios.get(`http://localhost:8080/api/account/accountRestrictions`).then((response) => {
 					this.accountRestrictions = response.data;
-					console.log(this.accountRestrictions)
 				})
 
 			}
 
-			
 
-			
+
+
 			catch (error) {
 				console.log(error)
 			}
 
 		},
-		fillAccountTable(accounts){
+		fillAccountTable(accounts) {
 			this.tableData = accounts.map(item => ({
 				account: item.account,
 				regulationAccountType: item.regulationAccountType?.code,
@@ -201,7 +188,7 @@ export default {
 		},
 
 		saveAccount() {
-			
+
 			axios
 				.post(`http://localhost:8080/api/account/save?bic=${this.entryAccounts.bic}`, this.addItem, {
 					headers: {
@@ -276,9 +263,20 @@ export default {
 			this.$emit('close');
 		}
 	},
+	computed: {
+		isAdmin() {
+
+			const roles = this.$store.getters.getRoles;
+			return roles ? roles.map(e => e.name).includes('ROLE_ADMIN') : false;
+		},
+	}
+
+
 }
 </script>
 
 
 
-<style scoped>@import '@/assets/css/accountsInfo.css';</style>
+<style scoped>
+@import '@/assets/css/accountsInfo.css';
+</style>

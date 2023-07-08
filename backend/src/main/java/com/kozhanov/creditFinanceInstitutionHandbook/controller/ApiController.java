@@ -51,9 +51,8 @@ public class ApiController {
    private ImportService importService;
 
     @GetMapping("/data")
-    public ResponseEntity<?> getAllData() {
-        List<BICDirectoryEntry> bicDirectoryEntries = bicDirectoryEntryService.findAll();
-        return new ResponseEntity<>(bicDirectoryEntries, HttpStatus.OK);
+    public ResponseEntity<?> getAllData(Pageable pageable) {
+        return new ResponseEntity<>(bicDirectoryEntryService.findAll(pageable), HttpStatus.OK);
     }
 
     @GetMapping("/participantTypes")
@@ -117,10 +116,6 @@ public class ApiController {
         List<BICDirectoryEntry> bicDirectoryEntries = bicDirectoryEntryService.findByName(name);
         return new ResponseEntity<>(bicDirectoryEntries,HttpStatus.OK);
     }
-
-
-
-
 
     @PostMapping("/import/update")
     public ResponseEntity<?> updateFromCB(){

@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -49,10 +50,43 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
-        httpSecurity.cors().and() // Добавьте эту строку
+        httpSecurity.cors().and()
                 .csrf().disable()
-                .authorizeRequests().antMatchers("/authenticate").permitAll().
-                anyRequest().authenticated().and().
+                .authorizeRequests().antMatchers(HttpMethod.GET,
+                        "/authenticate",
+                        "/api/data",
+                        "/api/participantTypes",
+                        "/api/availableTransferServices",
+                        "/api/participantStatuses",
+                        "/api/accounts/{bic}",
+                        "/api/findBy/bic/{bic}",
+                        "/api/findBy/name/{name}",
+                        "/api/regulationAccountTypes",
+                        "/api/accountStatuses",
+                        "/api/accountRestrictions"
+                ).permitAll()
+                .antMatchers(
+                        HttpMethod.POST,
+                        "/api/filter"
+
+                ).permitAll()
+                .antMatchers(HttpMethod.POST,
+                        "/api/save",
+                        "/api/import/update",
+                        "/api/account/update/{accountNumber}",
+                        "/api/account/save"
+                ).hasRole("ADMIN")
+                .antMatchers(HttpMethod.DELETE,
+                        "/api/delete/{bic}"
+                ).hasRole("ADMIN")
+                .antMatchers(HttpMethod.PUT,
+                        "/api/update/{bic}",
+                        "/api/account/{accountNumber}"
+                ).hasRole("ADMIN")
+                .antMatchers(HttpMethod.POST,
+                        "/api/favorites"
+                ).hasRole("USER")
+                .and().
                 exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint).and().sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         httpSecurity.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);

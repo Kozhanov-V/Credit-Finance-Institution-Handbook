@@ -45,7 +45,6 @@ nav:hover{
 	background-repeat: no-repeat;
 }
 
-/* Код для полосы активного элемента */
 .active-indicator {
 	position: absolute;
 	height: 2vw; 
@@ -55,6 +54,10 @@ nav:hover{
 	top: calc(var(--top) * 1vw); 
 	transition: top 0.5s ease-in-out; 
 	border-radius: 5px;
+}
+#logoutBtn{
+	position: absolute;
+	top: 67.5vh;
 }
 
 

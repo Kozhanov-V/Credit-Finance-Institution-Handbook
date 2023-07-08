@@ -253,13 +253,21 @@ public class StartupDataLoader implements
 
         bicDirectoryEntry.setChangeType(changeTypeRepository.findByCode("ADDD").get());
         bicDirectoryEntryRepository.save(bicDirectoryEntry);
-        Role role = new Role("ROLE_USER");
+        Role client = new Role("ROLE_USER");
+        Role admin = new Role("ROLE_ADMIN");
         User user = new User();
         user.setUsername("admin");
         user.setPassword(WebSecurityConfig.passwordEncoder().encode("admin"));
-        user.addRole(role);
-        roleReposiroty.save(role);
+        user.addRole(client);
+        user.addRole(admin);
+        User user2 = new User();
+        user2.setUsername("user");
+        user2.setPassword(WebSecurityConfig.passwordEncoder().encode("user"));
+        user2.addRole(client);
+        roleReposiroty.save(client);
+        roleReposiroty.save(admin);
         userRepository.save(user);
+        userRepository.save(user2);
 
 
     }

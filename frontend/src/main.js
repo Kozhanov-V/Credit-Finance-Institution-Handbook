@@ -2,6 +2,7 @@ import { createApp } from 'vue'
 import { createStore } from 'vuex'
 import { createRouter, createWebHistory } from 'vue-router'
 import axios from 'axios';
+import jwtDecode from "jwt-decode";
 import App from './App.vue'
 import Handbook from '@/views/Handbook.vue'
 import Import from '@/views/Import.vue'
@@ -16,17 +17,28 @@ import createPersistedState from 'vuex-persistedstate'
 const store = createStore({
     state: {
         token: null, // Переменная для хранения токена пользователя
+				username: null,
+				roles:[],
     },
     getters: {
-        isLoggedIn: (state) => !!state.token,
+			isLoggedIn: (state) => !!state.token,
+			getUsername: (state) => state.username,
+			getRoles: (state) => state.roles,
     },
     
     mutations: {
         setToken: (state, token) => {
-            state.token = token; // Устанавливает токен пользователя
+					state.token = token;
+
+					const decodedToken = jwtDecode(token);
+					console.log(decodedToken);
+					state.username = decodedToken.username;
+					state.roles = decodedToken.roles;
         },
         clearToken: (state) => {
             state.token = null;
+						state.username=null;
+						state.roles=[];
         },
     },
     
@@ -48,6 +60,8 @@ const store = createStore({
             return new Promise((resolve) => {
                 commit('clearToken');
                 localStorage.removeItem('token');
+                localStorage.removeItem('username');
+                localStorage.removeItem('roles');
                 resolve();
                 router.push("/")
             });
@@ -75,14 +89,9 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
     const isAuthenticated = store.getters.isLoggedIn;  // Используем геттер из хранилища Vuex
-    console.log(isAuthenticated); 
     if (to.path === '/login' && isAuthenticated) {
         // Если пользователь уже аутентифицирован, то не пускаем его на страницу входа
         next('/');
-    } else if (to.path !== '/login' && to.name !== 'NotFound' && !isAuthenticated) {
-        // Если пользователь не аутентифицирован и пытается перейти на любую другую страницу кроме '/login' и 'NotFound', 
-        // то перенаправляем его на страницу входа
-        next('/login');
     } else {
         // Во всех остальных случаях разрешаем переход
         next();
