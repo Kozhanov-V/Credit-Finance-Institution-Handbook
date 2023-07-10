@@ -27,6 +27,8 @@ public class BICDirectoryEntryServiceImpl implements BICDirectoryEntryService {
 
     @Override
     public void save(BICDirectoryEntry bicDirectoryEntry) {
+        bicDirectoryEntry.setChangeType(changeTypeRepository.findByCode("ADDD").get());
+
         bicDirectoryEntryRepository.save(bicDirectoryEntry);
     }
 

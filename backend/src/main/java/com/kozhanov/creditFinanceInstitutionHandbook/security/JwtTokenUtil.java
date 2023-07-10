@@ -21,10 +21,11 @@ public class JwtTokenUtil {
     @Value("${jwt.expiration}")
     private long expiration;
 
-    public String generateToken(UserDetails userDetails) {
+    public String generateToken(MyUserDetails userDetails) {
         Map<String, Object> claims = new HashMap<>();
         claims.put("username", userDetails.getUsername());
         claims.put("roles", userDetails.getAuthorities());
+        claims.put("favorites",userDetails.getBicDirectoryEntries());
         return Jwts.builder()
                 .setClaims(claims)
                 .setSubject(userDetails.getUsername())

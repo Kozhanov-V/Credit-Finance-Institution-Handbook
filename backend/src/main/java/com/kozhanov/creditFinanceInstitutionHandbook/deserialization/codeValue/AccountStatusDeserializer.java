@@ -16,7 +16,6 @@ public class AccountStatusDeserializer extends JsonDeserializer<AccountStatus> {
     @Override
     public AccountStatus deserialize(JsonParser p, DeserializationContext ctxt) throws IOException {
         String code = p.getValueAsString();
-        return accountStatusRepository.findById(code)
-                .orElseThrow(() -> new IllegalArgumentException("Invalid ParticipantType code: " + code));
+        return accountStatusRepository.findById(code).orElse(null);
     }
 }

@@ -23,7 +23,7 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.EAGER,cascade = {CascadeType.PERSIST,CascadeType.MERGE,CascadeType.REMOVE})
     @JoinTable(name = "user_favorites_bic",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "bic"))
@@ -35,6 +35,14 @@ public class User {
     public User(String username, String password) {
         this.username = username;
         this.password = password;
+    }
+
+    public User(User user) {
+        this.username = user.username;
+        this.password = user.password;
+        this.roles = user.getRoles();
+        this.bicDirectoryEntries = user.getBicDirectoryEntries();
+
     }
 
     public Long getId() {
@@ -89,4 +97,5 @@ public class User {
     public void setBicDirectoryEntries(Set<BICDirectoryEntry> bicDirectoryEntries) {
         this.bicDirectoryEntries = bicDirectoryEntries;
     }
+
 }

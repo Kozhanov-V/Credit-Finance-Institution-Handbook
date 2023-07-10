@@ -15,6 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -52,8 +53,8 @@ public class AccountsController {
     @PostMapping("/save")
     public ResponseEntity<?>saveAccount(@RequestParam int bic, @RequestBody Accounts accounts) {
        BICDirectoryEntry bicDirectoryEntry = bicDirectoryEntryService.findByBic(bic);
-       bicDirectoryEntry.addAccount(accounts);
-        bicDirectoryEntryService.save(bicDirectoryEntry);
+
+       accountsService.save(bicDirectoryEntry, accounts);
         return new ResponseEntity<>("All is good", HttpStatus.OK);
     }
     @GetMapping("/regulationAccountTypes")

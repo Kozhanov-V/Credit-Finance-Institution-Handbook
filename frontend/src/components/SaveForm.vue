@@ -98,8 +98,8 @@
 				<div class="input-group">
 					<label class="required-field" for="participantType">Тип перевода участника *</label>
 					<select v-model="bicDirectoryEntry.participantInfo.participantType" name="participantType">
-						<option v-for="(type, index) in participantTypes" :value="type.code" :key="index">
-							{{ type.code }}
+						<option v-for="(type, index) in participantTypes" :value="type" :key="index">
+							{{ type}}
 						</option>
 					</select>
 					<span class="error" v-if="v$.bicDirectoryEntry.participantInfo.participantType.$dirty
@@ -109,8 +109,8 @@
 				<div class="input-group">
 					<label class="required-field" for="availableTransferService">Доступные серв. перевода *</label>
 					<select v-model="bicDirectoryEntry.participantInfo.availableTransferService" name="availableTransferService">
-						<option v-for="(type, index) in availableTransferServices" :value="type.code" :key="index">
-							{{ type.code }}
+						<option v-for="(type, index) in availableTransferServices" :value="type" :key="index">
+							{{ type}}
 						</option>
 					</select>
 					<span class="error" v-if="v$.bicDirectoryEntry.participantInfo.availableTransferService.$dirty
@@ -129,14 +129,15 @@
 				</div>
 
 				<div class="input-group">
-					<label for="UID">УИС</label>
-					<input v-model.trim="bicDirectoryEntry.participantInfo.UID" type="number" placeholder="УИС" name="UID">
-					<span class="error" v-if="v$.bicDirectoryEntry.participantInfo.UID.$dirty
-						&& v$.bicDirectoryEntry.participantInfo.UID.$error">Цифровой, 10 знаков</span>
+					<label for="uid">УИС</label>
+					<input v-model.trim="bicDirectoryEntry.participantInfo.uid" type="number" placeholder="УИС" name="uid">
+					
+					<span class="error" v-if="v$.bicDirectoryEntry.participantInfo.uid.$dirty
+						&& v$.bicDirectoryEntry.participantInfo.uid.$error">Цифровой, 10 знаков</span>
 				</div>
 
 				<div class="button-row">
-					<button style="background-color: #5A77DF; color: white;" type="submit"> Submit</button>
+					<button style="background-color: #5A77DF; color: white;" type="submit"> Submit </button>
 					<button @click="closeModal">Close</button>
 				</div>
 
@@ -175,7 +176,7 @@ export default {
 					participantType: '',
 					availableTransferService: '',
 					exchangeParticipant: 0,
-					UID: 0,
+					uid: 0,
 				}
 
 			}
@@ -199,7 +200,7 @@ export default {
 					dateIn: { required },
 					participantType: { required },
 					availableTransferService: { required },
-					UID: {  between: between(0, 999999999) },
+					uid: {  between: between(0, 999999999) },
 					exchangeParticipant: { required }
 				}
 			}
@@ -225,7 +226,7 @@ export default {
 					dateOut: '',
 					participantType: '',
 					availableTransferService: '',
-					UID: '',
+					uid: '',
 					exchangeParticipant: 0,
 				}
 			}

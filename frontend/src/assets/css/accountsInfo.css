@@ -121,6 +121,7 @@
 	border: none;
 	background-color: transparent;
 	cursor: pointer;
+	
 }
 .table-accounts input, .table-accounts select {
 	border-radius: 5px;

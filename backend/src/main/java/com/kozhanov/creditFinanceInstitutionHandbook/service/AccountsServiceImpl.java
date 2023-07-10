@@ -2,19 +2,58 @@ package com.kozhanov.creditFinanceInstitutionHandbook.service;
 
 import com.kozhanov.creditFinanceInstitutionHandbook.model.handbook.Accounts;
 import com.kozhanov.creditFinanceInstitutionHandbook.model.handbook.BICDirectoryEntry;
+import com.kozhanov.creditFinanceInstitutionHandbook.repository.codeValue.AccountStatusRepository;
 import com.kozhanov.creditFinanceInstitutionHandbook.repository.handbook.AccountsRepository;
+import com.kozhanov.creditFinanceInstitutionHandbook.repository.handbook.BICDirectoryEntryRepository;
+import org.hibernate.event.spi.SaveOrUpdateEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 @Service
 public class AccountsServiceImpl implements AccountsService{
     @Autowired
     AccountsRepository accountsRepository;
+
+    @Autowired
+    BICDirectoryEntryRepository bicDirectoryEntryRepository;
+
+    @Autowired
+    AccountStatusRepository accountStatusRepository;
+
     public void save(Accounts accounts){
         accountsRepository.save(accounts);
     }
+
+    @Override
+    public void save(BICDirectoryEntry bicDirectoryEntry, Accounts accounts) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+
+        try {
+            Date today = sdf.parse(sdf.format(new Date()));
+            Date dateOut = accounts.getDateOut() != null ? sdf.parse(sdf.format(accounts.getDateOut())) : today;
+            Date dateIn = sdf.parse(sdf.format(accounts.getDateIn()));
+
+            if (dateOut.before(today) || dateIn.after(today)) {
+                System.out.println("ACDL");
+                accounts.setAccountStatus(accountStatusRepository.findByCode("ACDL").get());
+            } else {
+                System.out.println("ACAC");
+                accounts.setAccountStatus(accountStatusRepository.findByCode("ACAC").get());
+            }
+
+            bicDirectoryEntry.addAccount(accounts);
+            bicDirectoryEntryRepository.save(bicDirectoryEntry);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+    }
+
+
 
     @Override
     public List<Accounts> findByBic(int bic) {

@@ -19,14 +19,12 @@ export default {
     methods: {
         async submitForm() {
             try {
-                // отправить запрос на аутентификацию с помощью axios и сохранить полученный токен JWT.
                 await this.$store.dispatch('login', {
                     username: this.username,
                     password: this.password
                 });
                 this.$router.push("/")
             } catch (error) {
-                // Показать пользователю сообщение об ошибке
                 alert("Неверные учетные данные");
                 console.error(error);
             }

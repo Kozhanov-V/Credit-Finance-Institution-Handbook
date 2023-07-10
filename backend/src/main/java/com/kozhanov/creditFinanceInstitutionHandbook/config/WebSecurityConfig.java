@@ -84,7 +84,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/api/account/{accountNumber}"
                 ).hasRole("ADMIN")
                 .antMatchers(HttpMethod.POST,
-                        "/api/favorites"
+                        "/api/favorites/**"
                 ).hasRole("USER")
                 .and().
                 exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint).and().sessionManagement()

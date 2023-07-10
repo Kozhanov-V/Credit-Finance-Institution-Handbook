@@ -30,6 +30,9 @@ public class ApiController {
     private ParticipantTypeRepository participantTypeRepository;
 
     @Autowired
+    private ChangeTypeRepository changeTypeRepository;
+
+    @Autowired
     private ParticipantStatusRepository participantStatusRepository;
 
     @Autowired
@@ -82,8 +85,6 @@ public class ApiController {
 
     @PostMapping("/save")
     public ResponseEntity<?> save(@RequestBody BICDirectoryEntry bicDirectoryEntry){
-        ParticipantInfo participantInfo = bicDirectoryEntry.getParticipantInfo();
-        participantInfoService.save(participantInfo);
         bicDirectoryEntryService.save(bicDirectoryEntry);
         return new ResponseEntity<>("All is good", HttpStatus.OK);
     }
@@ -96,6 +97,7 @@ public class ApiController {
 
     @PutMapping("/update/{bic}")
     public ResponseEntity<?> updateBicDirectoryEntry(@PathVariable int bic, @RequestBody BICDirectoryEntry bicDirectoryEntry) {
+        bicDirectoryEntry.setChangeType(changeTypeRepository.findByCode("CHGD").get());
      bicDirectoryEntryService.update(bic, bicDirectoryEntry);
         return new ResponseEntity<>(bicDirectoryEntry, HttpStatus.OK);
     }
@@ -119,9 +121,9 @@ public class ApiController {
 
     @PostMapping("/import/update")
     public ResponseEntity<?> updateFromCB(){
-        System.out.println("1");
+        System.out.println("star import");
         importService.importFromCB();
-        System.out.println("2");
+        System.out.println("end import");
         return new ResponseEntity<>("bicDirectoryEntries",HttpStatus.OK);
     }
 

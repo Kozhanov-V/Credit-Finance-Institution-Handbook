@@ -45,7 +45,7 @@ export default {
       return [
         {id: 'handbookBtn', img: 'img/handbook.png', url: "/handbook", access: true},
         
-        {id: 'favoritesBtn', img: 'img/favorites.png', url: "/", access: this.isUser},
+        {id: 'favoritesBtn', img: 'img/favorites.png', url: "/favorites", access: this.isUser},
 				{id: 'importBtn', img: 'img/import.png', url: "/import", access: this.isAdmin}, 
       ];
     },
@@ -61,9 +61,6 @@ export default {
 		isLoggedIn() {
 		return this.$store.getters.isLoggedIn;
 	},
-},
-mounted(){
-	console.log(this.items)
 }
 }
 </script>

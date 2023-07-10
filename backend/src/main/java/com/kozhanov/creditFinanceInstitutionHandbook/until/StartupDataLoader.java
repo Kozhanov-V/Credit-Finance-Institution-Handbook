@@ -12,6 +12,7 @@ import com.kozhanov.creditFinanceInstitutionHandbook.repository.handbook.Account
 import com.kozhanov.creditFinanceInstitutionHandbook.repository.handbook.BICDirectoryEntryRepository;
 import com.kozhanov.creditFinanceInstitutionHandbook.repository.handbook.ElectronicDocumentsRepository;
 import com.kozhanov.creditFinanceInstitutionHandbook.repository.handbook.ParticipantInfoRepository;
+import com.kozhanov.creditFinanceInstitutionHandbook.service.ImportService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
@@ -29,6 +30,9 @@ public class StartupDataLoader implements
 
     @Autowired
     private AccountOperationRestrictionRepository accountOperationRestrictionRepository;
+
+    @Autowired
+    private ImportService importService;
 
     @Autowired
     private AccountStatusRepository accountStatusRepository;
@@ -200,59 +204,7 @@ public class StartupDataLoader implements
     }
 
     public void insertData() {
-        ElectronicDocuments electronicDocuments = new ElectronicDocuments();
-        electronicDocuments.setNumber(708037415);
-        electronicDocuments.setAuthor(4583001999L);
-        electronicDocuments.setBusinessDay(new Date(1686736262));
-        electronicDocuments.setCreationReason(creationReasonRepository.findByCode("FCBD").get());
-        electronicDocuments.setInfoTypeCode(infoTypeCodeRepository.findByCode("FIRR").get());
-        electronicDocuments.setDirectoryVersion(1);
-
-
-        electronicDocumentsRepository.save(electronicDocuments);
-
-        Accounts accounts = new Accounts();
-        accounts.setAccount("40116810100000010010");
-        accounts.setRegulationAccountType(regulationAccountTypeRepository.findByCode("TRSA").get());
-        accounts.setControlKey("99");
-        accounts.setAccountCBRBIC(41280002);
-        accounts.setAccountStatus(accountStatusRepository.findByCode("ACAC").get());
-
-        String dateStr = "2023-06-15";
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-        Date date = null;
-        try {
-             date = formatter.parse(dateStr);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        ParticipantInfo participantInfo = new ParticipantInfo.Builder()
-                .nameParticipant("УФК по Астраханской области")
-                .dateIn(date)
-                .participantType(participantTypeRepository.findByCode(52).get())
-                .availableTransferService(availableTransferServiceRepository.findByCode(3).get())
-                .exchangeParticipant(exchangeParticipantRepository.findByCode(0).get())
-                .participantStatus(participantStatusRepository.findByCode("PSAC").get())
-                .build();
-
-
-        BICDirectoryEntry bicDirectoryEntry = new BICDirectoryEntry(40173001, electronicDocuments, participantInfo);
-        bicDirectoryEntry.addAccount(accounts);
-        bicDirectoryEntryRepository.save(bicDirectoryEntry);
-        accounts.setAccount("40116810100000010012");
-        AccountRestriction accountRestriction = new AccountRestriction();
-        accountRestriction.setAccountRestriction(accountOperationRestrictionRepository.findByCode("URRS").get());
-        accountRestriction.setRestrictionDate(new Date(System.currentTimeMillis()));
-       // accounts.addAccountRestriction(accountRestriction);
-        bicDirectoryEntry.addAccount(accounts);
-        bicDirectoryEntryRepository.save(bicDirectoryEntry);
-        accounts.setAccount("40116810100000010015");
-        bicDirectoryEntry.addAccount(accounts);
-        bicDirectoryEntry.setBIC(342);
-        bicDirectoryEntryRepository.save(bicDirectoryEntry);
-
-        bicDirectoryEntry.setChangeType(changeTypeRepository.findByCode("ADDD").get());
-        bicDirectoryEntryRepository.save(bicDirectoryEntry);
+        importService.importFromCB();
         Role client = new Role("ROLE_USER");
         Role admin = new Role("ROLE_ADMIN");
         User user = new User();

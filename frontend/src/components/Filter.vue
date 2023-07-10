@@ -4,7 +4,7 @@
 	<select v-model="filter.participantType" name="availableTransferService">
 		<option value="" disabled selected hidden>Тип участника</option>
 						<option v-for="(type, index) in participantTypes" :value="type.code" :key="index">
-							{{ type.code }}
+							{{ type }}
 						</option>
 					</select>
 
@@ -21,7 +21,7 @@
 
 <script>
 export default {
-	props: ['visible', 'participantTypes'],
+	props: ['visible', 'participantTypes', 'shouldResetFilter'],
 	data() {
 		return {
 			filter: {
@@ -43,7 +43,12 @@ export default {
 			};
 			this.$emit('reset-filter');
 		}
-	}
+	},
+	watch: {
+        shouldResetFilter: function() {
+            this.resetFilter();
+        }
+    }
 }
 </script>
 <style scoped>

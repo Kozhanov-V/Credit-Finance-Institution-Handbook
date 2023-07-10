@@ -1,35 +1,18 @@
 <template>
 	<div class="container">
-		<SaveModalForm :visible="isSaveModalVisible" :participantTypes="participantTypes"
-			:availableTransferServices="availableTransferServices" :participantStatuses="participantStatuses"
-			@close="isSaveModalVisible = false" @entryCreated="addEntry" />
+
 		<AccountsInfo :visible="isAccountsFormVisible" :entryAccounts="selectedItem" @close="isAccountsFormVisible = false" />
+		<h2>Избранные записи</h2>
+		<p v-if="!bicDirectoryEntries || bicDirectoryEntries.length === 0">
+    У вас нет избранных записей. Вы можете добавить избранные записи в справочнике.
+  </p>
 
-		<div class="functional-panel">
-			<div class="filter-element" id="bic">
-				<input v-model="formFilter.bicInput" type="number" name="bic" placeholder="Поиск по BIC"
-					@keyup.enter="filterByBic">
-				<input @click="filterByBic" type="submit" id="submitBic" />
-			</div>
-			<div class="filter-element" id="name">
-				<input v-model="formFilter.nameInput" type="text" name="name" placeholder="Поиск по наименованию"
-					@keyup.enter="filterByName">
-				<input @click="filterByName" type="submit" id="submitName" />
-			</div>
-			<button @click="resetAllFilter" class="filter-element" id="clear-filter"><img src="img/clear.svg" alt="c">
-				Сбросить</button>
+  <button v-if="!bicDirectoryEntries || bicDirectoryEntries.length === 0" @click="goToHandbook">
+    Перейти в справочник
+  </button>
+		<div v-else class="table-container">
+		
 
-			<button @click="openFilterMenu" class="filter-element" id="filterBtn"><img src="img/filter.png" alt="">
-				Фильтр</button>
-
-			<Filter :visible="isFilterVisible" :participantTypes="participantTypes" :shouldResetFilter="shouldResetFilter"
-				@apply-filter="applyFilter" @reset-filter="resetFilter" />
-
-			<button @click="openSaveModal" v-show="isAdmin" class="filter-element" id="addBtn"><img src="img/plus.png" alt="">
-				Добавить
-				запись</button>
-		</div>
-		<div class="table-container">
 			<table>
 				<thead>
 					<tr class="sticky-header">
@@ -60,16 +43,13 @@
 								<div class="actions">
 									<button v-if="!item.editMode" @click="this.isAccountsFormVisible = true"><img src="img/accounts.svg"
 											alt="a"></button>
-									<button v-if="!item.editMode && isUser" @click="toggleFavorite(item)">
-										<img :src="isFavorite(item) ? 'img/favorites_added.svg' : 'img/favorites.svg'" alt="f">
-									</button>
-
+									<button v-if="!item.editMode && isUser"><img src="img/favorites_added.svg" alt="f"></button>
+									
 									<button v-if="!item.editMode && isAdmin" @click="item.editMode = true"><img src="img/settings.svg"
 											alt="u"></button>
 
-									<button v-if="!item.editMode && isAdmin" @click="deleteItem(item)"><img src="img/delete.svg"
+											<button v-if="!item.editMode && isAdmin" @click="deleteItem(item)"><img src="img/delete.svg"
 											alt="d"></button>
-									
 								</div>
 								<div class="edit_mode_action">
 									<button v-if="item.editMode" @click="item.editMode = false"><img src="img/cancel.svg" alt="c"></button>
@@ -202,22 +182,6 @@
 			</table>
 
 		</div>
-		<div class="control-pages-block">
-			<button @click="previousPage" :disabled="currentPage == 1">
-				<!-- <img src="img/previous_page.png" alt=""> -->
-				&#60;
-			</button>
-			<button @click="firstPage" :disabled="currentPage < 3">1</button>
-			<button @click="previousPage" :disabled="currentPage < 2">{{ currentPage - 1 }}</button>
-			<p class="currentPage">{{ currentPage }}</p>
-			<button @click="nextPage" :disabled="currentPage > totalPage - 1">{{ currentPage + 1 }}</button>
-			<button @click="lastPage" :disabled="currentPage > totalPage - 2">{{ totalPage }}</button>
-			<button @click="nextPage" :disabled="currentPage == totalPage">
-				<!-- <img src="img/next_page.png" alt=""> -->
-				&#62;
-			</button>
-
-		</div>
 
 	</div>
 </template>
@@ -250,61 +214,24 @@ export default {
 
 	data() {
 		return {
-
 			bicDirectoryEntries: [],
 			participantTypes: [],
 			availableTransferServices: [],
 			participantStatuses: [],
-			
-			formFilter: {
-				bicInput: '',
-				nameInput: '',
-				typeTransfer: '',
-				validFrom: '',
-				validUntil: '',
-
-			},
 			idES: '',
 			tableData: [],
 			selectedItem: null,
 			isSaveModalVisible: false,
 			isFilterVisible: false,
 			isAccountsFormVisible: false,
+
 			itemsPerPage: 32,
 			currentPage: 1,
 			totalPage: 0,
 			data: [],
-			shouldResetFilter: false
 		};
 	},
 	methods: {
-		toggleFavorite(item) {
-			if (this.isFavorite(item)) {
-				this.deleteFavorite(item)
-			} else {
-				this.addFavorite(item);
-			}
-		},
-		isFavorite(item) {
-			return this.favoritesEntry.some(favoriteItem => favoriteItem.bic === item.bic);
-		},
-		deleteFavorite(bicDirectoryEntry) {
-			try {
-				this.$store.dispatch('deleteFavoritesEntry', bicDirectoryEntry);
-			} catch (error) {
-				alert("Ошибка");
-				console.error(error);
-			}
-		},
-		addFavorite(bicDirectoryEntry) {
-			try {
-				this.$store.dispatch('addFavoritesEntry', bicDirectoryEntry);
-				console.log(this.favoritesEntry)
-			} catch (error) {
-				alert("Ошибка");
-				console.error(error);
-			}
-		},
 		async saveItem(item) {
 			try {
 				const response = await axios.put(`http://localhost:8080/api/update/${item.bic}`, {
@@ -326,12 +253,11 @@ export default {
 						uid: item.uid,
 						exchangeParticipant: item.exchangeParticipant,
 					}
-				}
-					, {
-						headers: {
-							'Authorization': 'Bearer ' + localStorage.getItem('token')
-						}
-					});
+				}, {
+					headers: {
+						'Authorization': 'Bearer ' + localStorage.getItem('token')
+					}
+				});
 
 				// Проверяем, успешно ли выполнился запрос
 				if (response.status === 200) {
@@ -347,32 +273,34 @@ export default {
 			item.editMode = false;
 		},
 		fillTable(bicDirectoryEntries) {
+			
 			this.tableData = bicDirectoryEntries.map(item => ({
 				bic: item.bic,
-				nameParticipant: item.participantInfo.nameParticipant,
-				registrationNumber: item.participantInfo.registrationNumber,
-				countryCode: item.participantInfo.countryCode,
-				regionCode: item.participantInfo.regionCode,
-				index: item.participantInfo.index,
-				typeLocation: item.participantInfo.typeLocation,
-				nameLocation: item.participantInfo.nameLocation,
-				address: item.participantInfo.address,
-				parentBIC: item.participantInfo.parentBIC,
-				dateIn: item.participantInfo.dateIn,
-				dateOut: item.participantInfo.dateOut,
-				participantType: item.participantInfo?.participantType?.code,
-				availableTransferService: item.participantInfo?.availableTransferService?.code,
-				exchangeParticipant: item.participantInfo?.exchangeParticipant?.code,
-				uid: item.participantInfo.uid,
-				participantStatus: item.participantInfo?.participantStatus?.code,
+				nameParticipant: item.nameParticipant,
+				registrationNumber: item.registrationNumber,
+				countryCode: item.countryCode,
+				regionCode: item.regionCode,
+				index: item.index,
+				typeLocation: item.typeLocation,
+				nameLocation: item.nameLocation,
+				address: item.address,
+				parentBIC: item.parentBIC,
+				dateIn: item.dateIn,
+				dateOut: item.dateOut,
+				participantType: item.participantType,
+				availableTransferService: item.availableTransferService,
+				exchangeParticipant: item.exchangeParticipant,
+				uid: item.uid,
+				participantStatus: item.participantStatus,
 				accounts: item.accounts,
 				editMode: false,
 			}))
 
 		},
 
-
-
+		goToHandbook() {
+			this.$router.push('/handbook');
+		},
 
 		async deleteItem() {
 			if (!this.selectedItem) {
@@ -400,133 +328,6 @@ export default {
 				console.error("Error deleting item:", error);
 			}
 		},
-
-
-		openSaveModal() {
-			this.isSaveModalVisible = true;
-		},
-		firstPage() {
-			this.currentPage = 1;
-			this.fetchData(1);
-		},
-		lastPage() {
-			this.currentPage = this.totalPage;
-			this.fetchData(this.totalPage);
-		},
-		previousPage() {
-			if (this.currentPage > 1) {
-				this.currentPage--;
-				this.fetchData(this.currentPage);
-			}
-		},
-		nextPage() {
-			if (this.currentPage < this.totalPage) {
-				this.currentPage++;
-				this.fetchData(this.currentPage);
-			}
-		},
-		async fetchData(currentPage) {
-
-			axios.get(`http://localhost:8080/api/data?page=${currentPage - 1}&size=${this.itemsPerPage}`)
-				.then(response => {
-					this.fillTable(response.data.bicDirectoryEntries);
-					this.bicDirectoryEntries = response.data.bicDirectoryEntries;
-					this.totalPage = response.data.totalPage;
-				}).catch(error => {
-					console.log(error)
-				});
-		},
-
-		openFilterMenu() {
-			this.isFilterVisible = true;
-		},
-		resetAllFilter() {
-			this.shouldResetFilter = !this.shouldResetFilter;
-			this.formFilter.bicInput = '';
-			this.formFilter.nameInput = '';
-			this.formFilter.typeTransfer = '';
-			this.formFilter.validFrom = '';
-			this.formFilter.validUntil = '';
-			this.fetchData();
-		},
-		async filterByBic() {
-			let bic = this.formFilter.bicInput;
-
-			try {
-				let response;
-				if (bic !== "") {
-					response = await axios.get(`http://localhost:8080/api/findBy/bic/${bic}`);
-
-				} else {
-
-					await this.fetchData();
-				}
-				this.nameInput = "";
-				this.fillTable(response.data)
-			} catch (error) {
-				console.error(error);
-			}
-		},
-
-		async filterByName() {
-			let name = this.formFilter.nameInput;
-
-			try {
-				let response;
-				if (name !== "") {
-					response = await axios.get(`http://localhost:8080/api/findBy/name/${name}`);
-
-				} else {
-
-					await this.fetchData();
-				}
-				this.bicInput = "";
-				this.fillTable(response.data)
-			} catch (error) {
-				console.error(error);
-			}
-		},
-
-
-		async applyFilter(filter) {
-			this.formFilter.typeTransfer = filter.participantType;
-			this.formFilter.validFrom = filter.validFrom;
-			this.formFilter.validUntil = filter.validUntil;
-			try {
-				const response = await axios.post('http://localhost:8080/api/filter', this.formFilter);
-				this.fillTable(response.data);
-
-			} catch (error) {
-				console.error(error);
-			}
-			this.isFilterVisible = false;
-		},
-		async resetFilter() {
-			this.isFilterVisible = false;
-		},
-		addEntry(newEntry) {
-			this.tableData.push({
-				bic: newEntry.bic,
-				idES: this.idES,
-				nameParticipant: newEntry.participantInfo.nameParticipant,
-				registrationNumber: newEntry.participantInfo.registrationNumber,
-				countryCode: newEntry.participantInfo.countryCode,
-				regionCode: newEntry.participantInfo.regionCode,
-				index: newEntry.participantInfo.index,
-				typeLocation: newEntry.participantInfo.typeLocation,
-				nameLocation: newEntry.participantInfo.nameLocation,
-				address: newEntry.participantInfo.address,
-				parentBIC: newEntry.participantInfo.parentBIC,
-				dateIn: newEntry.participantInfo.dateIn,
-				dateOut: newEntry.participantInfo.dateOut,
-				participantType: newEntry.participantInfo?.participantType,
-				availableTransferService: newEntry.participantInfo?.availableTransferService,
-				exchangeParticipant: newEntry.participantInfo?.exchangeParticipant,
-				uid: newEntry.participantInfo.uid,
-				participantStatus: newEntry.participantInfo?.participantStatus,
-				editMode: false,
-			})
-		},
 		async startupDataLoader() {
 			await axios.get('http://localhost:8080/api/participantTypes', {
 			}).then(response => {
@@ -544,14 +345,19 @@ export default {
 		}
 	},
 	created() {
-		this.fetchData();
-		this.startupDataLoader();
 
+		this.startupDataLoader();
 	},
 	mounted() {
 		this.$nextTick(function () {
-			document.getElementById('handbookBtn').click();
+			document.getElementById('favoritesBtn').click();
 		})
+		this.bicDirectoryEntries = this.$store.getters.getFavorites;
+		console.log(this.bicDirectoryEntries)
+		console.log(this.bicDirectoryEntries)
+		if (this.bicDirectoryEntries && this.bicDirectoryEntries.length > 0) {
+			this.fillTable(this.bicDirectoryEntries);
+		}
 	},
 	computed: {
 		isAdmin() {
@@ -566,9 +372,6 @@ export default {
 		isLoggedIn() {
 			return this.$store.getters.isLoggedIn;
 		},
-		favoritesEntry() {
-        return this.$store.getters.getFavorites;
-    },
 	},
 
 };

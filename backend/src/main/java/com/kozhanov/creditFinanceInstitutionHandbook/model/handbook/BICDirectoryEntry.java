@@ -8,11 +8,14 @@ import com.fasterxml.jackson.dataformat.xml.annotation.*;
 import com.kozhanov.creditFinanceInstitutionHandbook.deserialization.codeValue.ChangeTypeDeserializer;
 import com.kozhanov.creditFinanceInstitutionHandbook.deserialization.handbook.BICDirectoryEntryDeserializer;
 import com.kozhanov.creditFinanceInstitutionHandbook.deserialization.handbook.ParticipantInfoDeserializer;
+import com.kozhanov.creditFinanceInstitutionHandbook.model.codeValue.AccountStatus;
 import com.kozhanov.creditFinanceInstitutionHandbook.model.codeValue.ChangeType;
+import com.kozhanov.creditFinanceInstitutionHandbook.repository.codeValue.AccountStatusRepository;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.*;
 import javax.validation.constraints.Max;
@@ -27,8 +30,6 @@ import java.util.stream.Collectors;
 @Entity
 @Table(name = "bic_directory_entry")
 public class BICDirectoryEntry {
-
-
 
     @Id
     @Column(name = "bic")
@@ -85,6 +86,8 @@ public class BICDirectoryEntry {
                 .participantStatus(participantInfoDes.getParticipantStatus())
                 .build();
         this.changeType = bicDirectoryEntryDeserializer.getChangeType();
+        this.accounts.clear();
+        System.out.println(accounts);
         this.accounts = bicDirectoryEntryDeserializer.getAccountsDeserializer().stream().map(account->{
             Accounts acc = new Accounts(account);
             acc.setBicDirectoryEntry(this);
@@ -150,6 +153,9 @@ public class BICDirectoryEntry {
     }
 
     public void addAccount(Accounts account) {
+
+
+
         if (accounts == null) {
             accounts = new ArrayList<>();
         }
