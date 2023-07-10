@@ -43,7 +43,7 @@
 								<div class="actions">
 									<button v-if="!item.editMode" @click="this.isAccountsFormVisible = true"><img src="img/accounts.svg"
 											alt="a"></button>
-									<button v-if="!item.editMode && isUser"><img src="img/favorites_added.svg" alt="f"></button>
+									<button v-if="!item.editMode && isUser" @click="deleteFavorite(item)"><img src="img/favorites_added.svg" alt="f"></button>
 									
 									<button v-if="!item.editMode && isAdmin" @click="item.editMode = true"><img src="img/settings.svg"
 											alt="u"></button>
@@ -232,6 +232,18 @@ export default {
 		};
 	},
 	methods: {
+		deleteFavorite(bicDirectoryEntry) {
+			try {
+				this.$store.dispatch('deleteFavoritesEntry', bicDirectoryEntry);
+				const index = this.tableData.findIndex(item => item.bic === bicDirectoryEntry.bic);
+				if (index !== -1) {
+						this.tableData.splice(index, 1);
+					}
+			} catch (error) {
+				alert("Ошибка");
+				console.error(error);
+			}
+		},
 		async saveItem(item) {
 			try {
 				const response = await axios.put(`http://localhost:8080/api/update/${item.bic}`, {
