@@ -1,25 +1,22 @@
 package com.kozhanov.creditFinanceInstitutionHandbook.service;
 
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
-import com.kozhanov.creditFinanceInstitutionHandbook.deserialization.handbook.ElectroncDocumentsDeserializer;
-import com.kozhanov.creditFinanceInstitutionHandbook.model.handbook.BICDirectoryEntry;
+import com.kozhanov.creditFinanceInstitutionHandbook.deserialization.handbook.ElectronicDocumentsDeserializer;
 import com.kozhanov.creditFinanceInstitutionHandbook.model.handbook.ElectronicDocuments;
-import com.kozhanov.creditFinanceInstitutionHandbook.repository.handbook.ElectronicDocumentsRepository;
+import com.kozhanov.creditFinanceInstitutionHandbook.repository.handbook.AccountsRepository;
 import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.io.*;
 import java.net.URL;
 import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
 @Service
+@Transactional
 public class ImportServiceImpl implements ImportService{
 
     @Autowired
@@ -29,10 +26,12 @@ public class ImportServiceImpl implements ImportService{
     private BICDirectoryEntryService bicDirectoryEntryService;
 
     @Autowired
-    private AccountsService accountsService;
+    private AccountsRepository accountsRepository;
+
 
     @Override
     public void importFromCB() {
+        System.out.println("satart");
         String url = "http://cbr.ru/s/newbik";
         String directory = "C:\\Users\\vkozh\\Documents\\GitHub" +
                 "\\Credit-Finance-Institution-Handbook\\backend\\src\\main\\java\\com\\kozhanov\\creditFinanceInstitutionHandbook\\until\\";
@@ -48,6 +47,7 @@ public class ImportServiceImpl implements ImportService{
        nameFile= unzipFile(directory,nameFile);
 
         deserializeAndSaveEDFromXml(directory+nameFile);
+        System.out.println("end");
     }
 
     private void downloadFile(String url, String directory) throws IOException {
@@ -80,30 +80,27 @@ public class ImportServiceImpl implements ImportService{
 
     public void deserializeAndSaveEDFromXml(String xmlFilePath) {
         XmlMapper xmlMapper = new XmlMapper();
+        try (InputStream inputStream = new FileInputStream(xmlFilePath);
+             Reader reader = new InputStreamReader(inputStream, Charset.forName("windows-1251"))) {
 
-        try {
-            try (InputStream inputStream = new FileInputStream(xmlFilePath);
-                 Reader reader = new InputStreamReader(inputStream, Charset.forName("windows-1251"))) {
-
-                // Use reader to read the data
-                char[] arr = new char[8 * 1024]; // 8K at a time
-                StringBuilder buffer = new StringBuilder();
-                int numCharsRead;
-                while ((numCharsRead = reader.read(arr, 0, arr.length)) != -1) {
-                    buffer.append(arr, 0, numCharsRead);
-                }
-                String readContent = buffer.toString();
-
-                ElectroncDocumentsDeserializer electronicDocumentsDeserializer = xmlMapper.readValue(readContent, ElectroncDocumentsDeserializer.class);
-                ElectronicDocuments electronicDocuments = new ElectronicDocuments(electronicDocumentsDeserializer);
-
-                   electronicDocumentsService.save(electronicDocuments);
-
+            // Use reader to read the data
+            char[] arr = new char[8 * 1024]; // 8K at a time
+            StringBuilder buffer = new StringBuilder();
+            int numCharsRead;
+            while ((numCharsRead = reader.read(arr, 0, arr.length)) != -1) {
+                buffer.append(arr, 0, numCharsRead);
             }
+            String readContent = buffer.toString();
+
+            ElectronicDocumentsDeserializer electronicDocumentsDeserializer = xmlMapper.readValue(readContent, ElectronicDocumentsDeserializer.class);
+            electronicDocumentsService.save(electronicDocumentsDeserializer);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
+
+
+
 
 
 }

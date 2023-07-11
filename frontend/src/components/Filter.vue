@@ -3,7 +3,7 @@
 	<div v-if="visible" class="filter-menu">
 	<select v-model="filter.participantType" name="availableTransferService">
 		<option value="" disabled selected hidden>Тип участника</option>
-						<option v-for="(type, index) in participantTypes" :value="type.code" :key="index">
+						<option v-for="(type, index) in participantTypes" :value="type" :key="index">
 							{{ type }}
 						</option>
 					</select>

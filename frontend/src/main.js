@@ -11,6 +11,7 @@ import Favorites from '@/views/Favorites.vue'
 import NotFound from '@/views/NotFound.vue'
 import Logout from '@/views/Logout.vue'
 import Home from '@/views/Home.vue'
+import ExpiredToken from '@/views/ExpiredToken.vue'
 
 
 
@@ -24,6 +25,7 @@ const store = createStore({
     },
     getters: {
 			isLoggedIn: (state) => !!state.token,
+			getToken: (state) => state.token,
 			getUsername: (state) => state.username,
 			getRoles: (state) => state.roles,
 			getFavorites: (state) => state.favoritesEntry,
@@ -101,7 +103,6 @@ const store = createStore({
                 localStorage.removeItem('roles');
                 localStorage.removeItem('favoritesEntry');
                 resolve();
-                router.push("/")
             });
         },
 				addFavoritesEntry: async({state,commit}, bicDirectoryEntry)=>{ 
@@ -140,22 +141,51 @@ const router = createRouter({
         {path: '/login', name: 'Authenticate', component: Authenticate},
         {path: '/logout', name: 'Logout', component: Logout},
         {path: '/handbook', name: 'Handbook', component: Handbook},
+        {path: '/expired', name: 'ExpiredToken', component: ExpiredToken},
         {path: '/:pathMatch(.*)*', name: 'NotFound', component: NotFound},
      
      
     ]
 })
+async function checkValidationToken(){
+	return new Promise(async (resolve, reject) => {
+			try {
+					const response = await axios.post(
+							`http://localhost:8080/api/token/check`,
+							store.getters.getToken
+					);
+					if(response.data !=true) resolve(false);
+					resolve(true);
+			} catch(error) {
+					console.log(error);
+					resolve(false);
+			}
+	});
+}
 
-router.beforeEach((to, from, next) => {
-    const isAuthenticated = store.getters.isLoggedIn;  // Используем геттер из хранилища Vuex
-    if (to.path === '/login' && isAuthenticated) {
-        // Если пользователь уже аутентифицирован, то не пускаем его на страницу входа
-        next('/');
-    } else {
-        // Во всех остальных случаях разрешаем переход
-        next();
-    }
+router.beforeEach(async (to, from, next) => {
+	const isAuthenticated = store.getters.isLoggedIn;
+	const check = await checkValidationToken();
+	console.log("CHECK - " + check)
+	console.log("isAuth - " + isAuthenticated)
+if(isAuthenticated){
+	
+}
+
+	if (isAuthenticated && check) {
+			console.log('go to next')
+			next();
+	} else if (isAuthenticated && !check && to.path != '/expired') {
+			console.log('go to logout')
+			next('/expired');
+	} 
+	else if (to.path === '/login' && isAuthenticated) {
+			next('/');
+	} else {
+			next();
+	}
 });
+
 
 
   

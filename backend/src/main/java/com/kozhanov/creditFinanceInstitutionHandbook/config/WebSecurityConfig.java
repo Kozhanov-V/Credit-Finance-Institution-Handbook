@@ -64,10 +64,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/api/regulationAccountTypes",
                         "/api/accountStatuses",
                         "/api/accountRestrictions"
+
                 ).permitAll()
                 .antMatchers(
                         HttpMethod.POST,
-                        "/api/filter"
+                        "/api/filter",
+                        "/api/token/check"
 
                 ).permitAll()
                 .antMatchers(HttpMethod.POST,

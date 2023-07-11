@@ -1,6 +1,6 @@
 
 <template>
-	  <Navigation v-if="route.path !== '/login' && route.path!=='/'" />
+	  <Navigation v-if="route.path !== '/login' && route.path!=='/' && route.path!=='/expired'"/>
   <Header v-if="route.path !== '/login' && route.path!=='/'"  />
 
 

@@ -1,14 +1,6 @@
 package com.kozhanov.creditFinanceInstitutionHandbook.model.handbook;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
-import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
-import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
-import com.kozhanov.creditFinanceInstitutionHandbook.deserialization.codeValue.CreationReasonDeserializer;
-import com.kozhanov.creditFinanceInstitutionHandbook.deserialization.codeValue.InfoTypeCodeDeserializer;
-import com.kozhanov.creditFinanceInstitutionHandbook.deserialization.handbook.ElectroncDocumentsDeserializer;
+import com.kozhanov.creditFinanceInstitutionHandbook.deserialization.handbook.ElectronicDocumentsDeserializer;
 import com.kozhanov.creditFinanceInstitutionHandbook.model.codeValue.CreationReason;
 import com.kozhanov.creditFinanceInstitutionHandbook.model.codeValue.InfoTypeCode;
 
@@ -87,7 +79,7 @@ public class ElectronicDocuments {
         this.directoryVersion = directoryVersion;
     }
 
-    public ElectronicDocuments(ElectroncDocumentsDeserializer electroncDocumentsDeserializer){
+    public ElectronicDocuments(ElectronicDocumentsDeserializer electroncDocumentsDeserializer){
         this.number = electroncDocumentsDeserializer.getEdNo();
         this.date = electroncDocumentsDeserializer.getEdDate();
         this.author = electroncDocumentsDeserializer.getEdAuthor();
@@ -97,13 +89,20 @@ public class ElectronicDocuments {
         this.infoTypeCode = electroncDocumentsDeserializer.getInfoTypeCode();
         this.businessDay = electroncDocumentsDeserializer.getBusinessDay();
         this.directoryVersion = electroncDocumentsDeserializer.getDirectoryVersion();
-        this.bicDirectoryEntryList = electroncDocumentsDeserializer.getBicDirectoryEntryDeserializer().stream().map(bicDirectoryEntry->{
-            BICDirectoryEntry bicDirEnt = new BICDirectoryEntry(bicDirectoryEntry);
-            bicDirEnt.setElectronicDocuments(this);
-            return bicDirEnt;
-        }).collect(Collectors.toList());
     }
 
+    public ElectronicDocuments(ElectronicDocumentsDeserializer electroncDocumentsDeserializer, List<BICDirectoryEntry> filteredBicDirectoryEntry){
+        this.number = electroncDocumentsDeserializer.getEdNo();
+        this.date = electroncDocumentsDeserializer.getEdDate();
+        this.author = electroncDocumentsDeserializer.getEdAuthor();
+        this.receiver = electroncDocumentsDeserializer.geteDReceiver();
+        this.creationReason = electroncDocumentsDeserializer.getCreationReason();
+        this.creationDateTime = electroncDocumentsDeserializer.getCreationDateTime();
+        this.infoTypeCode = electroncDocumentsDeserializer.getInfoTypeCode();
+        this.businessDay = electroncDocumentsDeserializer.getBusinessDay();
+        this.directoryVersion = electroncDocumentsDeserializer.getDirectoryVersion();
+        this.bicDirectoryEntryList = filteredBicDirectoryEntry;
+    }
 
 
     public ElectronicDocuments() {

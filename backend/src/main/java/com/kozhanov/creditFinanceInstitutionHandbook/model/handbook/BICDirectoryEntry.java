@@ -11,6 +11,7 @@ import com.kozhanov.creditFinanceInstitutionHandbook.deserialization.handbook.Pa
 import com.kozhanov.creditFinanceInstitutionHandbook.model.codeValue.AccountStatus;
 import com.kozhanov.creditFinanceInstitutionHandbook.model.codeValue.ChangeType;
 import com.kozhanov.creditFinanceInstitutionHandbook.repository.codeValue.AccountStatusRepository;
+import com.kozhanov.creditFinanceInstitutionHandbook.service.AccountsService;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.LazyCollection;
@@ -30,6 +31,7 @@ import java.util.stream.Collectors;
 @Entity
 @Table(name = "bic_directory_entry")
 public class BICDirectoryEntry {
+
 
     @Id
     @Column(name = "bic")
@@ -86,7 +88,6 @@ public class BICDirectoryEntry {
                 .participantStatus(participantInfoDes.getParticipantStatus())
                 .build();
         this.changeType = bicDirectoryEntryDeserializer.getChangeType();
-        this.accounts.clear();
         System.out.println(accounts);
         this.accounts = bicDirectoryEntryDeserializer.getAccountsDeserializer().stream().map(account->{
             Accounts acc = new Accounts(account);
@@ -103,6 +104,8 @@ public class BICDirectoryEntry {
     public int getBIC() {
         return BIC;
     }
+
+
 
     public void setBIC(int BIC) {
         this.BIC = BIC;
@@ -180,6 +183,7 @@ public class BICDirectoryEntry {
                 ", electronicDocuments=" + electronicDocuments +
                 ", accounts=" + accounts +
                 ", swbicsList=" + swbicsList +
+                ", accounts=" + accounts +
                 '}';
     }
 }

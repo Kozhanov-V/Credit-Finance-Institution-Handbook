@@ -5,7 +5,12 @@ import com.kozhanov.creditFinanceInstitutionHandbook.model.users.User;
 import com.kozhanov.creditFinanceInstitutionHandbook.repository.auth.UserRepository;
 import com.kozhanov.creditFinanceInstitutionHandbook.repository.handbook.BICDirectoryEntryRepository;
 import com.kozhanov.creditFinanceInstitutionHandbook.security.*;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jws;
+import io.jsonwebtoken.JwtException;
+import io.jsonwebtoken.Jwts;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -31,6 +36,9 @@ public class UserManagementController {
 
     @Autowired
     private JwtUserDetailsService userDetailsService;
+
+    @Value("${jwt.secret}")
+    private String secretKey;
 
     @RequestMapping(value = "/authenticate", method = RequestMethod.POST)
     public ResponseEntity<?> createAuthenticationToken(@RequestBody JwtRequest authenticationRequest) throws Exception {
@@ -76,6 +84,22 @@ public class UserManagementController {
 
 
         return new ResponseEntity<>("All is good", HttpStatus.OK);
+    }
+
+    @PostMapping("/api/token/check")
+    public ResponseEntity<?> checkTokenValidations(@RequestBody String token) {
+
+        try {
+            if(token.startsWith("Bearer ")) {
+                token = token.substring(7);
+            }
+                Jws<Claims> claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token);
+
+
+            return new ResponseEntity<>(true, HttpStatus.OK);
+        } catch (JwtException | IllegalArgumentException e) {
+            return new ResponseEntity<>(false, HttpStatus.UNAUTHORIZED);
+        }
     }
 
 

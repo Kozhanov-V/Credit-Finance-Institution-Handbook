@@ -17,18 +17,17 @@ import java.util.List;
 public class BICDirectoryEntryServiceImpl implements BICDirectoryEntryService {
 
     @Autowired
-    BICDirectoryEntryRepository bicDirectoryEntryRepository;
+  private   BICDirectoryEntryRepository bicDirectoryEntryRepository;
 
     @Autowired
-    ParticipantInfoService participantInfoService;
+  private  ParticipantInfoService participantInfoService;
 
     @Autowired
-    ChangeTypeRepository changeTypeRepository;
+   private ChangeTypeRepository changeTypeRepository;
 
     @Override
     public void save(BICDirectoryEntry bicDirectoryEntry) {
         bicDirectoryEntry.setChangeType(changeTypeRepository.findByCode("ADDD").get());
-
         bicDirectoryEntryRepository.save(bicDirectoryEntry);
     }
 

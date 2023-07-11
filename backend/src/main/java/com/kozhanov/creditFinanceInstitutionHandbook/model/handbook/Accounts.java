@@ -25,13 +25,8 @@ import java.util.stream.Collectors;
 @Table(name = "accounts")
 public class Accounts {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id")
-    private long id;
-
     @Column(name = "account")
     @Size(min = 20, max = 20)
-
     private String account;
 
     @ManyToOne
@@ -65,14 +60,6 @@ public class Accounts {
 
     @OneToMany(cascade = {CascadeType.PERSIST,CascadeType.MERGE,CascadeType.REMOVE})
     private List<AccountRestriction> accountRestrictions = new ArrayList<>();
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
 
     public Accounts(AccountsDeserializer accountsDeserializer) {
         this.account = accountsDeserializer.getAccount();

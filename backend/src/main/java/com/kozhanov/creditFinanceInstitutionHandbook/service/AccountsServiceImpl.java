@@ -7,14 +7,17 @@ import com.kozhanov.creditFinanceInstitutionHandbook.repository.handbook.Account
 import com.kozhanov.creditFinanceInstitutionHandbook.repository.handbook.BICDirectoryEntryRepository;
 import org.hibernate.event.spi.SaveOrUpdateEvent;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
 @Service
+@Transactional
 public class AccountsServiceImpl implements AccountsService{
     @Autowired
     AccountsRepository accountsRepository;
@@ -26,7 +29,9 @@ public class AccountsServiceImpl implements AccountsService{
     AccountStatusRepository accountStatusRepository;
 
     public void save(Accounts accounts){
-        accountsRepository.save(accounts);
+
+            accountsRepository.save(accounts);
+
     }
 
     @Override
@@ -77,7 +82,7 @@ public class AccountsServiceImpl implements AccountsService{
 
     @Override
     public void delete(String accountNumber) {
-        accountsRepository.deleteById(accountNumber);
+        accountsRepository.deleteByAccount(accountNumber);
     }
 
 

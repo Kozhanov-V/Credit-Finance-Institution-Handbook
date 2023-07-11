@@ -5,14 +5,13 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 import com.kozhanov.creditFinanceInstitutionHandbook.model.codeValue.CreationReason;
 import com.kozhanov.creditFinanceInstitutionHandbook.model.codeValue.InfoTypeCode;
-import com.kozhanov.creditFinanceInstitutionHandbook.model.handbook.BICDirectoryEntry;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 @JacksonXmlRootElement(localName = "ED807")
-public class ElectroncDocumentsDeserializer {
+public class ElectronicDocumentsDeserializer {
     @JacksonXmlProperty(localName = "EDNo", isAttribute = true)
     private int edNo;
 
@@ -44,7 +43,7 @@ public class ElectroncDocumentsDeserializer {
     @JacksonXmlElementWrapper(useWrapping = false)
     private List<BICDirectoryEntryDeserializer> bicDirectoryEntryDeserializer =new ArrayList<>();
 
-    public ElectroncDocumentsDeserializer() {
+    public ElectronicDocumentsDeserializer() {
     }
 
     public int getEdNo() {
