@@ -414,7 +414,6 @@ public class ParticipantInfo {
                 ", exchangeParticipant=" + exchangeParticipant +
                 ", UID=" + UID +
                 ", participantStatus=" + participantStatus +
-                ", bicDirectoryEntry=" + bicDirectoryEntry +
                 ", rstrList=" + rstrList +
                 '}';
     }

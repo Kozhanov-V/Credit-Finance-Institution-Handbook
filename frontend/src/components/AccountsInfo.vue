@@ -22,8 +22,8 @@
 
 						<td>{{ item.account }}</td>
 
-						<td v-if="editItem && editItem.account === item.account">
-							<select v-model="editItem.regulationAccountType" name="regulationAccountType">
+						<td v-if="item === currentlyEditing">
+							<select v-model="editedItem.regulationAccountType" name="regulationAccountType">
 								<option v-for="(type, index) in regulationAccountTypes" :value="type" :key="index">
 									{{ type }}
 								</option>
@@ -32,17 +32,22 @@
 						<td v-else>{{ item.regulationAccountType }}</td>
 
 
-						<td v-if="editItem && editItem.account === item.account"><input v-model="editItem.controlKey" type="number">
+						<td v-if="item === currentlyEditing">
+							<input v-model="editedItem.controlKey" type="number">
 						</td>
 						<td v-else>{{ item.controlKey }}</td>
 
-						<td v-if="editItem && editItem.account === item.account"><input v-model="editItem.dateIn" type="date"></td>
+						<td v-if="item === currentlyEditing">
+							<input v-model="editedItem.dateIn" type="date">
+						</td>
 						<td v-else>{{ item.dateIn }}</td>
 
-						<td v-if="editItem && editItem.account === item.account"><input v-model="editItem.dateOut" type="date"></td>
+						<td v-if="item === currentlyEditing">
+							<input v-model="editedItem.dateOut" type="date"></td>
 						<td v-else>{{ item.dateOut }}</td>
 
-						<td v-if="editItem && editItem.account === item.account"><input v-model="editItem.accountCBRBIC"
+						<td v-if="item === currentlyEditing">
+							<input v-model="editedItem.accountCBRBIC"
 								type="number">
 						</td>
 						<td v-else>{{ item.accountCBRBIC }}</td>
@@ -60,14 +65,14 @@
 
 
 							<div class="buttons" v-if="isAdmin">
-								<div v-if="editItem && editItem.account === item.account">
+								<div v-if="item === currentlyEditing">
 									<button @click="cancelEdit()"><img src="img/cancel.svg" alt="O"></button>
-									<button @click="saveEdit()"><img src="img/save.svg" alt="S"></button>
+									<button @click="saveEdit(item)"><img src="img/save.svg" alt="S"></button>
 								</div>
 
 								<div v-else>
-									<button @click="editAccount()"><img src="img/settings.svg" alt="E"></button>
-									<button @click="deleteCurrentItem()"><img src="img/delete.svg" alt="D"></button>
+									<button @click="editAccount(item)"><img src="img/settings.svg" alt="E"></button>
+									<button @click="deleteCurrentItem(item)"><img src="img/delete.svg" alt="D"></button>
 								</div>
 							</div>
 
@@ -79,7 +84,7 @@
 						<td> <input type="text" v-model="addItem.account"></td>
 						<td> <select v-model="addItem.regulationAccountType" name="regulationAccountType">
 								<option v-for="(type, index) in regulationAccountTypes" :value="type" :key="index">
-									{{ type}}
+									{{ type }}
 								</option>
 							</select></td>
 						<td> <input type="text" v-model="addItem.controlKey"></td>
@@ -111,12 +116,14 @@
 </template>
 <script>
 import axios from 'axios';
+import { parseISO, format } from 'date-fns';
 export default {
 	props: ['visible', 'entryAccounts'],
 	data() {
 		return {
 			activeItem: null,
-			editItem: null,
+			editedItem: null,
+			currentlyEditing: null,
 			addMode: false,
 			accountRestrictions: [],
 			accountStatuses: [],
@@ -153,8 +160,23 @@ export default {
 				dateOut: item.dateOut,
 				accountStatus: item?.accountStatus?.code,
 				accountCBRBIC: item.accountCBRBIC,
-				accountRestrictions: item.accountRestrictions,
 			}))
+		},
+		getAccountStatusByDates(dateIn, dateOut) {
+
+			let today = format(new Date(), "yyyy-MM-dd")
+
+			if (dateOut === '') {
+				dateOut = today;
+			}
+
+			if (dateOut < today || dateIn > today) {
+				console.log("ACDL")
+				return "ACDL"
+			} else {
+				console.log("ACAC")
+				return "ACAC"
+			}
 		},
 
 		saveAccount() {
@@ -166,15 +188,16 @@ export default {
 					}
 				})
 				.then(() => {
+					let accountStatusForAddItem = this.getAccountStatusByDates(this.addItem.dateIn, this.addItem.dateOut);
+					console.log(accountStatusForAddItem)
 					this.tableData.push({
 						account: this.addItem.account,
 						regulationAccountType: this.addItem?.regulationAccountType,
 						controlKey: this.addItem.controlKey,
 						dateIn: this.addItem.dateIn,
 						dateOut: this.addItem.dateOut,
-						accountStatus: this.addItem?.accountStatus,
+						accountStatus: accountStatusForAddItem,
 						accountCBRBIC: this.addItem.accountCBRBIC,
-						accountRestrictions: this.addItem.accountRestrictions,
 					});
 					this.closeAddMode();
 				})
@@ -197,34 +220,41 @@ export default {
 			this.addItem.accountCBRBIC = '';
 			accountRestrictions = [];
 		},
-		editAccount() {
-			this.editItem = this.activeItem;
+		editAccount(item) {
+		this.editedItem = Object.assign({}, item); 
+    this.currentlyEditing = item;
 
 		},
 		cancelEdit() {
-			this.editItem = null;
+			Object.assign(this.editedItem,this.currentlyEditing); 
+    this.currentlyEditing = null;
+    this.editedItem = null;
 		},
-		saveEdit() {
+		saveEdit(item) {
 			axios
-				.put(`http://localhost:8080/api/account/update/${this.editItem.account}`, this.editItem, {
+				.put(`http://localhost:8080/api/account/update/${this.editedItem.account}`, this.editedItem, {
 					headers: {
 						'Authorization': 'Bearer ' + localStorage.getItem('token')
 					}
 				})
 				.then(() => {
 					// обновить запись в локальном состоянии
-					let item = this.tableData.find(item => item.account === this.editItem.account);
-					Object.assign(item, this.editItem);
+					let accountStatusForeditedItem = this.getAccountStatusByDates(this.editedItem.dateIn, this.editedItem.dateOut);
+					console.log(accountStatusForeditedItem)
+					item.accountStatus = accountStatusForeditedItem;
+					Object.assign(item, this.editedItem);
+					this.currentlyEditing = null;
+   			 this.editedItem = null;
 				})
 				.catch(error => {
 					console.error(error);
 				})
 				.finally(() => {
-					this.editItem = null;
+					this.editedItem = null;
 				});
 
 		},
-		deleteCurrentItem() {
+		deleteCurrentItem(item) {
 			axios
 				.delete(`http://localhost:8080/api/account/delete/${this.activeItem.account}`, {
 					headers: {
@@ -248,23 +278,23 @@ export default {
 			const roles = this.$store.getters.getRoles;
 			return roles ? roles.map(e => e.name).includes('ROLE_ADMIN') : false;
 		},
-		
-		
+
+
 	},
 	async created() {
-    try {
-      let response = await axios.get(`http://localhost:8080/api/account/regulationAccountTypes`);
-      this.regulationAccountTypes = response.data.map(e => e.code);
+		try {
+			let response = await axios.get(`http://localhost:8080/api/account/regulationAccountTypes`);
+			this.regulationAccountTypes = response.data.map(e => e.code);
 
-      response = await axios.get(`http://localhost:8080/api/account/accountStatuses`);
-      this.accountStatuses = response.data.map(e => e.code);
+			response = await axios.get(`http://localhost:8080/api/account/accountStatuses`);
+			this.accountStatuses = response.data.map(e => e.code);
 
-      response = await axios.get(`http://localhost:8080/api/account/accountRestrictions`);
-      this.accountRestrictions = response.data.map(e => e.code);
-    } catch (error) {
-      console.log(error);
-    }
-  },
+			response = await axios.get(`http://localhost:8080/api/account/accountRestrictions`);
+			this.accountRestrictions = response.data.map(e => e.code);
+		} catch (error) {
+			console.log(error);
+		}
+	},
 
 
 }

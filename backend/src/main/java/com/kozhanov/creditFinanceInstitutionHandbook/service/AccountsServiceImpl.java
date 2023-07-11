@@ -36,26 +36,12 @@ public class AccountsServiceImpl implements AccountsService{
 
     @Override
     public void save(BICDirectoryEntry bicDirectoryEntry, Accounts accounts) {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
-        try {
-            Date today = sdf.parse(sdf.format(new Date()));
-            Date dateOut = accounts.getDateOut() != null ? sdf.parse(sdf.format(accounts.getDateOut())) : today;
-            Date dateIn = sdf.parse(sdf.format(accounts.getDateIn()));
+        accounts = setAccountStatus(accounts);
 
-            if (dateOut.before(today) || dateIn.after(today)) {
-                System.out.println("ACDL");
-                accounts.setAccountStatus(accountStatusRepository.findByCode("ACDL").get());
-            } else {
-                System.out.println("ACAC");
-                accounts.setAccountStatus(accountStatusRepository.findByCode("ACAC").get());
-            }
+        bicDirectoryEntry.addAccount(accounts);
+        bicDirectoryEntryRepository.save(bicDirectoryEntry);
 
-            bicDirectoryEntry.addAccount(accounts);
-            bicDirectoryEntryRepository.save(bicDirectoryEntry);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
     }
 
 
@@ -71,11 +57,11 @@ public class AccountsServiceImpl implements AccountsService{
                 .orElseThrow(() -> new RuntimeException("No entry found with id: " + accountNumber));
         existingAccounts.setAccount(accounts.getAccount());
         existingAccounts.setAccountCBRBIC(accounts.getAccountCBRBIC());
-        existingAccounts.setAccountStatus(accounts.getAccountStatus());
         existingAccounts.setRegulationAccountType(accounts.getRegulationAccountType());
         existingAccounts.setControlKey(accounts.getControlKey());
         existingAccounts.setDateIn(accounts.getDateIn());
         existingAccounts.setDateOut(accounts.getDateOut());
+        existingAccounts = setAccountStatus(existingAccounts);
       //  existingAccounts.setAccountRestrictions(accounts.getAccountRestrictions());
         accountsRepository.save(existingAccounts);
     }
@@ -85,5 +71,26 @@ public class AccountsServiceImpl implements AccountsService{
         accountsRepository.deleteByAccount(accountNumber);
     }
 
+    private Accounts setAccountStatus(Accounts accounts){
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        try {
+            Date today = sdf.parse(sdf.format(new Date()));
+            Date dateOut = accounts.getDateOut() != null ? sdf.parse(sdf.format(accounts.getDateOut())) : today;
+            Date dateIn = sdf.parse(sdf.format(accounts.getDateIn()));
+
+            if (dateOut.before(today) || dateIn.after(today)) {
+                System.out.println("ACDL");
+                accounts.setAccountStatus(accountStatusRepository.findByCode("ACDL").get());
+            } else {
+                System.out.println("ACAC");
+                accounts.setAccountStatus(accountStatusRepository.findByCode("ACAC").get());
+            }
+
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return accounts;
+    }
 
 }

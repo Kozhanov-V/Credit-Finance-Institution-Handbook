@@ -310,7 +310,7 @@ input::-webkit-inner-spin-button {
 	margin-right: 16px;
 }
 .control-pages-block button:disabled{
-	display: none;
+	visibility: hidden;
 }
 
 .error {

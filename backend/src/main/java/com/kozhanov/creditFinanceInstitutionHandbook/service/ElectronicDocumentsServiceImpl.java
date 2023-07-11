@@ -12,6 +12,7 @@ import javax.annotation.PostConstruct;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 @Service
@@ -57,11 +58,9 @@ public class ElectronicDocumentsServiceImpl implements ElectronicDocumentsServic
     @Override
     public void save(ElectronicDocumentsDeserializer electronicDocumentsDeserializer) {
         ElectronicDocuments electronicDocuments = new ElectronicDocuments(electronicDocumentsDeserializer);
-        System.out.println(1);
-        // Use a Set to store already added accounts.
-        // The Set automatically ensures uniqueness of its elements.
         Set<String> addedAccounts = new HashSet<>();
-
+        AtomicInteger count = new AtomicInteger();
+        AtomicInteger count2 = new AtomicInteger();
         List<BICDirectoryEntry> filteredBicDirectoryEntry = electronicDocumentsDeserializer.getBicDirectoryEntryDeserializer().stream()
                 .map(bicDirectoryEntry -> {
                     // Filter only new and unique accounts
@@ -69,9 +68,11 @@ public class ElectronicDocumentsServiceImpl implements ElectronicDocumentsServic
                             .filter(account -> {
                                 boolean isUnique = !addedAccounts.contains(account.getAccount());
                                 if (isUnique) {
+                                    count2.getAndIncrement();
                                     addedAccounts.add(account.getAccount());
                                     return true;
                                 }
+                                count.getAndIncrement();
                                 return false;
                             })
                             .collect(Collectors.toList());
@@ -82,9 +83,7 @@ public class ElectronicDocumentsServiceImpl implements ElectronicDocumentsServic
                     return bicDirEnt;
                 })
                 .collect(Collectors.toList());
-
         electronicDocuments.setBicDirectoryEntryList(filteredBicDirectoryEntry);
-        System.out.println(2);
         electronicDocumentsRepository.save(electronicDocuments);
     }
 

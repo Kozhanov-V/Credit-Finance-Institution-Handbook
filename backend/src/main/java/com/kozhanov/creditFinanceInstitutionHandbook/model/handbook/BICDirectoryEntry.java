@@ -88,7 +88,6 @@ public class BICDirectoryEntry {
                 .participantStatus(participantInfoDes.getParticipantStatus())
                 .build();
         this.changeType = bicDirectoryEntryDeserializer.getChangeType();
-        System.out.println(accounts);
         this.accounts = bicDirectoryEntryDeserializer.getAccountsDeserializer().stream().map(account->{
             Accounts acc = new Accounts(account);
             acc.setBicDirectoryEntry(this);

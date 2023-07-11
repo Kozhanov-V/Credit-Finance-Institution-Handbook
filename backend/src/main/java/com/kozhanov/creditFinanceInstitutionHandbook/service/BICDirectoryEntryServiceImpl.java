@@ -52,7 +52,17 @@ public class BICDirectoryEntryServiceImpl implements BICDirectoryEntryService {
 
     @Override
     public BICDirectoryEntry findByBic(int bic) {
+
         return bicDirectoryEntryRepository.findByBIC(bic).get();
+    }
+
+    @Override
+    public HashMap<String, Object> findByBic(int bic, Pageable pageable) {
+        Page<BICDirectoryEntry> page = bicDirectoryEntryRepository.findByBICLike(bic, pageable);
+        HashMap<String, Object> response = new HashMap<>();
+        response.put("bicDirectoryEntries", page.toList());
+        response.put("totalPage",page.getTotalPages());
+        return response;
     }
 
     @Override
@@ -67,6 +77,15 @@ public class BICDirectoryEntryServiceImpl implements BICDirectoryEntryService {
     }
 
     @Override
+    public HashMap<String, Object> findByName(String name, Pageable pageable) {
+        Page<BICDirectoryEntry> page = bicDirectoryEntryRepository.findByParticipantInfo_NameParticipantLikeIgnoreCase("%"+name+"%",pageable);
+        HashMap<String, Object> response = new HashMap<>();
+        response.put("bicDirectoryEntries", page.toList());
+        response.put("totalPage",page.getTotalPages());
+        return response;
+    }
+
+    @Override
     public void update(int bic, BICDirectoryEntry bicDirectoryEntry) {
         BICDirectoryEntry existingEntry = bicDirectoryEntryRepository.findByBIC(bic)
                 .orElseThrow(() -> new RuntimeException("No entry found with id: " + bic));
@@ -78,7 +97,11 @@ public class BICDirectoryEntryServiceImpl implements BICDirectoryEntryService {
     }
 
     @Override
-    public List<BICDirectoryEntry> filter(Integer bic, String nameRecord, Integer typeTransfer, Date validFrom, Date validUntil) {
-        return bicDirectoryEntryRepository.filter(bic, nameRecord, typeTransfer, validFrom, validUntil);
+    public HashMap<String, Object> filter(Integer bic, String nameRecord, Integer typeTransfer, Date validFrom, Date validUntil, Pageable pageable) {
+        Page<BICDirectoryEntry> page = bicDirectoryEntryRepository.filter(bic, nameRecord, typeTransfer, validFrom, validUntil, pageable);
+        HashMap<String, Object> response = new HashMap<>();
+        response.put("bicDirectoryEntries", page.toList());
+        response.put("totalPage",page.getTotalPages());
+        return response;
     }
 }

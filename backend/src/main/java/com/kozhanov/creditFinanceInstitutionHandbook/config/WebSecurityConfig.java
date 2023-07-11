@@ -59,8 +59,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/api/availableTransferServices",
                         "/api/participantStatuses",
                         "/api/accounts/{bic}",
-                        "/api/findBy/bic/{bic}",
-                        "/api/findBy/name/{name}",
+                        "/api/findBy/**",
                         "/api/regulationAccountTypes",
                         "/api/accountStatuses",
                         "/api/accountRestrictions"

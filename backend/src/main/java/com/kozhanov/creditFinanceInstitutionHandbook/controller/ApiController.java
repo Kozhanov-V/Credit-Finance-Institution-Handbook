@@ -77,10 +77,9 @@ public class ApiController {
     }
 
     @PostMapping("/filter")
-    public ResponseEntity<?> filter(@RequestBody FilterParameters filterParameters) {
-        List<BICDirectoryEntry> bicDirectoryEntries = bicDirectoryEntryService.filter(filterParameters.getBic(),filterParameters.getNameRecord(),filterParameters.getTypeTransfer(), filterParameters.getValidFrom(), filterParameters.getValidUntil());
-
-        return new ResponseEntity<>(bicDirectoryEntries, HttpStatus.OK);
+    public ResponseEntity<?> filter(@RequestBody FilterParameters filterParameters, Pageable pageable) {
+       return new ResponseEntity<>( bicDirectoryEntryService.filter(filterParameters.getBic(),filterParameters.getNameRecord(),filterParameters.getTypeTransfer(), filterParameters.getValidFrom(), filterParameters.getValidUntil(),pageable)
+               , HttpStatus.OK);
     }
 
     @PostMapping("/save")
@@ -109,13 +108,13 @@ public class ApiController {
     }
 
     @GetMapping("/findBy/bic/{bic}")
-    public ResponseEntity<?> getEntryByBic(@PathVariable int bic){
-        List<BICDirectoryEntry> bicDirectoryEntries = bicDirectoryEntryService.findByBicLike(bic);
+    public ResponseEntity<?> getEntryByBic(@PathVariable int bic, Pageable pageable){
+        HashMap<String,Object> bicDirectoryEntries = bicDirectoryEntryService.findByBic(bic, pageable);
         return new ResponseEntity<>(bicDirectoryEntries,HttpStatus.OK);
     }
     @GetMapping("/findBy/name/{name}")
-    public ResponseEntity<?> getEntryByName(@PathVariable String name){
-        List<BICDirectoryEntry> bicDirectoryEntries = bicDirectoryEntryService.findByName(name);
+    public ResponseEntity<?> getEntryByName(@PathVariable String name, Pageable pageable){
+        HashMap<String,Object> bicDirectoryEntries= bicDirectoryEntryService.findByName(name, pageable);
         return new ResponseEntity<>(bicDirectoryEntries,HttpStatus.OK);
     }
 

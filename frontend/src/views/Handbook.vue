@@ -58,105 +58,105 @@
 						<tr @mouseover="selectedItem = item">
 							<td class="actions_container">
 								<div class="actions">
-									<button v-if="!item.editMode" @click="this.isAccountsFormVisible = true"><img src="img/accounts.svg"
+									<button v-if="item !== currentlyEditing" @click="this.isAccountsFormVisible = true"><img src="img/accounts.svg"
 											alt="a"></button>
-									<button v-if="!item.editMode && isUser" @click="toggleFavorite(item)">
+									<button v-if="item !== currentlyEditing && isUser" @click="toggleFavorite(item)">
 										<img :src="isFavorite(item) ? 'img/favorites_added.svg' : 'img/favorites.svg'" alt="f">
 									</button>
 
-									<button v-if="!item.editMode && isAdmin" @click="item.editMode = true"><img src="img/settings.svg"
+									<button v-if="item !== currentlyEditing && isAdmin" @click="startEditing(item)"><img src="img/settings.svg"
 											alt="u"></button>
 
-									<button v-if="!item.editMode && isAdmin" @click="deleteItem(item)"><img src="img/delete.svg"
+									<button v-if="item !== currentlyEditing && isAdmin" @click="deleteItem(item)"><img src="img/delete.svg"
 											alt="d"></button>
-									
+
 								</div>
 								<div class="edit_mode_action">
-									<button v-if="item.editMode" @click="item.editMode = false"><img src="img/cancel.svg" alt="c"></button>
-									<button v-if="item.editMode && isAdmin" @click="saveItem(item)"><img src="img/save.svg"
+									<button v-if="item === currentlyEditing" @click="cancelEditing"><img src="img/cancel.svg" alt="c"></button>
+									<button v-if="item === currentlyEditing && isAdmin" @click="saveItem(item)"><img src="img/save.svg"
 											alt="s"></button>
 								</div>
 
 							</td>
 							<td>{{ item.bic }}</td>
-							<td v-if="!item.editMode">
+							<td v-if="item !== currentlyEditing">
 								{{ item.nameParticipant }}
 							</td>
 							<td v-else>
 								<input v-model.trim="item.nameParticipant" type="text">
 							</td>
 
-							<td v-if="!item.editMode">
+							<td v-if="item !== currentlyEditing">
 								{{ item.registrationNumber }}
 							</td>
 							<td v-else>
 								<input v-model.trim="item.registrationNumber" type="text">
 							</td>
 
-							<td v-if="!item.editMode">
+							<td v-if="item !== currentlyEditing">
 								{{ item.countryCode }}
 							</td>
 							<td v-else>
 								<input v-model.trim="item.countryCode" type="text">
 							</td>
 
-							<td v-if="!item.editMode">
+							<td v-if="item !== currentlyEditing">
 								{{ item.regionCode }}
 							</td>
 							<td v-else>
 								<input v-model.trim="item.regionCode" type="text">
 							</td>
 
-							<td v-if="!item.editMode">
+							<td v-if="item !== currentlyEditing">
 								{{ item.index }}
 							</td>
 							<td v-else>
 								<input v-model.trim="item.index" type="text">
 							</td>
 
-							<td v-if="!item.editMode">
+							<td v-if="item !== currentlyEditing">
 								{{ item.typeLocation }}
 							</td>
 							<td v-else>
 								<input v-model.trim="item.typeLocation" type="text">
 							</td>
 
-							<td v-if="!item.editMode">
+							<td v-if="item !== currentlyEditing">
 								{{ item.nameLocation }}
 							</td>
 							<td v-else>
 								<input v-model.trim="item.nameLocation" type="text">
 							</td>
 
-							<td v-if="!item.editMode">
+							<td v-if="item !== currentlyEditing">
 								{{ item.address }}
 							</td>
 							<td v-else>
 								<input v-model.trim="item.address" type="text">
 							</td>
 
-							<td v-if="!item.editMode">
+							<td v-if="item !== currentlyEditing">
 								{{ item.parentBIC }}
 							</td>
 							<td v-else>
 								<input v-model.trim="item.parentBIC" type="number">
 							</td>
 
-							<td v-if="!item.editMode">
+							<td v-if="item !== currentlyEditing">
 								{{ item.dateIn }}
 							</td>
 							<td v-else>
 								<input v-model="item.dateIn" type="date">
 							</td>
 
-							<td v-if="!item.editMode">
+							<td v-if="item !== currentlyEditing">
 								{{ item.dateOut }}
 							</td>
 							<td v-else>
 								<input v-model="item.dateOut" type="date">
 							</td>
 
-							<td v-if="!item.editMode">
+							<td v-if="item !== currentlyEditing">
 								{{ item.participantType }}
 							</td>
 							<td v-else>
@@ -167,7 +167,7 @@
 								</select>
 							</td>
 
-							<td v-if="!item.editMode">
+							<td v-if="item !== currentlyEditing">
 								{{ item.availableTransferService }}
 							</td>
 							<td v-else>
@@ -178,7 +178,7 @@
 								</select>
 							</td>
 
-							<td v-if="!item.editMode">
+							<td v-if="item !== currentlyEditing">
 								{{ item.exchangeParticipant }}
 							</td>
 							<td v-else>
@@ -186,8 +186,8 @@
 									@change="item.exchangeParticipant = $event.target.checked ? 1 : 0" name="exchangeParticipant">
 							</td>
 
-							<td v-if="!item.editMode">
-								{{ item.uid }}
+							<td v-if="item !== currentlyEditing">
+									{{ item.uid }}
 							</td>
 							<td v-else><input v-model.trim="item.uid" type="number"></td>
 
@@ -203,16 +203,16 @@
 
 		</div>
 		<div class="control-pages-block">
-			<button @click="previousPage" :disabled="currentPage == 1">
+			<button @click="previousPage" :disabled="currentQueryParams.page == 1">
 				<!-- <img src="img/previous_page.png" alt=""> -->
 				&#60;
 			</button>
-			<button @click="firstPage" :disabled="currentPage < 3">1</button>
-			<button @click="previousPage" :disabled="currentPage < 2">{{ currentPage - 1 }}</button>
-			<p class="currentPage">{{ currentPage }}</p>
-			<button @click="nextPage" :disabled="currentPage > totalPage - 1">{{ currentPage + 1 }}</button>
-			<button @click="lastPage" :disabled="currentPage > totalPage - 2">{{ totalPage }}</button>
-			<button @click="nextPage" :disabled="currentPage == totalPage">
+			<button @click="firstPage" :disabled="currentQueryParams.page < 3">1</button>
+			<button @click="previousPage" :disabled="currentQueryParams.page < 2">{{ currentQueryParams.page - 1 }}</button>
+			<p class="currentPage">{{ currentQueryParams.page }}</p>
+			<button @click="nextPage" :disabled="currentQueryParams.page > currentQueryParams.totalPage - 1">{{ currentQueryParams.page+ 1 }}</button>
+			<button @click="lastPage" :disabled="currentQueryParams.page > currentQueryParams.totalPage - 2">{{ currentQueryParams.totalPage }}</button>
+			<button @click="nextPage" :disabled="currentQueryParams.page == currentQueryParams.totalPage">
 				<!-- <img src="img/next_page.png" alt=""> -->
 				&#62;
 			</button>
@@ -255,7 +255,7 @@ export default {
 			participantTypes: [],
 			availableTransferServices: [],
 			participantStatuses: [],
-			
+
 			formFilter: {
 				bicInput: '',
 				nameInput: '',
@@ -270,14 +270,35 @@ export default {
 			isSaveModalVisible: false,
 			isFilterVisible: false,
 			isAccountsFormVisible: false,
-			itemsPerPage: 32,
-			currentPage: 1,
-			totalPage: 0,
+			currentQuery: null,
+			currentQueryParams: {
+				page: 1,
+				size: 32,
+				totalPage: 0,
+			},
+			editedItem: null,
+        currentlyEditing: null,
 			data: [],
 			shouldResetFilter: false
 		};
 	},
 	methods: {
+		startEditing(item) {
+    this.editedItem = Object.assign({}, item); 
+    this.currentlyEditing = item;
+},
+cancelEditing() {
+	Object.assign(this.currentlyEditing, this.editedItem); 
+    this.currentlyEditing = null;
+    this.editedItem = null;
+},
+		async performQuery() {
+			if (this.currentQuery) {
+				const response = await this.currentQuery(this.currentQueryParams);
+				this.currentQueryParams.totalPage = response.data.totalPage;
+				this.fillTable(response.data.bicDirectoryEntries);
+			}
+		},
 		toggleFavorite(item) {
 			if (this.isFavorite(item)) {
 				this.deleteFavorite(item)
@@ -333,9 +354,11 @@ export default {
 						}
 					});
 
-				// Проверяем, успешно ли выполнился запрос
+			
 				if (response.status === 200) {
-					console.log('Item successfully updated');
+					item=this.editedItem;
+    this.currentlyEditing = null;
+    this.editedItem = null;
 				} else {
 					console.error('Error updating item:', response);
 				}
@@ -406,35 +429,33 @@ export default {
 			this.isSaveModalVisible = true;
 		},
 		firstPage() {
-			this.currentPage = 1;
-			this.fetchData(1);
+			this.currentQueryParams.page = 1;
+			this.performQuery(this.currentQueryParams);
 		},
 		lastPage() {
-			this.currentPage = this.totalPage;
-			this.fetchData(this.totalPage);
+			this.currentQueryParams.page = this.currentQueryParams.totalPage;
+			this.performQuery(this.currentQueryParams);
 		},
 		previousPage() {
-			if (this.currentPage > 1) {
-				this.currentPage--;
-				this.fetchData(this.currentPage);
+			if (this.currentQueryParams.page > 1) {
+				this.currentQueryParams.page--;
 			}
+			this.performQuery(this.currentQueryParams);
 		},
 		nextPage() {
-			if (this.currentPage < this.totalPage) {
-				this.currentPage++;
-				this.fetchData(this.currentPage);
+			if (this.currentQueryParams.page < this.currentQueryParams.totalPage) {
+				this.currentQueryParams.page++;
+				this.performQuery(this.currentQueryParams);
 			}
 		},
-		async fetchData(currentPage) {
+		async fetchData(queryParams) {
 
-			axios.get(`http://localhost:8080/api/data?page=${currentPage - 1}&size=${this.itemsPerPage}`)
-				.then(response => {
-					this.fillTable(response.data.bicDirectoryEntries);
-					this.bicDirectoryEntries = response.data.bicDirectoryEntries;
-					this.totalPage = response.data.totalPage;
-				}).catch(error => {
-					console.log(error)
-				});
+			this.currentQuery = this.fetchData; 
+			this.currentQueryParams = queryParams; // Сохраните текущие параметры запроса
+
+			const { page, size } = queryParams;
+			const response = await axios.get(`http://localhost:8080/api/data?page=${page - 1}&size=${size}`);
+			return response;
 		},
 
 		openFilterMenu() {
@@ -447,59 +468,108 @@ export default {
 			this.formFilter.typeTransfer = '';
 			this.formFilter.validFrom = '';
 			this.formFilter.validUntil = '';
-			this.fetchData();
+			this.fetchData(this.currentQueryParams);
+			this.performQuery(this.currentQueryParams);
 		},
-		async filterByBic() {
+		async filterByBicQuery(queryParams){
+			this.currentQuery = this.filterByBicQuery; 
+			this.currentQueryParams = queryParams; 
+
+			const { page, size } = queryParams;
+
 			let bic = this.formFilter.bicInput;
 
-			try {
-				let response;
-				if (bic !== "") {
-					response = await axios.get(`http://localhost:8080/api/findBy/bic/${bic}`);
+			const response = await axios.get(`http://localhost:8080/api/findBy/bic/${bic}?page=${page - 1}&size=${size}`);
+			console.log(response.data.bicDirectoryEntries)
+			return response;
+		},
 
+		async filterByBic() {
+			let bic = this.formFilter.bicInput;
+			
+			try {
+				if (bic !== "") {
+					
+				this.nameInput = "";
+				this.filterByBicQuery({
+					page: 1,
+				size: 32,
+				totalPage: 1,
+				});
+				this.performQuery(this.currentQuery);
 				} else {
 
-					await this.fetchData();
+					this.currentQuery = this.fetchData;
+					this.performQuery(this.currentQueryParams);
 				}
-				this.nameInput = "";
-				this.fillTable(response.data)
+				
 			} catch (error) {
 				console.error(error);
 			}
 		},
+		async filterByNameQuery(queryParams) {
+			this.currentQuery = this.filterByNameQuery; 
+			this.currentQueryParams = queryParams; 
 
+			const { page, size } = queryParams;
+
+			let name = this.formFilter.nameInput;
+
+			const response = await axios.get(`http://localhost:8080/api/findBy/name/${name}?page=${page - 1}&size=${size}`);
+			console.log(response.data.bicDirectoryEntries)
+			return response;
+		},
 		async filterByName() {
 			let name = this.formFilter.nameInput;
 
 			try {
-				let response;
 				if (name !== "") {
-					response = await axios.get(`http://localhost:8080/api/findBy/name/${name}`);
+					this.bicInput = "";
 
+					this.filterByNameQuery({
+					page: 1,
+					size: 32,
+					totalPage: 1,
+					});
+				this.performQuery(this.currentQuery);
 				} else {
 
-					await this.fetchData();
+					this.currentQuery = this.fetchData;
+					this.performQuery();
 				}
-				this.bicInput = "";
-				this.fillTable(response.data)
+				
 			} catch (error) {
 				console.error(error);
 			}
 		},
 
+		async fetchDataFilter(queryParams){
 
-		async applyFilter(filter) {
-			this.formFilter.typeTransfer = filter.participantType;
-			this.formFilter.validFrom = filter.validFrom;
-			this.formFilter.validUntil = filter.validUntil;
+			this.currentQuery = this.fetchDataFilter; 
+			this.currentQueryParams = queryParams;
+			const { page, size } = queryParams;
 			try {
-				const response = await axios.post('http://localhost:8080/api/filter', this.formFilter);
-				this.fillTable(response.data);
-
+				const response = await axios.post(`http://localhost:8080/api/filter?page=${page - 1}&size=${size}`, this.formFilter);
+				this.currentQueryParams.totalPage = response.data.totalPage;
+				this.isFilterVisible = false;
+				return response;
 			} catch (error) {
 				console.error(error);
 			}
-			this.isFilterVisible = false;
+
+		},
+
+		 applyFilter(filter) {
+			this.formFilter.typeTransfer = filter.participantType;
+			this.formFilter.validFrom = filter.validFrom;
+			this.formFilter.validUntil = filter.validUntil;
+			this.fetchDataFilter({
+				page: 1,
+				size: 32,
+				totalPage: 1,
+			});
+			this.performQuery(this.currentQueryParams);
+			
 		},
 		async resetFilter() {
 			this.isFilterVisible = false;
@@ -544,9 +614,9 @@ export default {
 		}
 	},
 	created() {
-		this.fetchData();
+		this.currentQuery = this.fetchData;
+		this.performQuery(this.currentQueryParams);
 		this.startupDataLoader();
-
 	},
 	mounted() {
 		this.$nextTick(function () {
@@ -567,8 +637,8 @@ export default {
 			return this.$store.getters.isLoggedIn;
 		},
 		favoritesEntry() {
-        return this.$store.getters.getFavorites;
-    },
+			return this.$store.getters.getFavorites;
+		},
 	},
 
 };
