@@ -24,6 +24,7 @@ import java.util.stream.Collectors;
 @Entity
 @Table(name = "accounts")
 public class Accounts {
+
     @Id
     @Column(name = "account")
     @Size(min = 20, max = 20)

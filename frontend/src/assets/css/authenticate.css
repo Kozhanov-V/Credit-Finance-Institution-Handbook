@@ -1,0 +1,80 @@
+.authenticate {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	width: 44vw;
+	height: 65vh;
+	background-color: #5A77DF;
+	border-radius: calc(var(--index)*1.5);
+	color: white;
+	margin: 0 auto;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	border: 1px solid #3E53A0;
+}
+.authenticate h1{
+	font-size: calc(var(--index)*1.2);
+}
+.authenticate h2{
+	font-size: calc(var(--index)*0.8);
+}
+.authenticate label {
+	margin-top: calc(var(--index)*0.8);
+}
+
+.authenticate form {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	width: 100%;
+}
+.authenticate input {
+	margin-top: calc(var(--index)*0.7);
+	width: 14.3vw;
+	height: 4vh;
+	border-radius: calc(var(--index)*0.5);
+	border: 1px solid #3E53A0;
+	background: none;
+	font-size: calc(var(--index)*0.5);
+	color: white;
+	outline: none;
+}
+.authenticate input[type=text], .authenticate input[type=password]{
+	padding-left: calc(var(--index)*0.7);
+}
+.authenticate input:first-of-type {
+	margin-top: calc(var(--index)*0.7);
+}
+
+.input-group {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	width: 14.3vw;
+}
+
+.authenticate ::placeholder{
+	color: #DCDCDC;
+}
+.authenticate input[type=submit]{
+	background-color: #3E53A0;
+	color: white;
+	cursor: pointer;
+}
+.logo {
+	position: relative;
+	width: 7vw;
+	height: 7vh;
+	background-repeat: no-repeat;
+	margin-bottom: 1vh;
+}
+.authenticate a{
+	text-decoration: underline;
+}
+.authenticate p{
+	font-size: calc(var(--index)*0.55);
+}

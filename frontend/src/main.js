@@ -165,11 +165,15 @@ async function checkValidationToken(){
 
 router.beforeEach(async (to, from, next) => {
 	const isAuthenticated = store.getters.isLoggedIn;
-	const check = await checkValidationToken();
-	console.log("CHECK - " + check)
-	console.log("isAuth - " + isAuthenticated)
+	let check = false;
+	let roles = [];
+	let isAdmin = false;
+	let isUser =false;
 if(isAuthenticated){
-	
+check = await checkValidationToken();
+roles = store.getters.getRoles;
+isAdmin =	roles ? roles.map(e => e.name).includes('ROLE_ADMIN') : false;
+isUser= roles ? roles.map(e => e.name).includes('ROLE_USER') : false;
 }
 
 	if (isAuthenticated && check) {
@@ -179,6 +183,13 @@ if(isAuthenticated){
 			console.log('go to logout')
 			next('/expired');
 	} 
+	else if(to.path==='/import' && !isAdmin){
+		alert('Войдите в аккаунт администратора чтобы получить доступ к данной ссылке')
+		next('/login');
+	}	else if(to.path==='/favorites' && !isUser){
+		alert('Войдите в аккаунт чтобы получить доступ к данной ссылке')
+		next('/login');
+	}
 	else if (to.path === '/login' && isAuthenticated) {
 			next('/');
 	} else {

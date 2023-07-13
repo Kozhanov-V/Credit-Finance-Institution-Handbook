@@ -1,13 +1,27 @@
 <template>
     <div class="authenticate">
-        <h1>Auth</h1>
+				<div class="logo" style="background-image: url(img/logoAuth.svg);"></div>
+			<h1>АВТОРИЗАЦИЯ</h1>
+
         <form @submit.prevent="submitForm">
-            <input type="text" placeholder="login" v-model="username">
-            <input type="password" placeholder="password" v-model="password">
-            <input type="submit" value="Войти" />
+					<div class="input-group">
+					<label for="login"><h2>ЛОГИН</h2></label>
+            <input type="text" placeholder="login" name="login" id="login" v-model="username">
+					</div>
+					<div class="input-group">
+						<label for="password"><h2>ПАРОЛЬ</h2></label>
+            <input type="password" placeholder="password" name="password" id="password" v-model="password">
+					</div>
+            <input type="submit" value="ВОЙТИ" />
+						<p>Нет аккаунта? <a href="/signup">Зарегистрироваться</a></p>
         </form>
+			
     </div>
 </template>
+<style scoped>
+@import '@/assets/css/authenticate.css';
+</style>
+
 <script>
 export default {
     data() {

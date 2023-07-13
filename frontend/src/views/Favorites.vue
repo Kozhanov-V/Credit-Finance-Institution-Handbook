@@ -2,17 +2,19 @@
 	<div class="container">
 
 		<AccountsInfo :visible="isAccountsFormVisible" :entryAccounts="selectedItem" @close="isAccountsFormVisible = false" />
-		<h2>Избранные записи</h2>
-		<p v-if="!bicDirectoryEntries || bicDirectoryEntries.length === 0">
-    У вас нет избранных записей. Вы можете добавить избранные записи в справочнике.
-  </p>
 
-  <button v-if="!bicDirectoryEntries || bicDirectoryEntries.length === 0" @click="goToHandbook">
-    Перейти в справочник
-  </button>
+		<h1>Избранные записи</h1>
+		<div v-if="!bicDirectoryEntries || bicDirectoryEntries.length === 0" class="favorites_empty">
+			<p>
+				У вас нет избранных записей. Вы можете добавить избранные записи в справочнике.
+			</p>
+
+			<button @click="goToHandbook">
+				Перейти в справочник
+			</button>
+		</div>
+
 		<div v-else class="table-container">
-		
-
 			<table>
 				<thead>
 					<tr class="sticky-header">
@@ -41,102 +43,105 @@
 						<tr @mouseover="selectedItem = item">
 							<td class="actions_container">
 								<div class="actions">
-									<button v-if="!item.editMode" @click="this.isAccountsFormVisible = true"><img src="img/accounts.svg"
+									<button v-if="item !== currentlyEditing" @click="this.isAccountsFormVisible = true"><img src="img/accounts.svg"
 											alt="a"></button>
-									<button v-if="!item.editMode && isUser" @click="deleteFavorite(item)"><img src="img/favorites_added.svg" alt="f"></button>
-									
-									<button v-if="!item.editMode && isAdmin" @click="item.editMode = true"><img src="img/settings.svg"
+									<button v-if="item !== currentlyEditing && isUser" @click="toggleFavorite(item)">
+										<img src="img/favorites_added.svg" alt="f">
+									</button>
+
+									<button v-if="item !== currentlyEditing && isAdmin" @click="startEditing(item)"><img src="img/settings.svg"
 											alt="u"></button>
 
-											<button v-if="!item.editMode && isAdmin" @click="deleteItem(item)"><img src="img/delete.svg"
+									<button v-if="item !== currentlyEditing && isAdmin" @click="deleteItem(item)"><img src="img/delete.svg"
 											alt="d"></button>
+
 								</div>
 								<div class="edit_mode_action">
-									<button v-if="item.editMode" @click="item.editMode = false"><img src="img/cancel.svg" alt="c"></button>
-									<button v-if="item.editMode && isAdmin" @click="saveItem(item)"><img src="img/save.svg"
+									<button v-if="item === currentlyEditing" @click="cancelEditing"><img src="img/cancel.svg" alt="c"></button>
+									<button v-if="item === currentlyEditing && isAdmin" @click="saveItem(item)"><img src="img/save.svg"
 											alt="s"></button>
 								</div>
 
 							</td>
 							<td>{{ item.bic }}</td>
-							<td v-if="!item.editMode">
+							<td v-if="item !== currentlyEditing">
 								{{ item.nameParticipant }}
 							</td>
 							<td v-else>
 								<input v-model.trim="item.nameParticipant" type="text">
 							</td>
 
-							<td v-if="!item.editMode">
+							<td v-if="item !== currentlyEditing">
 								{{ item.registrationNumber }}
 							</td>
 							<td v-else>
 								<input v-model.trim="item.registrationNumber" type="text">
 							</td>
 
-							<td v-if="!item.editMode">
+							<td v-if="item !== currentlyEditing">
 								{{ item.countryCode }}
 							</td>
 							<td v-else>
 								<input v-model.trim="item.countryCode" type="text">
 							</td>
 
-							<td v-if="!item.editMode">
+							<td v-if="item !== currentlyEditing">
 								{{ item.regionCode }}
 							</td>
 							<td v-else>
 								<input v-model.trim="item.regionCode" type="text">
 							</td>
 
-							<td v-if="!item.editMode">
+							<td v-if="item !== currentlyEditing">
 								{{ item.index }}
 							</td>
 							<td v-else>
 								<input v-model.trim="item.index" type="text">
 							</td>
 
-							<td v-if="!item.editMode">
+							<td v-if="item !== currentlyEditing">
 								{{ item.typeLocation }}
 							</td>
 							<td v-else>
 								<input v-model.trim="item.typeLocation" type="text">
 							</td>
 
-							<td v-if="!item.editMode">
+							<td v-if="item !== currentlyEditing">
 								{{ item.nameLocation }}
 							</td>
 							<td v-else>
 								<input v-model.trim="item.nameLocation" type="text">
 							</td>
 
-							<td v-if="!item.editMode">
+							<td v-if="item !== currentlyEditing">
 								{{ item.address }}
 							</td>
 							<td v-else>
 								<input v-model.trim="item.address" type="text">
 							</td>
 
-							<td v-if="!item.editMode">
+							<td v-if="item !== currentlyEditing">
 								{{ item.parentBIC }}
 							</td>
 							<td v-else>
 								<input v-model.trim="item.parentBIC" type="number">
 							</td>
 
-							<td v-if="!item.editMode">
+							<td v-if="item !== currentlyEditing">
 								{{ item.dateIn }}
 							</td>
 							<td v-else>
 								<input v-model="item.dateIn" type="date">
 							</td>
 
-							<td v-if="!item.editMode">
+							<td v-if="item !== currentlyEditing">
 								{{ item.dateOut }}
 							</td>
 							<td v-else>
 								<input v-model="item.dateOut" type="date">
 							</td>
 
-							<td v-if="!item.editMode">
+							<td v-if="item !== currentlyEditing">
 								{{ item.participantType }}
 							</td>
 							<td v-else>
@@ -147,7 +152,7 @@
 								</select>
 							</td>
 
-							<td v-if="!item.editMode">
+							<td v-if="item !== currentlyEditing">
 								{{ item.availableTransferService }}
 							</td>
 							<td v-else>
@@ -158,7 +163,7 @@
 								</select>
 							</td>
 
-							<td v-if="!item.editMode">
+							<td v-if="item !== currentlyEditing">
 								{{ item.exchangeParticipant }}
 							</td>
 							<td v-else>
@@ -166,8 +171,8 @@
 									@change="item.exchangeParticipant = $event.target.checked ? 1 : 0" name="exchangeParticipant">
 							</td>
 
-							<td v-if="!item.editMode">
-								{{ item.uid }}
+							<td v-if="item !== currentlyEditing">
+									{{ item.uid }}
 							</td>
 							<td v-else><input v-model.trim="item.uid" type="number"></td>
 
@@ -189,7 +194,7 @@
 
 
 <style scoped>
-@import '@/assets/css/handbook.css';
+@import '@/assets/css/favorites.css';
 </style>
 
 
@@ -221,24 +226,31 @@ export default {
 			idES: '',
 			tableData: [],
 			selectedItem: null,
-			isSaveModalVisible: false,
-			isFilterVisible: false,
 			isAccountsFormVisible: false,
 
-			itemsPerPage: 32,
-			currentPage: 1,
-			totalPage: 0,
+			editedItem: null,
+        currentlyEditing: null,
+			data: [],
 			data: [],
 		};
 	},
 	methods: {
+		startEditing(item) {
+    this.editedItem = Object.assign({}, item); 
+    this.currentlyEditing = item;
+},
+cancelEditing() {
+	Object.assign(this.currentlyEditing, this.editedItem); 
+    this.currentlyEditing = null;
+    this.editedItem = null;
+},
 		deleteFavorite(bicDirectoryEntry) {
 			try {
 				this.$store.dispatch('deleteFavoritesEntry', bicDirectoryEntry);
 				const index = this.tableData.findIndex(item => item.bic === bicDirectoryEntry.bic);
 				if (index !== -1) {
-						this.tableData.splice(index, 1);
-					}
+					this.tableData.splice(index, 1);
+				}
 			} catch (error) {
 				alert("Ошибка");
 				console.error(error);
@@ -265,15 +277,18 @@ export default {
 						uid: item.uid,
 						exchangeParticipant: item.exchangeParticipant,
 					}
-				}, {
-					headers: {
-						'Authorization': 'Bearer ' + localStorage.getItem('token')
-					}
-				});
+				}
+					, {
+						headers: {
+							'Authorization': 'Bearer ' + localStorage.getItem('token')
+						}
+					});
 
-				// Проверяем, успешно ли выполнился запрос
+			
 				if (response.status === 200) {
-					console.log('Item successfully updated');
+					item=this.editedItem;
+    this.currentlyEditing = null;
+    this.editedItem = null;
 				} else {
 					console.error('Error updating item:', response);
 				}
@@ -285,7 +300,7 @@ export default {
 			item.editMode = false;
 		},
 		fillTable(bicDirectoryEntries) {
-			
+
 			this.tableData = bicDirectoryEntries.map(item => ({
 				bic: item.bic,
 				nameParticipant: item.nameParticipant,
@@ -357,16 +372,13 @@ export default {
 		}
 	},
 	created() {
-
 		this.startupDataLoader();
 	},
 	mounted() {
-		this.$nextTick(function () {
-			document.getElementById('favoritesBtn').click();
-		})
+	  this.$nextTick(function() {
+      document.getElementById('favoritesBtn').click();
+    })
 		this.bicDirectoryEntries = this.$store.getters.getFavorites;
-		console.log(this.bicDirectoryEntries)
-		console.log(this.bicDirectoryEntries)
 		if (this.bicDirectoryEntries && this.bicDirectoryEntries.length > 0) {
 			this.fillTable(this.bicDirectoryEntries);
 		}

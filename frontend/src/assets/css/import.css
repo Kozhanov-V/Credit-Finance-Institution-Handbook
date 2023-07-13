@@ -1,0 +1,44 @@
+.import{
+	margin-top: 5vh;
+	display: flex;
+flex-direction: column;
+align-items: center;
+justify-content: center;
+	min-height: 50vh;
+}
+.import h1{
+	
+	margin-bottom: 3.5vh;
+}
+.import_from_cb{
+background-color: #5A77DF;
+color: white;
+width: 30vw;
+border-radius: calc(var(--index)*1);
+display: flex;
+flex-direction: column;
+align-items: center;
+justify-content: center;
+padding: 5vh 5vw;
+}
+.import_from_cb *{
+	margin-top: 1vh;
+}
+.import_from_cb span{
+	display: block;
+}
+.import_from_cb h1{
+	text-align: center;
+}
+.import_from_cb p{
+	text-align: justify;
+}
+.import_from_cb button{
+	margin-top: 2vh;
+	color: #5A77DF;
+	background-color: white;
+	border: none;
+	padding: 1vh 2vw;
+	border-radius: calc(var(--index)*0.5);
+	cursor: pointer;
+}

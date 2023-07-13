@@ -254,15 +254,16 @@ export default {
 				});
 
 		},
-		deleteCurrentItem(item) {
+		deleteCurrentItem(deletedItem) {
+			console.log(deletedItem)
 			axios
-				.delete(`http://localhost:8080/api/account/delete/${this.activeItem.account}`, {
+				.delete(`http://localhost:8080/api/account/delete/${this.deletedItem.account}`, {
 					headers: {
 						'Authorization': 'Bearer ' + localStorage.getItem('token')
 					}
 				})
 				.then(() => {
-					this.entryAccounts.accounts = this.entryAccounts.accounts.filter(item => item.account !== this.activeItem.account);
+					this.entryAccounts.accounts = this.entryAccounts.accounts.filter(item => item.account !== this.deletedItem.account);
 				})
 				.catch(error => {
 					console.error(error);

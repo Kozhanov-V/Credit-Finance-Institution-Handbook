@@ -98,6 +98,7 @@ public class ApiController {
     public ResponseEntity<?> updateBicDirectoryEntry(@PathVariable int bic, @RequestBody BICDirectoryEntry bicDirectoryEntry) {
         bicDirectoryEntry.setChangeType(changeTypeRepository.findByCode("CHGD").get());
      bicDirectoryEntryService.update(bic, bicDirectoryEntry);
+        System.out.println("1111111");
         return new ResponseEntity<>(bicDirectoryEntry, HttpStatus.OK);
     }
 

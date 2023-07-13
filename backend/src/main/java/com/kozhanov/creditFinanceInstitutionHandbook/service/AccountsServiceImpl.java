@@ -68,7 +68,8 @@ public class AccountsServiceImpl implements AccountsService{
 
     @Override
     public void delete(String accountNumber) {
-        accountsRepository.deleteByAccount(accountNumber);
+        System.out.println(accountNumber);
+        accountsRepository.deleteById(accountNumber);
     }
 
     private Accounts setAccountStatus(Accounts accounts){
