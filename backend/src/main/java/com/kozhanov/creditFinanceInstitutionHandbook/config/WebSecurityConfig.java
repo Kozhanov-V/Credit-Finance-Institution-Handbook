@@ -62,13 +62,18 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/api/findBy/**",
                         "/api/regulationAccountTypes",
                         "/api/accountStatuses",
-                        "/api/accountRestrictions"
+                        "/api/filter/all",
+                        "api/data/all",
+                        "/api/accountRestrictions",
+                        "/api/token/check"
 
                 ).permitAll()
                 .antMatchers(
                         HttpMethod.POST,
                         "/api/filter",
-                        "/api/token/check"
+                        "/api/token/check",
+                        "/api/register",
+                        "/api/confirm"
 
                 ).permitAll()
                 .antMatchers(HttpMethod.POST,
@@ -86,6 +91,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 ).hasRole("ADMIN")
                 .antMatchers(HttpMethod.POST,
                         "/api/favorites/**"
+
                 ).hasRole("USER")
                 .and().
                 exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint).and().sessionManagement()

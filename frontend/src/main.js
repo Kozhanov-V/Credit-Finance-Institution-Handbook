@@ -12,6 +12,8 @@ import NotFound from '@/views/NotFound.vue'
 import Logout from '@/views/Logout.vue'
 import Home from '@/views/Home.vue'
 import ExpiredToken from '@/views/ExpiredToken.vue'
+import Signup from '@/views/Signup.vue'
+import { VueTelInput } from 'vue-tel-input';
 
 
 
@@ -142,6 +144,7 @@ const router = createRouter({
         {path: '/logout', name: 'Logout', component: Logout},
         {path: '/handbook', name: 'Handbook', component: Handbook},
         {path: '/expired', name: 'ExpiredToken', component: ExpiredToken},
+        {path: '/signup', name: 'Signup', component: Signup},
         {path: '/:pathMatch(.*)*', name: 'NotFound', component: NotFound},
      
      
@@ -204,5 +207,6 @@ isUser= roles ? roles.map(e => e.name).includes('ROLE_USER') : false;
 
 createApp(App)
     .use(router)
+		.use(VueTelInput)
     .use(store)
     .mount('#app')

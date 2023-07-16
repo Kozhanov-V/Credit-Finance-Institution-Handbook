@@ -41,6 +41,7 @@ public class MyUserDetails extends User implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return !isActive();
     }
+
 }

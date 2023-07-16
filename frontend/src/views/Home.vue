@@ -1,13 +1,13 @@
 <template>
 	<div class="block-1">
-		<div class="logo" style="background-image: url(img/logo.svg);"></div>
+		<div class="logo" style="background-image: url(/img/logo.svg);"></div>
 
 		<section class="layers">
 
 			<div class="layers__container">
 
-				<div class="layers__item layer1" style="background-image: url(img/layer-1.jpg);"></div>
-				<div class="layers__item layer2" style="background-image: url(img/layer-2.png);"></div>
+				<div class="layers__item layer1" style="background-image: url(/img/layer-1.jpg);"></div>
+				<div class="layers__item layer2" style="background-image: url(/img/layer-2.png);"></div>
 				<div class="layers__item layer3">
 					<div class="hero-content">
 						<h1>Справочник сведений ЦБ РФ <span>о кредитно-финансовых учреждениях</span></h1>
@@ -17,7 +17,7 @@
 						</router-link>
 					</div>
 				</div>
-				<div class="layers__item layer4" style="background-image: url(img/layer-4.png);"></div>
+				<div class="layers__item layer4" style="background-image: url(/img/layer-4.png);"></div>
 
 			</div>
 
@@ -30,7 +30,7 @@
 				<h1>Интерактивный <span>дизайн</span></h1><br />
 				<p>Мы продумали все до мелочей, чтобы вам было удобно и комфортно пользоваться нашими услугами.</p>
 			</div>
-			<div class="ilutration" style="background-image: url(img/illustration.svg);">
+			<div class="ilutration" style="background-image: url(/img/illustration.svg);">
 			</div>
 		</div>
 		<div class="security-block">

@@ -16,16 +16,16 @@
 					@keyup.enter="filterByName">
 				<input @click="filterByName" type="submit" id="submitName" />
 			</div>
-			<button @click="resetAllFilter" class="filter-element" id="clear-filter"><img src="img/clear.svg" alt="c">
+			<button @click="resetAllFilter" class="filter-element" id="clear-filter"><img src="/img/clear.svg" alt="c">
 				Сбросить</button>
 
-			<button @click="openFilterMenu" class="filter-element" id="filterBtn"><img src="img/filter.png" alt="">
+			<button @click="openFilterMenu" class="filter-element" id="filterBtn"><img src="/img/filter.png" alt="">
 				Фильтр</button>
 
 			<Filter :visible="isFilterVisible" :participantTypes="participantTypes" :shouldResetFilter="shouldResetFilter"
 				@apply-filter="applyFilter" @reset-filter="resetFilter" />
 
-			<button @click="openSaveModal" v-show="isAdmin" class="filter-element" id="addBtn"><img src="img/plus.png" alt="">
+			<button @click="openSaveModal" v-show="isAdmin" class="filter-element" id="addBtn"><img src="/img/plus.png" alt="">
 				Добавить
 				запись</button>
 		</div>
@@ -58,22 +58,22 @@
 						<tr @mouseover="selectedItem = item">
 							<td class="actions_container">
 								<div class="actions">
-									<button v-if="item !== currentlyEditing" @click="this.isAccountsFormVisible = true"><img src="img/accounts.svg"
+									<button v-if="item !== currentlyEditing" @click="this.isAccountsFormVisible = true"><img src="/img/accounts.svg"
 											alt="a"></button>
 									<button v-if="item !== currentlyEditing && isUser" @click="toggleFavorite(item)">
 										<img :src="isFavorite(item) ? 'img/favorites_added.svg' : 'img/favorites.svg'" alt="f">
 									</button>
 
-									<button v-if="item !== currentlyEditing && isAdmin" @click="startEditing(item)"><img src="img/settings.svg"
+									<button v-if="item !== currentlyEditing && isAdmin" @click="startEditing(item)"><img src="/img/settings.svg"
 											alt="u"></button>
 
-									<button v-if="item !== currentlyEditing && isAdmin" @click="deleteItem(item)"><img src="img/delete.svg"
+									<button v-if="item !== currentlyEditing && isAdmin" @click="deleteItem(item)"><img src="/img/delete.svg"
 											alt="d"></button>
 
 								</div>
 								<div class="edit_mode_action">
-									<button v-if="item === currentlyEditing" @click="cancelEditing"><img src="img/cancel.svg" alt="c"></button>
-									<button v-if="item === currentlyEditing && isAdmin" @click="saveItem(item)"><img src="img/save.svg"
+									<button v-if="item === currentlyEditing" @click="cancelEditing"><img src="/img/cancel.svg" alt="c"></button>
+									<button v-if="item === currentlyEditing && isAdmin" @click="saveItem(item)"><img src="/img/save.svg"
 											alt="s"></button>
 								</div>
 
@@ -232,7 +232,6 @@
 
 <script>
 import { useVuelidate } from '@vuelidate/core'
-import { numeric, required, between, maxLength } from '@vuelidate/validators'
 import Filter from '@/components/Filter.vue';
 
 import SaveModalForm from '@/components/SaveForm.vue';
@@ -240,12 +239,16 @@ import AccountsInfo from '@/components/AccountsInfo.vue';
 
 import { reactive } from 'vue';
 import axios from 'axios';
-
+import { required, minLength, maxLength, sameAs } from '@vuelidate/validators';
 export default {
 	components: {
 		SaveModalForm,
 		AccountsInfo,
 		Filter,
+	},
+
+	setup() {
+		return {v$: useVuelidate() }
 	},
 
 	data() {
@@ -282,6 +285,14 @@ export default {
 			shouldResetFilter: false
 		};
 	},
+	validations() {
+		return{
+			editedItem: {
+				nameParticipant: { required, minLength: minLength(20) },
+    },
+	}
+}
+  ,
 	methods: {
 		startEditing(item) {
     this.editedItem = Object.assign({}, item); 
@@ -320,13 +331,17 @@ cancelEditing() {
 		addFavorite(bicDirectoryEntry) {
 			try {
 				this.$store.dispatch('addFavoritesEntry', bicDirectoryEntry);
-				console.log(this.favoritesEntry)
 			} catch (error) {
 				alert("Ошибка");
 				console.error(error);
 			}
 		},
 		async saveItem(item) {
+			this.v$.$touch()
+      if (this.v$.$invalid) {
+				alert('ошибка')
+        return
+      }
 			try {
 				const response = await axios.put(`http://localhost:8080/api/update/${item.bic}`, {
 					bic: item.bic,

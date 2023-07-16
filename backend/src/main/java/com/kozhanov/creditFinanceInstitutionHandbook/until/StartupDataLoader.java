@@ -2,6 +2,7 @@ package com.kozhanov.creditFinanceInstitutionHandbook.until;
 
 import com.kozhanov.creditFinanceInstitutionHandbook.config.WebSecurityConfig;
 import com.kozhanov.creditFinanceInstitutionHandbook.model.handbook.*;
+import com.kozhanov.creditFinanceInstitutionHandbook.model.users.Confirmation;
 import com.kozhanov.creditFinanceInstitutionHandbook.model.users.Role;
 import com.kozhanov.creditFinanceInstitutionHandbook.model.users.User;
 import com.kozhanov.creditFinanceInstitutionHandbook.model.codeValue.*;
@@ -209,17 +210,20 @@ public class StartupDataLoader implements
         Role admin = new Role("ROLE_ADMIN");
         User user = new User();
         user.setUsername("admin");
+        user.setActive(true);
         user.setPassword(WebSecurityConfig.passwordEncoder().encode("admin"));
         user.addRole(client);
         user.addRole(admin);
         User user2 = new User();
         user2.setUsername("user");
+        user2.setActive(false);
         user2.setPassword(WebSecurityConfig.passwordEncoder().encode("user"));
         user2.addRole(client);
         roleReposiroty.save(client);
         roleReposiroty.save(admin);
         userRepository.save(user);
         userRepository.save(user2);
+        Confirmation confirmation = new Confirmation();
 
 
     }

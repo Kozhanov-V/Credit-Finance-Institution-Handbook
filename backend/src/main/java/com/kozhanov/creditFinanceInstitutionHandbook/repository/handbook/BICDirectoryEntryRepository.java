@@ -15,8 +15,6 @@ import java.util.Optional;
 @Repository
 public interface BICDirectoryEntryRepository extends JpaRepository<BICDirectoryEntry, Integer> {
     @EntityGraph(attributePaths = {"accounts", "swbicsList"})
-    @Override
-    public List<BICDirectoryEntry> findAll();
     public Optional<BICDirectoryEntry> findByBIC(int bic);
     public Page<BICDirectoryEntry>findByBIC(int bic,Pageable pageable);
 
@@ -32,6 +30,18 @@ public interface BICDirectoryEntryRepository extends JpaRepository<BICDirectoryE
                                    @Param("validFrom") Date validFrom,
                                    @Param("validUntil") Date validUntil,
                                      Pageable pageable);
+
+    @Query("SELECT b FROM BICDirectoryEntry b INNER JOIN b.participantInfo p WHERE " +
+            "(:bic IS NULL OR b.BIC = :bic) AND " +
+            "(:nameRecord IS NULL OR LOWER(p.nameParticipant) LIKE LOWER(CONCAT('%', :nameRecord, '%'))) AND " +
+            "(:typeTransfer IS NULL OR p.participantType.code = :typeTransfer) AND " +
+            "(:validFrom IS NULL OR p.dateIn >= :validFrom) AND " +
+            "(:validUntil IS NULL OR p.dateIn <= :validUntil)")
+    List<BICDirectoryEntry> filter(@Param("bic") Integer bic,
+                                   @Param("nameRecord") String nameRecord,
+                                   @Param("typeTransfer") Integer typeTransfer,
+                                   @Param("validFrom") Date validFrom,
+                                   @Param("validUntil") Date validUntil);
 
 
     List<BICDirectoryEntry> findByBICLike(int bic);

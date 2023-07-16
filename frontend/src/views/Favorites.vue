@@ -4,7 +4,7 @@
 		<AccountsInfo :visible="isAccountsFormVisible" :entryAccounts="selectedItem" @close="isAccountsFormVisible = false" />
 
 		<h1>Избранные записи</h1>
-		<div v-if="!bicDirectoryEntries || bicDirectoryEntries.length === 0" class="favorites_empty">
+		<div v-if="favoritesIsEmpty" class="favorites_empty">
 			<p>
 				У вас нет избранных записей. Вы можете добавить избранные записи в справочнике.
 			</p>
@@ -43,22 +43,22 @@
 						<tr @mouseover="selectedItem = item">
 							<td class="actions_container">
 								<div class="actions">
-									<button v-if="item !== currentlyEditing" @click="this.isAccountsFormVisible = true"><img src="img/accounts.svg"
+									<button v-if="item !== currentlyEditing" @click="this.isAccountsFormVisible = true"><img src="/img/accounts.svg"
 											alt="a"></button>
-									<button v-if="item !== currentlyEditing && isUser" @click="toggleFavorite(item)">
-										<img src="img/favorites_added.svg" alt="f">
+									<button v-if="item !== currentlyEditing && isUser" @click="deleteFavorite(item)">
+										<img src="/img/favorites_added.svg" alt="f">
 									</button>
 
-									<button v-if="item !== currentlyEditing && isAdmin" @click="startEditing(item)"><img src="img/settings.svg"
+									<button v-if="item !== currentlyEditing && isAdmin" @click="startEditing(item)"><img src="/img/settings.svg"
 											alt="u"></button>
 
-									<button v-if="item !== currentlyEditing && isAdmin" @click="deleteItem(item)"><img src="img/delete.svg"
+									<button v-if="item !== currentlyEditing && isAdmin" @click="deleteItem(item)"><img src="/img/delete.svg"
 											alt="d"></button>
 
 								</div>
 								<div class="edit_mode_action">
-									<button v-if="item === currentlyEditing" @click="cancelEditing"><img src="img/cancel.svg" alt="c"></button>
-									<button v-if="item === currentlyEditing && isAdmin" @click="saveItem(item)"><img src="img/save.svg"
+									<button v-if="item === currentlyEditing" @click="cancelEditing"><img src="/img/cancel.svg" alt="c"></button>
+									<button v-if="item === currentlyEditing && isAdmin" @click="saveItem(item)"><img src="/img/save.svg"
 											alt="s"></button>
 								</div>
 
@@ -231,7 +231,7 @@ export default {
 			editedItem: null,
         currentlyEditing: null,
 			data: [],
-			data: [],
+			favoritesIsEmpty:true,
 		};
 	},
 	methods: {
@@ -251,6 +251,15 @@ cancelEditing() {
 				if (index !== -1) {
 					this.tableData.splice(index, 1);
 				}
+
+				if(this.tableData.length <1){
+					this.favoritesIsEmpty=true;
+				}
+				else{
+					this.favoritesIsEmpty=false;
+				}
+				console.log(this.tableData.length)
+
 			} catch (error) {
 				alert("Ошибка");
 				console.error(error);
@@ -346,6 +355,14 @@ cancelEditing() {
 					if (index !== -1) {
 						this.tableData.splice(index, 1);
 					}
+					console.log(this.tableData.length)
+					if(this.tableData.length <1){
+					this.favoritesIsEmpty=true;
+				}
+				else{
+					this.favoritesIsEmpty=false;
+				}
+
 					// Сброс выбранного элемента
 					this.selectedItem = null;
 				} else {
@@ -368,20 +385,52 @@ cancelEditing() {
 			await axios.get('http://localhost:8080/api/participantStatuses').then(response => {
 				this.participantStatuses = response.data.map(e => e.code);
 			})
+			
+			
 			this.typeTransfer = this.participantTypes.map(e => e.code);
 		}
 	},
 	created() {
 		this.startupDataLoader();
 	},
-	mounted() {
+	async mounted() {
 	  this.$nextTick(function() {
       document.getElementById('favoritesBtn').click();
     })
+		await axios.get(`http://localhost:8080/api/favorites/get?token=${this.$store.getters.getToken}`).then(response => {
+				console.log(response.data)
+				this.$store.state.favoritesEntry = response.data.map(item => ({
+						bic: item.bic,
+						nameParticipant: item.participantInfo.nameParticipant,
+						registrationNumber: item.participantInfo.registrationNumber,
+						countryCode: item.participantInfo.countryCode,
+						regionCode: item.participantInfo.regionCode,
+						index: item.participantInfo.index,
+						typeLocation: item.participantInfo.typeLocation,
+						nameLocation: item.participantInfo.nameLocation,
+						address: item.participantInfo.address,
+						parentBIC: item.participantInfo.parentBIC,
+						dateIn: item.participantInfo.dateIn,
+						dateOut: item.participantInfo.dateOut,
+						participantType: item.participantInfo?.participantType?.code,
+						availableTransferService: item.participantInfo?.availableTransferService?.code,
+						exchangeParticipant: item.participantInfo?.exchangeParticipant?.code,
+						uid: item.participantInfo.uid,
+						participantStatus: item.participantInfo?.participantStatus?.code,
+						accounts: item.accounts,
+						editMode: false,
+					 }));
+			})
 		this.bicDirectoryEntries = this.$store.getters.getFavorites;
 		if (this.bicDirectoryEntries && this.bicDirectoryEntries.length > 0) {
 			this.fillTable(this.bicDirectoryEntries);
 		}
+		if(this.tableData.length <1){
+					this.favoritesIsEmpty=true;
+				}
+				else{
+					this.favoritesIsEmpty=false;
+				}
 	},
 	computed: {
 		isAdmin() {

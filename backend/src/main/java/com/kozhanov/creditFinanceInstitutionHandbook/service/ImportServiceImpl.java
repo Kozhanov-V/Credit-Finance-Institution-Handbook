@@ -33,13 +33,12 @@ public class ImportServiceImpl implements ImportService{
     public void importFromCB() {
         System.out.println("satart");
         String url = "http://cbr.ru/s/newbik";
-        String directory = "C:\\Users\\vkozh\\Documents\\GitHub" +
-                "\\Credit-Finance-Institution-Handbook\\backend\\src\\main\\java\\com\\kozhanov\\creditFinanceInstitutionHandbook\\until\\";
+        String directory = "../until/";
 
         String nameFile = "newbik.zip";
 
         try {
-            downloadFile(url,directory+"\\"+nameFile);
+            downloadFile(url,directory+nameFile);
         } catch (IOException e) {
             e.printStackTrace();
         }

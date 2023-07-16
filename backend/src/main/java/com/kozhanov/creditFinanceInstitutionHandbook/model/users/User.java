@@ -14,8 +14,14 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "username")
     private String username;
+
+    @Column(name = "password")
     private String password;
+
+    @Column(name = "phone")
+    private String phone;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "user_roles",
@@ -28,6 +34,8 @@ public class User {
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "bic"))
     private Set<BICDirectoryEntry> bicDirectoryEntries;
+
+    private boolean active = false;
 
     public User() {
     }
@@ -43,6 +51,31 @@ public class User {
         this.roles = user.getRoles();
         this.bicDirectoryEntries = user.getBicDirectoryEntries();
 
+    }
+
+    public User(Long id, String username, String password, Set<Role> roles, Set<BICDirectoryEntry> bicDirectoryEntries, boolean active) {
+        this.id = id;
+        this.username = username;
+        this.password = password;
+        this.roles = roles;
+        this.bicDirectoryEntries = bicDirectoryEntries;
+        this.active = active;
+    }
+
+    public boolean isActive() {
+        return this.active;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
     }
 
     public Long getId() {

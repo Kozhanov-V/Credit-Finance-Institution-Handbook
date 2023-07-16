@@ -1,0 +1,12 @@
+version: '3'
+services:
+  backend:
+    build: ./backend
+    container_name: 'backend-hand'
+    ports:
+      - 8080:8080
+  frontend:
+    build: ./frontend
+    container_name: 'frontend-hand'
+    ports:
+      - 5173:80

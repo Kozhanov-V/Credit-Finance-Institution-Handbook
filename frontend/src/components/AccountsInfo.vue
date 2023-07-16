@@ -66,13 +66,13 @@
 
 							<div class="buttons" v-if="isAdmin">
 								<div v-if="item === currentlyEditing">
-									<button @click="cancelEdit()"><img src="img/cancel.svg" alt="O"></button>
-									<button @click="saveEdit(item)"><img src="img/save.svg" alt="S"></button>
+									<button @click="cancelEdit()"><img src="/img/cancel.svg" alt="O"></button>
+									<button @click="saveEdit(item)"><img src="/img/save.svg" alt="S"></button>
 								</div>
 
 								<div v-else>
-									<button @click="editAccount(item)"><img src="img/settings.svg" alt="E"></button>
-									<button @click="deleteCurrentItem(item)"><img src="img/delete.svg" alt="D"></button>
+									<button @click="editAccount(item)"><img src="/img/settings.svg" alt="E"></button>
+									<button @click="deleteCurrentItem(item)"><img src="/img/delete.svg" alt="D"></button>
 								</div>
 							</div>
 
@@ -96,8 +96,8 @@
 						<td>
 							<div class="buttons">
 
-								<button @click="closeAddMode"><img src="img/cancel.svg" alt="О"></button>
-								<button @click="saveAccount"><img src="img/save.svg" alt="S"></button>
+								<button @click="closeAddMode"><img src="/img/cancel.svg" alt="О"></button>
+								<button @click="saveAccount"><img src="/img/save.svg" alt="S"></button>
 
 
 							</div>

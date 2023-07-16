@@ -1,0 +1,106 @@
+.signup {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	width: 44vw;
+	height: 85vh;
+	background-color: #5A77DF;
+	border-radius: calc(var(--index)*1.5);
+	color: white;
+	margin: 0 auto;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	border: 1px solid #3E53A0;
+}
+.signup h1{
+	font-size: calc(var(--index)*1.2);
+}
+.signup h2{
+	font-size: calc(var(--index)*0.8);
+}
+.signup label {
+	margin-top: calc(var(--index)*0.5);
+}
+
+.signup form {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	width: 100%;
+}
+.signup input[type=text], .signup input[type=password], .signup input[type=submit] {
+	width: 17vw;
+	height: 4vh;
+	border-radius: calc(var(--index)*0.5);
+	border: 1px solid #3E53A0;
+	background: none;
+	font-size: calc(var(--index)*0.5);
+	color: #3E53A0;
+	background-color: white;
+	outline: none;
+}
+.signup input[type=text], .signup input[type=password]{
+	padding-left: calc(var(--index)*0.7);
+}
+.signup input[type=text]:first-of-type, .signup input[type=password]:first-of-type, .signup input[type=submit]:first-of-type{
+	margin-top: calc(var(--index)*0.5);
+}
+.vue-tel-input {
+	margin-top: calc(var(--index)*0.5);
+	width: 17vw;
+	border: none;
+	border-radius: calc(var(--index)*1);
+}
+.vue-tel-input{
+	border-top-right-radius: 30px;
+	border-bottom-right-radius: 30px;
+}
+.error{
+	color: #8F2B00;
+}
+.input-group {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	width: 17vw;
+}
+
+.signup ::placeholder{
+	color: #7788C6;
+}
+.signup input[type=submit]{
+	background-color: #3E53A0;
+	color: white;
+	cursor: pointer;
+}
+.logo {
+	position: relative;
+	width: 7vw;
+	height: 7vh;
+	background-repeat: no-repeat;
+	margin-bottom: 1vh;
+}
+.signup a{
+	text-decoration: underline;
+}
+.signup p{
+	font-size: calc(var(--index)*0.55);
+}
+.vti__dropdown-item{
+	color: black;
+
+}
+.vue-tel-input{
+	border-radius: calc(var(--index)*0.5);
+}
+
+.vti__input{
+	width: 40vw;
+	height: 4vh;
+	border-top-right-radius: calc(var(--index)*0.5);
+	border-bottom-right-radius: calc(var(--index)*0.5);
+}

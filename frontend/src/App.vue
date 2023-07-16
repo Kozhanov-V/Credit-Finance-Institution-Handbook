@@ -1,11 +1,11 @@
 
 <template>
-	  <Navigation v-if="route.path !== '/login' && route.path!=='/' && route.path!=='/expired'"/>
-  <Header v-if="route.path !== '/login' && route.path!=='/'"  />
+	  <Navigation v-if="route.path !== '/login' && route.path!=='/' && route.path!=='/expired' && route.path!=='/signup'"/>
+  <Header v-if="route.path !== '/login' && route.path!=='/' && route.path!=='/signup'"  />
 
 
   <RouterView></RouterView>
-	<Footer v-if="route.path !== '/login'"  />
+	<Footer v-if="route.path !== '/login' && route.path!=='/signup'"  />
 </template>
 
 <script>

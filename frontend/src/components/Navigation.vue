@@ -1,6 +1,6 @@
 <template>
   <nav>
-    <div class="logo" style="background-image: url(img/logo.svg);"></div>
+    <div class="logo" style="background-image: url(/img/logo.svg);"></div>
     <div class="navigation-elements" :style="{'--top': `${(hoverItem !== null ? hoverItem : activeItem)* 2.9 + 0.85}`}">
       <div class="active-indicator"></div>
 			<div  v-for="(item, index) in items" v-show="item.access">
@@ -22,7 +22,7 @@
         <button 
           
           class="element-item" 
-          style="background-image: url('img/logout.png')"
+          style="background-image: url('/img/logout.png')"
         ></button>
       </router-link>
     </div>
@@ -43,10 +43,10 @@ export default {
 	computed: {
     items() {
       return [
-        {id: 'handbookBtn', img: 'img/handbook.png', url: "/handbook", access: true},
+        {id: 'handbookBtn', img: '/img/handbook.png', url: "/handbook", access: true},
         
-        {id: 'favoritesBtn', img: 'img/favorites.png', url: "/favorites", access: this.isUser},
-				{id: 'importBtn', img: 'img/import.png', url: "/import", access: this.isAdmin}, 
+        {id: 'favoritesBtn', img: '/img/favorites.png', url: "/favorites", access: this.isUser},
+				{id: 'importBtn', img: '/img/import.png', url: "/import", access: this.isAdmin}, 
       ];
     },
     isAdmin() {

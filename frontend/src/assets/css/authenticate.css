@@ -40,7 +40,8 @@
 	border: 1px solid #3E53A0;
 	background: none;
 	font-size: calc(var(--index)*0.5);
-	color: white;
+	color: #3E53A0;
+	background-color: white;
 	outline: none;
 }
 .authenticate input[type=text], .authenticate input[type=password]{
@@ -58,7 +59,7 @@
 }
 
 .authenticate ::placeholder{
-	color: #DCDCDC;
+	color: #7788C6;
 }
 .authenticate input[type=submit]{
 	background-color: #3E53A0;

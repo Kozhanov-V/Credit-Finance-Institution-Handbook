@@ -53,7 +53,7 @@ public class BICDirectoryEntryServiceImpl implements BICDirectoryEntryService {
     @Override
     public BICDirectoryEntry findByBic(int bic) {
 
-        return bicDirectoryEntryRepository.findByBIC(bic).get();
+        return bicDirectoryEntryRepository.findByBICLike(bic).get(0);
     }
 
     @Override
@@ -103,5 +103,10 @@ public class BICDirectoryEntryServiceImpl implements BICDirectoryEntryService {
         response.put("bicDirectoryEntries", page.toList());
         response.put("totalPage",page.getTotalPages());
         return response;
+    }
+
+    @Override
+    public List<BICDirectoryEntry> filter(Integer bic, String nameRecord, Integer typeTransfer, Date validFrom, Date validUntil) {
+        return bicDirectoryEntryRepository.filter(bic, nameRecord, typeTransfer, validFrom, validUntil);
     }
 }

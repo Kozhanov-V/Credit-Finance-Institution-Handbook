@@ -1,6 +1,6 @@
 <template>
     <div class="authenticate">
-				<div class="logo" style="background-image: url(img/logoAuth.svg);"></div>
+				<div class="logo" style="background-image: url(/img/logoAuth.svg);"></div>
 			<h1>АВТОРИЗАЦИЯ</h1>
 
         <form @submit.prevent="submitForm">

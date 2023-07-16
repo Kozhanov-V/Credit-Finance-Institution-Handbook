@@ -47,6 +47,7 @@ body{
   padding: 3px 0;
   width: 80%;
 	font-size: calc(var(--index)*.5);
+	background-color: white;
 }
 
 #bic{
@@ -67,7 +68,7 @@ body{
 	outline-offset: 0;
 }
 .filter-element input[type="submit"] {
-  background: transparent url(img/search_outline_16.svg);
+  background: transparent url(/img/search_outline_16.svg);
 	background-repeat: no-repeat;
   border: 0 none;
   height: calc(var(--index)*.6);

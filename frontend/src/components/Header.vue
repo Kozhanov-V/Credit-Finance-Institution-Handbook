@@ -1,6 +1,6 @@
 <template>
 	<header>
-			<div class="logo" style="background-image: url(img/headerLogo.svg);"></div>
+			<div class="logo" style="background-image: url(/img/headerLogo.svg);"></div>
 			<div v-if="isLoggedIn">
 					<h2>{{ username }}</h2>
 			</div>
@@ -40,4 +40,6 @@ computed: {
 };
 </script>
 
-<style scoped>@import '@/assets/css/header.css';</style>
+<style scoped>
+@import '@/assets/css/header.css';
+</style>

@@ -20,4 +20,5 @@ public interface BICDirectoryEntryService {
     public HashMap<String,Object>  findByName(String name, Pageable pageable);
     public void update(int bic, BICDirectoryEntry bicDirectoryEntry);
     public HashMap<String, Object> filter(Integer bic, String nameRecord, Integer typeTransfer, Date validFrom, Date validUntil,Pageable pageable);
+    public List<BICDirectoryEntry> filter(Integer bic, String nameRecord, Integer typeTransfer, Date validFrom, Date validUntil);
 }
