@@ -24,9 +24,12 @@ header h2, header a {
   align-items: center;
 	font-size: calc(var(--index)*1);
 	position: relative;
-	top: calc(50% - var(--index));
+
 	font-weight: bold;
 }
 header a:hover{
 	color: #E5E5E5;
+}
+header h2{
+	top: calc(50% - var(--index));
 }

@@ -1,0 +1,33 @@
+.not-found{
+	position: relative;
+	left: 10vw;
+	min-height: 50vh;
+	width: 70vw;
+	top: 5vh;
+
+}
+.not_found_ilustr{
+	position: absolute;
+	width: 40vw;
+	height: 80vh;
+	background-repeat: no-repeat;
+	left: 45vw;
+	top: -10vh;
+	z-index: -1;
+}
+.not-found h1{
+	font-size: calc(var(--index)*3);
+
+}
+
+.not-found h2{
+	font-size: calc(var(--index)*1.5);
+}
+.not-found span{
+	display: block;
+}
+
+.not-found p{
+	font-size: calc(var(--index)*1);
+	color: black;
+}

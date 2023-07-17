@@ -44,7 +44,7 @@ public interface BICDirectoryEntryRepository extends JpaRepository<BICDirectoryE
                                    @Param("validUntil") Date validUntil);
 
 
-    List<BICDirectoryEntry> findByBICLike(int bic);
+    Optional<BICDirectoryEntry> findByBICLike(int bic);
     Page<BICDirectoryEntry> findByBICLike(int bic,Pageable pageable);
     List<BICDirectoryEntry> findByParticipantInfo_NameParticipantLikeIgnoreCase(String name);
     Page<BICDirectoryEntry> findByParticipantInfo_NameParticipantLikeIgnoreCase(String name,Pageable pageable);

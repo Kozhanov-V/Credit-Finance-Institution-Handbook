@@ -164,6 +164,9 @@ public class BICDirectoryEntry {
         accounts.add(account);
         account.setBicDirectoryEntry(this);
     }
+    public void deleteAccount(Accounts accounts){
+        this.accounts.remove(accounts);
+    }
 
     public ParticipantInfo getParticipantInfo() {
         return participantInfo;

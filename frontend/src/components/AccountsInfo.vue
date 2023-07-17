@@ -257,13 +257,13 @@ export default {
 		deleteCurrentItem(deletedItem) {
 			console.log(deletedItem)
 			axios
-				.delete(`http://localhost:8080/api/account/delete/${this.deletedItem.account}`, {
+				.delete(`http://localhost:8080/api/account/delete/${deletedItem.account}`, {
 					headers: {
 						'Authorization': 'Bearer ' + localStorage.getItem('token')
 					}
 				})
 				.then(() => {
-					this.entryAccounts.accounts = this.entryAccounts.accounts.filter(item => item.account !== this.deletedItem.account);
+					this.entryAccounts.accounts = this.entryAccounts.accounts.filter(item => item.account !== deletedItem.account);
 				})
 				.catch(error => {
 					console.error(error);

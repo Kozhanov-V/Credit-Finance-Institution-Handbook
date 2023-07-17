@@ -247,9 +247,9 @@ export default {
 		Filter,
 	},
 
-	setup() {
-		return {v$: useVuelidate() }
-	},
+	// setup() {
+	// 	return {v$: useVuelidate() }
+	// },
 
 	data() {
 		return {
@@ -285,14 +285,14 @@ export default {
 			shouldResetFilter: false
 		};
 	},
-	validations() {
-		return{
-			editedItem: {
-				nameParticipant: { required, minLength: minLength(20) },
-    },
-	}
-}
-  ,
+// 	validations() {
+// 		return{
+// 			editedItem: {
+// 				nameParticipant: { required, minLength: minLength(20) },
+//     },
+// 	}
+// }
+//   ,
 	methods: {
 		startEditing(item) {
     this.editedItem = Object.assign({}, item); 
@@ -337,11 +337,11 @@ cancelEditing() {
 			}
 		},
 		async saveItem(item) {
-			this.v$.$touch()
-      if (this.v$.$invalid) {
-				alert('ошибка')
-        return
-      }
+			// this.v$.$touch()
+      // if (this.v$.$invalid) {
+			// 	alert('ошибка')
+      //   return
+      // }
 			try {
 				const response = await axios.put(`http://localhost:8080/api/update/${item.bic}`, {
 					bic: item.bic,

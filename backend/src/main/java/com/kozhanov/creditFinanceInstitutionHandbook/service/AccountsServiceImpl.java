@@ -51,6 +51,10 @@ public class AccountsServiceImpl implements AccountsService{
         return accountsRepository.findByBicDirectoryEntry_BIC(bic);
     }
 
+    public Accounts findByAccount(String accountNumber) {
+        return accountsRepository.findByAccount(accountNumber).get();
+    }
+
     @Override
     public void update(String accountNumber, Accounts accounts) {
         Accounts existingAccounts = accountsRepository.findByAccount(accountNumber)
@@ -68,8 +72,12 @@ public class AccountsServiceImpl implements AccountsService{
 
     @Override
     public void delete(String accountNumber) {
-        System.out.println(accountNumber);
-        accountsRepository.deleteById(accountNumber);
+     Accounts accounts =   accountsRepository.findByAccount(accountNumber)   .orElseThrow(() -> new RuntimeException("No entry found with id: " + accountNumber));
+        System.out.println(accounts);
+        BICDirectoryEntry bicDirectoryEntry = accounts.getBicDirectoryEntry();
+        bicDirectoryEntry.deleteAccount(accounts);
+        bicDirectoryEntryRepository.save(bicDirectoryEntry);
+     accountsRepository.delete(accounts);
     }
 
     private Accounts setAccountStatus(Accounts accounts){

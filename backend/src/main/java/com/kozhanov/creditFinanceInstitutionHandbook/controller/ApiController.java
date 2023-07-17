@@ -141,7 +141,7 @@ public class ApiController {
     @ApiOperation(value = "Get Bic Directory Entry by bic", response = List.class)
     @GetMapping("/findBy/bic/{bic}/all")
     public ResponseEntity<?> getEntryByBic(@PathVariable int bic){
-        List<BICDirectoryEntry> bicDirectoryEntries = bicDirectoryEntryService.findByBicLike(bic);
+        BICDirectoryEntry bicDirectoryEntries = bicDirectoryEntryService.findByBic(bic);
         return new ResponseEntity<>(bicDirectoryEntries,HttpStatus.OK);
     }
 

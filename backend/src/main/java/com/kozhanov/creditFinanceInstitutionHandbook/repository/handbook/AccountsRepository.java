@@ -11,4 +11,5 @@ import java.util.Optional;
 public interface AccountsRepository extends JpaRepository<Accounts, String> {
     public List<Accounts> findByBicDirectoryEntry_BIC(int bic);
     public Optional<Accounts> findByAccount(String account);
+    public void deleteByAccount(String account);
 }

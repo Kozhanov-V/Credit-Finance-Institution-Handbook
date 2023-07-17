@@ -10,7 +10,7 @@
 			
 			<router-link to="/"><p>Главная</p></router-link>
 			<router-link to="/handbook"><p>Справочник</p></router-link>
-			<router-link to="/favorite"><p>Избранное</p></router-link>
+			<router-link to="/favorites"><p>Избранное</p></router-link>
 		</div>
 		<div class="footer-block">
 			<h2>API СПРАВОЧНИКА</h2>

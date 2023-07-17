@@ -82,7 +82,9 @@
 	</div>
 	<div class="block-4">
 		<h1>ЗАРЕГИСТРИРУЙСЯ <span>И ПОПРОБУЙ САМ</span></h1>
+		<router-link :to="{name: 'Signup'}">
 			<button>РЕГИСТРАЦИЯ</button>
+			</router-link>
 		
 	</div>
 	

@@ -15,7 +15,6 @@ public interface BICDirectoryEntryService {
     public HashMap<String, Object> findAll(Pageable pageable);
     public BICDirectoryEntry findByBic(int bic);
     public HashMap<String,Object> findByBic(int bic,Pageable pageable);
-    public List<BICDirectoryEntry> findByBicLike(int bic);
     public List<BICDirectoryEntry> findByName(String name);
     public HashMap<String,Object>  findByName(String name, Pageable pageable);
     public void update(int bic, BICDirectoryEntry bicDirectoryEntry);

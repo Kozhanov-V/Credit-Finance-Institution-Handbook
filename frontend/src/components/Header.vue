@@ -4,8 +4,9 @@
 			<div v-if="isLoggedIn">
 					<h2>{{ username }}</h2>
 			</div>
-			<div v-else>
-					<router-link to="/login">Login</router-link>
+			<div style="display: flex;" v-else>
+					<router-link to="/login">Login</router-link>	
+					<router-link to="/signup" style="margin-left: 2vw;">Signup</router-link>
 			</div>
 	</header>
 </template>

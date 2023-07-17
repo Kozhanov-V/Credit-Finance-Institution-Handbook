@@ -205,7 +205,7 @@ public class StartupDataLoader implements
     }
 
     public void insertData() {
-        importService.importFromCB();
+        //   importService.importFromCB();
         Role client = new Role("ROLE_USER");
         Role admin = new Role("ROLE_ADMIN");
         User user = new User();
