@@ -28,27 +28,36 @@
 									{{ type }}
 								</option>
 							</select>
+							<span class="error" v-if="v$.editedItem.regulationAccountType.$dirty
+						&& v$.editedItem.regulationAccountType.$error">выберите тип счета</span>
 						</td>
 						<td v-else>{{ item.regulationAccountType }}</td>
 
 
 						<td v-if="item === currentlyEditing">
 							<input v-model="editedItem.controlKey" type="number">
+							<span class="error" v-if="v$.editedItem.controlKey.$dirty
+						&& v$.editedItem.controlKey.$error">не больше 2 символов</span>
 						</td>
 						<td v-else>{{ item.controlKey }}</td>
 
 						<td v-if="item === currentlyEditing">
 							<input v-model="editedItem.dateIn" type="date">
+							<span class="error" v-if="v$.editedItem.dateIn.$dirty
+						&& v$.editedItem.dateIn.$error">обязательное поле</span>
 						</td>
 						<td v-else>{{ item.dateIn }}</td>
 
 						<td v-if="item === currentlyEditing">
 							<input v-model="editedItem.dateOut" type="date"></td>
+							
 						<td v-else>{{ item.dateOut }}</td>
 
 						<td v-if="item === currentlyEditing">
 							<input v-model="editedItem.accountCBRBIC"
 								type="number">
+								<span class="error" v-if="v$.editedItem.accountCBRBIC.$dirty
+						&& v$.editedItem.accountCBRBIC.$error">Цифровой, 9 знаков</span>
 						</td>
 						<td v-else>{{ item.accountCBRBIC }}</td>
 
@@ -81,16 +90,35 @@
 						</td>
 					</tr>
 					<tr v-if="addMode">
-						<td> <input type="text" v-model="addItem.account"></td>
+						<td> <input type="text" v-model="addItem.account">
+							<span class="error" v-if="v$.addItem.account.$dirty
+						&& v$.addItem.account.$error">текстовой, 20 знаков</span>
+						</td>
 						<td> <select v-model="addItem.regulationAccountType" name="regulationAccountType">
+						
 								<option v-for="(type, index) in regulationAccountTypes" :value="type" :key="index">
 									{{ type }}
 								</option>
-							</select></td>
-						<td> <input type="text" v-model="addItem.controlKey"></td>
-						<td> <input type="date" v-model="addItem.dateIn"></td>
+							</select>
+							<span class="error" v-if="v$.addItem.regulationAccountType.$dirty
+						&& v$.addItem.regulationAccountType.$error">выберите тип счета</span>
+						</td>
+						<td> 
+							<input type="text" v-model="addItem.controlKey">
+							<span class="error" v-if="v$.addItem.controlKey.$dirty
+						&& v$.addItem.controlKey.$error">не больше 2 символов</span>
+						</td>
+						<td>
+							 <input type="date" v-model="addItem.dateIn">
+							 <span class="error" v-if="v$.addItem.dateIn.$dirty
+						&& v$.addItem.dateIn.$error">обязательное поле</span>
+							</td>
 						<td> <input type="date" v-model="addItem.dateOut"></td>
-						<td> <input type="number" v-model="addItem.accountCBRBIC"></td>
+						<td> 
+							<input type="number" v-model="addItem.accountCBRBIC">
+							<span class="error" v-if="v$.addItem.accountCBRBIC.$dirty
+						&& v$.addItem.accountCBRBIC.$error">Цифровой, 9 знаков</span>
+						</td>
 						<td>
 						</td>
 						<td>
@@ -117,8 +145,30 @@
 <script>
 import axios from 'axios';
 import { parseISO, format } from 'date-fns';
+import { required, maxLength, between, and } from '@vuelidate/validators';
+import { useVuelidate } from '@vuelidate/core';
 export default {
 	props: ['visible', 'entryAccounts'],
+	setup() {
+		return { v$: useVuelidate() }
+	},
+	validations() {
+		return {
+			editedItem:{
+				regulationAccountType:{required},
+				controlKey:{maxLength: maxLength(2)},
+				dateIn:{required},
+				accountCBRBIC:{ between: between(0, 999999999)},
+			},		
+			addItem:{
+				account:{required,maxLength: maxLength(20)},
+				regulationAccountType:{required},
+				controlKey:{maxLength: maxLength(2)},
+				dateIn:{required},
+				accountCBRBIC:{ between: between(0, 999999999)},
+			},
+		}
+	},
 	data() {
 		return {
 			activeItem: null,
@@ -180,7 +230,12 @@ export default {
 		},
 
 		saveAccount() {
-
+			this.v$.addItem.$touch()
+			if (this.v$.addItem.$error) {
+				console.log("Ошибка")
+				alert('Ошибка')
+				return;
+			}
 			axios
 				.post(`http://localhost:8080/api/account/save?bic=${this.entryAccounts.bic}`, this.addItem, {
 					headers: {
@@ -221,7 +276,7 @@ export default {
 			accountRestrictions = [];
 		},
 		editAccount(item) {
-		this.editedItem = Object.assign({}, item); 
+		this.editedItem = item; 
     this.currentlyEditing = item;
 
 		},
@@ -231,6 +286,12 @@ export default {
     this.editedItem = null;
 		},
 		saveEdit(item) {
+			this.v$.editedItem.$touch()
+			if (this.v$.editedItem.$error) {
+				console.log("Ошибка")
+				alert('Ошибка')
+				return;
+			}
 			axios
 				.put(`http://localhost:8080/api/account/update/${this.editedItem.account}`, this.editedItem, {
 					headers: {
@@ -248,9 +309,6 @@ export default {
 				})
 				.catch(error => {
 					console.error(error);
-				})
-				.finally(() => {
-					this.editedItem = null;
 				});
 
 		},

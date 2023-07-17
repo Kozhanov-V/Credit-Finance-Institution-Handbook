@@ -1,6 +1,6 @@
 
 <template>
-	  <Navigation v-if="shouldShowNavigation && route.path!=='/'"/>
+	  <Navigation v-if="shouldShowNavigation"/>
   <Header v-if="route.path !== '/login' && route.path!=='/' && route.path!=='/signup' && route.path!=='/expired'"  />
 
 
@@ -21,7 +21,7 @@ export default {
   },
 	computed: {
     shouldShowNavigation() {
-      const excludedRoutes = ['/', 'Login', 'Signup', 'Expired', 'NotFound'];
+      const excludedRoutes = ['Home', 'Authenticate', 'Signup', 'ExpiredToken', 'NotFound'];
       return !excludedRoutes.includes(this.$route.name);
     }
   },

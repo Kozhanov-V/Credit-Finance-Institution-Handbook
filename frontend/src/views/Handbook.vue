@@ -83,113 +83,157 @@
 								{{ item.nameParticipant }}
 							</td>
 							<td v-else>
-								<input v-model.trim="item.nameParticipant" type="text">
+								<input v-model.trim="editedItem.nameParticipant" type="text">
+								<span class="error" v-if="v$.editedItem.nameParticipant.$dirty
+						&& v$.editedItem.nameParticipant.$error">Поле обязательно</span>
 							</td>
 
 							<td v-if="item !== currentlyEditing">
 								{{ item.registrationNumber }}
 							</td>
 							<td v-else>
-								<input v-model.trim="item.registrationNumber" type="text">
+								<input v-model.trim="editedItem.registrationNumber" type="text">
+								<span class="error" v-if="v$.editedItem.registrationNumber.$dirty
+						&& v$.editedItem.registrationNumber.$error">Не более 9 символов</span>
+			
 							</td>
 
 							<td v-if="item !== currentlyEditing">
 								{{ item.countryCode }}
 							</td>
 							<td v-else>
-								<input v-model.trim="item.countryCode" type="text">
+								<input v-model.trim="editedItem.countryCode" type="text">
+								<span class="error" v-if="v$.editedItem.countryCode.$dirty
+						&& v$.editedItem.countryCode.$error">Не более 2 символов</span>
+			
 							</td>
 
 							<td v-if="item !== currentlyEditing">
 								{{ item.regionCode }}
 							</td>
 							<td v-else>
-								<input v-model.trim="item.regionCode" type="text">
+								<input v-model.trim="editedItem.regionCode" type="text">
+								<span class="error" v-if="v$.editedItem.regionCode.$dirty
+						&& v$.editedItem.regionCode.$error">Не более 2 символова</span>
+			
 							</td>
 
 							<td v-if="item !== currentlyEditing">
 								{{ item.index }}
 							</td>
 							<td v-else>
-								<input v-model.trim="item.index" type="text">
+								<input v-model.trim="editedItem.index" type="text">
+								<span class="error" v-if="v$.editedItem.index.$dirty
+						&& v$.editedItem.index.$error">Не более 6 символов</span>
+				
 							</td>
 
 							<td v-if="item !== currentlyEditing">
 								{{ item.typeLocation }}
 							</td>
 							<td v-else>
-								<input v-model.trim="item.typeLocation" type="text">
+								<input v-model.trim="editedItem.typeLocation" type="text">
+								<span class="error" v-if="v$.editedItem.typeLocation.$dirty
+						&& v$.editedItem.typeLocation.$error">Не более 6 символов</span>
+				
 							</td>
 
 							<td v-if="item !== currentlyEditing">
 								{{ item.nameLocation }}
 							</td>
 							<td v-else>
-								<input v-model.trim="item.nameLocation" type="text">
+								<input v-model.trim="editedItem.nameLocation" type="text">
+								<span class="error" v-if="v$.editedItem.nameLocation.$dirty
+						&& v$.editedItem.nameLocation.$error">Не более 25 символов</span>
+			
 							</td>
 
 							<td v-if="item !== currentlyEditing">
 								{{ item.address }}
 							</td>
 							<td v-else>
-								<input v-model.trim="item.address" type="text">
+								<input v-model.trim="editedItem.address" type="text">
+								<span class="error" v-if="v$.editedItem.address.$dirty
+						&& v$.editedItem.address.$error">Не более 160 символов</span>
+				
 							</td>
 
 							<td v-if="item !== currentlyEditing">
 								{{ item.parentBIC }}
 							</td>
 							<td v-else>
-								<input v-model.trim="item.parentBIC" type="number">
+								<input v-model.trim="editedItem.parentBIC" type="number">
+								<span class="error" v-if="v$.editedItem.parentBIC.$dirty
+						&& v$.editedItem.parentBIC.$error">Требуется 9-значный БИК</span>
+				
 							</td>
 
 							<td v-if="item !== currentlyEditing">
 								{{ item.dateIn }}
 							</td>
 							<td v-else>
-								<input v-model="item.dateIn" type="date">
+								<input v-model="editedItem.dateIn" type="date">
+								<span class="error" v-if="v$.editedItem.dateIn.$dirty
+						&& v$.editedItem.dateIn.$error">Требуется дата</span>
+			
 							</td>
 
 							<td v-if="item !== currentlyEditing">
 								{{ item.dateOut }}
+							
 							</td>
 							<td v-else>
-								<input v-model="item.dateOut" type="date">
+								<input v-model="editedItem.dateOut" type="date">
 							</td>
 
 							<td v-if="item !== currentlyEditing">
 								{{ item.participantType }}
 							</td>
 							<td v-else>
-								<select v-model="item.participantType" name="participantType">
+								<select v-model="editedItem.participantType" name="participantType">
 									<option v-for="(type, index) in participantTypes" :value="type" :key="index">
 										{{ type }}
 									</option>
 								</select>
+								<span class="error" v-if="v$.editedItem.participantType.$dirty
+						&& v$.editedItem.participantType.$error">Выберите тип</span>
+				
 							</td>
 
 							<td v-if="item !== currentlyEditing">
 								{{ item.availableTransferService }}
 							</td>
 							<td v-else>
-								<select v-model="item.availableTransferService" name="availableTransferService">
+								<select v-model="editedItem.availableTransferService" name="availableTransferService">
 									<option v-for="(type, index) in availableTransferServices" :value="type" :key="index">
 										{{ type }}
 									</option>
 								</select>
+								<span class="error" v-if="v$.editedItem.availableTransferService.$dirty
+						&& v$.editedItem.availableTransferService.$error">Выберите сервис</span>
+			
 							</td>
 
 							<td v-if="item !== currentlyEditing">
 								{{ item.exchangeParticipant }}
 							</td>
 							<td v-else>
-								<input type="checkbox" :checked="item.exchangeParticipant == 1"
-									@change="item.exchangeParticipant = $event.target.checked ? 1 : 0" name="exchangeParticipant">
-							</td>
+								<input type="checkbox" :checked="editedItem.exchangeParticipant == 1"
+									@change="editedItem.exchangeParticipant = $event.target.checked ? 1 : 0" name="exchangeParticipant">
+									<span class="error" v-if="v$.editedItem.exchangeParticipant.$dirty
+						&& v$.editedItem.exchangeParticipant.$error">Выберите статус</span>
+			
+								</td>
 
 							<td v-if="item !== currentlyEditing">
 									{{ item.uid }}
 							</td>
-							<td v-else><input v-model.trim="item.uid" type="number"></td>
+							<td v-else>
+								<input v-model.trim="editedItem.uid" type="number">
+								<span class="error" v-if="v$.editedItem.uid.$dirty
+						&& v$.editedItem.uid.$error">Цифровой, 10 знаков</span>
+		
+							</td>
 
 							<td>{{ item.participantStatus }}</td>
 
@@ -239,7 +283,7 @@ import AccountsInfo from '@/components/AccountsInfo.vue';
 
 import { reactive } from 'vue';
 import axios from 'axios';
-import { required, minLength, maxLength, sameAs } from '@vuelidate/validators';
+import { required, minLength, maxLength, sameAs, between, and } from '@vuelidate/validators';
 export default {
 	components: {
 		SaveModalForm,
@@ -247,9 +291,9 @@ export default {
 		Filter,
 	},
 
-	// setup() {
-	// 	return {v$: useVuelidate() }
-	// },
+	setup() {
+		return {v$: useVuelidate() }
+	},
 
 	data() {
 		return {
@@ -285,21 +329,34 @@ export default {
 			shouldResetFilter: false
 		};
 	},
-// 	validations() {
-// 		return{
-// 			editedItem: {
-// 				nameParticipant: { required, minLength: minLength(20) },
-//     },
-// 	}
-// }
-//   ,
+	validations() {
+		return{
+			editedItem: {
+				bic: { required, between: between(0, 999999999) }, 
+				nameParticipant: { required, maxLength: maxLength(140) },
+					registrationNumber: {maxLength: maxLength(9)},
+					countryCode: {maxLength: maxLength(2)},
+					regionCode:{maxLength: maxLength(2)},
+					index:{maxLength: maxLength(6)},
+					typeLocation:{maxLength: maxLength(6)},
+					nameLocation:{maxLength: maxLength(25)},
+					address:{maxLength: maxLength(160)},
+					parentBIC: { between: between(0, 999999999) },
+					dateIn: { required },
+					participantType: { required },
+					availableTransferService: { required },
+					uid: {  between: between(0, 999999999) },
+					exchangeParticipant: { required }
+    },
+	}
+}
+  ,
 	methods: {
 		startEditing(item) {
     this.editedItem = Object.assign({}, item); 
     this.currentlyEditing = item;
 },
 cancelEditing() {
-	Object.assign(this.currentlyEditing, this.editedItem); 
     this.currentlyEditing = null;
     this.editedItem = null;
 },
@@ -337,30 +394,31 @@ cancelEditing() {
 			}
 		},
 		async saveItem(item) {
-			// this.v$.$touch()
-      // if (this.v$.$invalid) {
-			// 	alert('ошибка')
-      //   return
-      // }
+			
+			this.v$.editedItem.$touch()
+      if (this.v$.editedItem.$invalid) {
+				alert('ошибка')
+        return
+      }
 			try {
-				const response = await axios.put(`http://localhost:8080/api/update/${item.bic}`, {
-					bic: item.bic,
+				const response = await axios.put(`http://localhost:8080/api/update/${this.editedItem.bic}`, {
+					bic: this.editedItem.bic,
 					participantInfo: {
-						nameParticipant: item.nameParticipant,
-						registrationNumber: item.registrationNumber,
-						countryCode: item.countryCode,
-						regionCode: item.regionCode,
-						index: item.index,
-						typeLocation: item.typeLocation,
-						nameLocation: item.nameLocation,
-						address: item.address,
-						parentBIC: item.parentBIC,
-						dateIn: item.dateIn,
-						dateOut: item.dateOut,
-						participantType: item.participantType,
-						availableTransferService: item.availableTransferService,
-						uid: item.uid,
-						exchangeParticipant: item.exchangeParticipant,
+						nameParticipant: this.editedItem.nameParticipant,
+						registrationNumber: this.editedItem.registrationNumber,
+						countryCode: this.editedItem.countryCode,
+						regionCode: this.editedItem.regionCode,
+						index: this.editedItem.index,
+						typeLocation: this.editedItem.typeLocation,
+						nameLocation: this.editedItem.nameLocation,
+						address: this.editedItem.address,
+						parentBIC: this.editedItem.parentBIC,
+						dateIn: this.editedItem.dateIn,
+						dateOut: this.editedItem.dateOut,
+						participantType: this.editedItem.participantType,
+						availableTransferService: this.editedItem.availableTransferService,
+						uid: this.editedItem.uid,
+						exchangeParticipant: this.editedItem.exchangeParticipant,
 					}
 				}
 					, {
@@ -371,9 +429,12 @@ cancelEditing() {
 
 			
 				if (response.status === 200) {
-					item=this.editedItem;
-    this.currentlyEditing = null;
-    this.editedItem = null;
+					console.log(this.editedItem)
+					console.log(item)
+					Object.assign(this.currentlyEditing, this.editedItem); 
+  			  this.currentlyEditing = null;
+  			  this.editedItem = null;
+					
 				} else {
 					console.error('Error updating item:', response);
 				}
@@ -381,7 +442,6 @@ cancelEditing() {
 				console.error('Error updating item:', error);
 			}
 
-			// В любом случае выходим из режима редактирования
 			item.editMode = false;
 		},
 		fillTable(bicDirectoryEntries) {
@@ -629,14 +689,15 @@ cancelEditing() {
 		}
 	},
 	created() {
-		this.currentQuery = this.fetchData;
-		this.performQuery(this.currentQueryParams);
+	
 		this.startupDataLoader();
 	},
 	mounted() {
 		this.$nextTick(function () {
 			document.getElementById('handbookBtn').click();
 		})
+		this.currentQuery = this.fetchData;
+		this.performQuery(this.currentQueryParams);
 	},
 	computed: {
 		isAdmin() {

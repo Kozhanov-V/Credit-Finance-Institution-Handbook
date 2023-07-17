@@ -148,7 +148,7 @@
 
 <script>
 import axios from 'axios';
-import { required, maxLength, between } from '@vuelidate/validators';
+import { required, maxLength, between, and } from '@vuelidate/validators';
 import { useVuelidate } from '@vuelidate/core';
 import { UNREF } from '@vue/compiler-core';
 export default {
@@ -189,13 +189,13 @@ export default {
 				bic: { required, between: between(0, 999999999) },
 				participantInfo: {
 					nameParticipant: { required, maxLength: maxLength(140) },
-					registrationNumber: maxLength(9),
-					countryCode: maxLength(2),
-					regionCode: maxLength(2),
-					index: maxLength(6),
-					typeLocation: maxLength(6),
-					nameLocation: maxLength(25),
-					address: maxLength(160),
+					registrationNumber: {maxLength: maxLength(9)},
+					countryCode: {maxLength: maxLength(2)},
+					regionCode:{maxLength: maxLength(2)},
+					index:{maxLength: maxLength(6)},
+					typeLocation:{maxLength: maxLength(6)},
+					nameLocation:{maxLength: maxLength(25)},
+					address:{maxLength: maxLength(160)},
 					parentBIC: { between: between(0, 999999999) },
 					dateIn: { required },
 					participantType: { required },
@@ -236,7 +236,7 @@ export default {
 		},
 		async submitForm() {
 			this.v$.bicDirectoryEntry.$touch()
-			if (!this.v$.bicDirectoryEntry.$error) {
+			if (this.v$.bicDirectoryEntry.$error) {
 				console.log("Ошибка")
 				return;
 			}

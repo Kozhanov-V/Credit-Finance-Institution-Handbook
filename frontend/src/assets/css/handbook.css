@@ -316,5 +316,6 @@ input::-webkit-inner-spin-button {
 
 .error {
 	color: red;
-	font-size: 0.8rem;
+	font-size: 0.8em;
+	display: block;
 }
