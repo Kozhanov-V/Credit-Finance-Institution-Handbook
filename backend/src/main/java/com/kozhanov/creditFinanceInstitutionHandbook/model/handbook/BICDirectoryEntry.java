@@ -16,6 +16,7 @@ import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
+import org.hibernate.envers.Audited;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.*;
@@ -30,6 +31,7 @@ import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "bic_directory_entry")
+@Audited
 public class BICDirectoryEntry {
 
 

@@ -8,12 +8,15 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 import com.kozhanov.creditFinanceInstitutionHandbook.deserialization.codeValue.AccountOperationRestrictionDeserializer;
 import com.kozhanov.creditFinanceInstitutionHandbook.deserialization.handbook.AccountRestrictionDeserializer;
 import com.kozhanov.creditFinanceInstitutionHandbook.model.codeValue.AccountOperationRestriction;
+import org.hibernate.envers.Audited;
+import org.hibernate.envers.RelationTargetAuditMode;
 
 import javax.persistence.*;
 import java.util.Date;
 
 @Table(name = "account_restriction")
 @Entity
+@Audited
 public class AccountRestriction {
 
     @Id
@@ -21,6 +24,7 @@ public class AccountRestriction {
     private Long id;
     @ManyToOne
     @JoinColumn(name = "account_restriction_code")
+
     private AccountOperationRestriction accountRestriction;
 
     @Column(name = "restriction_date")

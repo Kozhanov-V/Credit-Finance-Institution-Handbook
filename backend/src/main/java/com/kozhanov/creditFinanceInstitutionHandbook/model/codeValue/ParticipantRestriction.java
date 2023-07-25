@@ -3,6 +3,8 @@ package com.kozhanov.creditFinanceInstitutionHandbook.model.codeValue;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.kozhanov.creditFinanceInstitutionHandbook.deserialization.codeValue.AccountStatusDeserializer;
 import com.kozhanov.creditFinanceInstitutionHandbook.deserialization.codeValue.ParticipantRestrictionDeserializer;
+import org.hibernate.envers.Audited;
+import org.hibernate.envers.RelationTargetAuditMode;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -15,6 +17,7 @@ import javax.validation.constraints.Size;
 @Entity
 @Table(name = "participant_restriction")
 @JsonDeserialize(using = ParticipantRestrictionDeserializer.class)
+@Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
 public class ParticipantRestriction {
     @Column(name = "code")
     @Id

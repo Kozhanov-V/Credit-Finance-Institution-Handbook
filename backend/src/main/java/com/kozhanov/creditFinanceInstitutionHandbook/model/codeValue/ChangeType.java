@@ -3,6 +3,8 @@ package com.kozhanov.creditFinanceInstitutionHandbook.model.codeValue;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.kozhanov.creditFinanceInstitutionHandbook.deserialization.codeValue.AccountStatusDeserializer;
 import com.kozhanov.creditFinanceInstitutionHandbook.deserialization.codeValue.ChangeTypeDeserializer;
+import org.hibernate.envers.Audited;
+import org.hibernate.envers.RelationTargetAuditMode;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -13,6 +15,7 @@ import javax.validation.constraints.Size;
 @Table(name = "change_type")
 @Entity
 @JsonDeserialize(using = ChangeTypeDeserializer.class)
+@Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
 public class ChangeType {
     @Column(name = "code")
     @Id

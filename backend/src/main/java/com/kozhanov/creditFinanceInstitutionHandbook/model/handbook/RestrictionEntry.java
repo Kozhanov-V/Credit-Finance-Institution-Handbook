@@ -7,12 +7,14 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 import com.kozhanov.creditFinanceInstitutionHandbook.deserialization.codeValue.ParticipantRestrictionDeserializer;
 import com.kozhanov.creditFinanceInstitutionHandbook.model.codeValue.ParticipantRestriction;
+import org.hibernate.envers.Audited;
 
 import javax.persistence.*;
 import java.util.Date;
 
 @Entity
 @Table(name = "restriction_entry")
+@Audited
 public class RestrictionEntry {
 
     @Id

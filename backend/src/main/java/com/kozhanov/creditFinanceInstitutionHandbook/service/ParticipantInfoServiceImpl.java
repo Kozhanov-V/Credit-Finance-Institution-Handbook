@@ -6,7 +6,10 @@ import com.kozhanov.creditFinanceInstitutionHandbook.repository.handbook.Partici
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
+
 @Service
+@Transactional
 public class ParticipantInfoServiceImpl implements ParticipantInfoService{
 
     @Autowired

@@ -3,6 +3,8 @@ package com.kozhanov.creditFinanceInstitutionHandbook.model.codeValue;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.kozhanov.creditFinanceInstitutionHandbook.deserialization.codeValue.AccountStatusDeserializer;
 import com.kozhanov.creditFinanceInstitutionHandbook.deserialization.codeValue.ExchangeParticipantDeserializer;
+import org.hibernate.envers.Audited;
+import org.hibernate.envers.RelationTargetAuditMode;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -14,6 +16,7 @@ import javax.validation.constraints.Size;
 @Entity
 @Table(name = "exchange_participant")
 @JsonDeserialize(using = ExchangeParticipantDeserializer.class)
+@Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
 public class ExchangeParticipant {
     @Column(name = "code")
     @Id

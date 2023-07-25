@@ -209,20 +209,28 @@ public class StartupDataLoader implements
         Role client = new Role("ROLE_USER");
         Role admin = new Role("ROLE_ADMIN");
         User user = new User();
-        user.setUsername("admin");
+        user.setUsername("system");
         user.setActive(true);
-        user.setPassword(WebSecurityConfig.passwordEncoder().encode("admin"));
-        user.addRole(client);
-        user.addRole(admin);
+        user.setId(0L);
+
         User user2 = new User();
-        user2.setUsername("user");
-        user2.setActive(false);
-        user2.setPassword(WebSecurityConfig.passwordEncoder().encode("user"));
+        user2.setUsername("admin");
+        user2.setActive(true);
+        user2.setPassword(WebSecurityConfig.passwordEncoder().encode("admin"));
         user2.addRole(client);
+        user2.addRole(admin);
+
+        User user3 = new User();
+        user3.setUsername("user");
+        user3.setActive(false);
+        user3.setPassword(WebSecurityConfig.passwordEncoder().encode("user"));
+        user3.addRole(client);
+
         roleReposiroty.save(client);
         roleReposiroty.save(admin);
         userRepository.save(user);
         userRepository.save(user2);
+        userRepository.save(user3);
         Confirmation confirmation = new Confirmation();
 
 

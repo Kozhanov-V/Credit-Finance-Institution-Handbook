@@ -33,6 +33,8 @@ C:\Users\vkozh\Documents\GitHub\Credit-Finance-Institution-Handbook\backend\src\
 C:\Users\vkozh\Documents\GitHub\Credit-Finance-Institution-Handbook\backend\src\main\java\com\kozhanov\creditFinanceInstitutionHandbook\deserialization\handbook\SWBICSDeserializer.java
 C:\Users\vkozh\Documents\GitHub\Credit-Finance-Institution-Handbook\backend\src\main\java\com\kozhanov\creditFinanceInstitutionHandbook\service\ParticipantInfoService.java
 C:\Users\vkozh\Documents\GitHub\Credit-Finance-Institution-Handbook\backend\src\main\java\com\kozhanov\creditFinanceInstitutionHandbook\deserialization\handbook\RstrListDeserializer.java
+C:\Users\vkozh\Documents\GitHub\Credit-Finance-Institution-Handbook\backend\src\main\java\com\kozhanov\creditFinanceInstitutionHandbook\until\AuditorAwareImpl.java
+C:\Users\vkozh\Documents\GitHub\Credit-Finance-Institution-Handbook\backend\src\main\java\com\kozhanov\creditFinanceInstitutionHandbook\service\CurrentUserService.java
 C:\Users\vkozh\Documents\GitHub\Credit-Finance-Institution-Handbook\backend\src\main\java\com\kozhanov\creditFinanceInstitutionHandbook\model\codeValue\ParticipantStatus.java
 C:\Users\vkozh\Documents\GitHub\Credit-Finance-Institution-Handbook\backend\src\main\java\com\kozhanov\creditFinanceInstitutionHandbook\service\ConfirmationService.java
 C:\Users\vkozh\Documents\GitHub\Credit-Finance-Institution-Handbook\backend\src\main\java\com\kozhanov\creditFinanceInstitutionHandbook\service\BICDirectoryEntryServiceImpl.java
@@ -68,6 +70,7 @@ C:\Users\vkozh\Documents\GitHub\Credit-Finance-Institution-Handbook\backend\src\
 C:\Users\vkozh\Documents\GitHub\Credit-Finance-Institution-Handbook\backend\src\main\java\com\kozhanov\creditFinanceInstitutionHandbook\service\AccountsServiceImpl.java
 C:\Users\vkozh\Documents\GitHub\Credit-Finance-Institution-Handbook\backend\src\main\java\com\kozhanov\creditFinanceInstitutionHandbook\deserialization\codeValue\RegulationAccountTypeDeserializer.java
 C:\Users\vkozh\Documents\GitHub\Credit-Finance-Institution-Handbook\backend\src\main\java\com\kozhanov\creditFinanceInstitutionHandbook\security\JwtTokenUtil.java
+C:\Users\vkozh\Documents\GitHub\Credit-Finance-Institution-Handbook\backend\src\main\java\com\kozhanov\creditFinanceInstitutionHandbook\config\EnversConfig.java
 C:\Users\vkozh\Documents\GitHub\Credit-Finance-Institution-Handbook\backend\src\main\java\com\kozhanov\creditFinanceInstitutionHandbook\model\handbook\BICDirectoryEntry.java
 C:\Users\vkozh\Documents\GitHub\Credit-Finance-Institution-Handbook\backend\src\main\java\com\kozhanov\creditFinanceInstitutionHandbook\model\handbook\ElectronicDocuments.java
 C:\Users\vkozh\Documents\GitHub\Credit-Finance-Institution-Handbook\backend\src\main\java\com\kozhanov\creditFinanceInstitutionHandbook\service\ParticipantInfoServiceImpl.java
@@ -78,6 +81,7 @@ C:\Users\vkozh\Documents\GitHub\Credit-Finance-Institution-Handbook\backend\src\
 C:\Users\vkozh\Documents\GitHub\Credit-Finance-Institution-Handbook\backend\src\main\java\com\kozhanov\creditFinanceInstitutionHandbook\repository\handbook\ElectronicDocumentsRepository.java
 C:\Users\vkozh\Documents\GitHub\Credit-Finance-Institution-Handbook\backend\src\main\java\com\kozhanov\creditFinanceInstitutionHandbook\model\codeValue\AccountStatus.java
 C:\Users\vkozh\Documents\GitHub\Credit-Finance-Institution-Handbook\backend\src\main\java\com\kozhanov\creditFinanceInstitutionHandbook\repository\handbook\ParticipantInfoRepository.java
+C:\Users\vkozh\Documents\GitHub\Credit-Finance-Institution-Handbook\backend\src\main\java\com\kozhanov\creditFinanceInstitutionHandbook\ExceptionHandler\GlobalExceptionHandler.java
 C:\Users\vkozh\Documents\GitHub\Credit-Finance-Institution-Handbook\backend\src\main\java\com\kozhanov\creditFinanceInstitutionHandbook\model\codeValue\AvailableTransferService.java
 C:\Users\vkozh\Documents\GitHub\Credit-Finance-Institution-Handbook\backend\src\main\java\com\kozhanov\creditFinanceInstitutionHandbook\service\ElectronicDocumentsService.java
 C:\Users\vkozh\Documents\GitHub\Credit-Finance-Institution-Handbook\backend\src\main\java\com\kozhanov\creditFinanceInstitutionHandbook\deserialization\codeValue\AvailableTransferServiceDeserializer.java

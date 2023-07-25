@@ -1,6 +1,8 @@
 package com.kozhanov.creditFinanceInstitutionHandbook.model.users;
 
 import com.kozhanov.creditFinanceInstitutionHandbook.model.handbook.BICDirectoryEntry;
+import org.springframework.data.jpa.domain.AbstractAuditable;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -8,7 +10,8 @@ import java.util.Set;
 
 @Entity
 @Table(name = "users")
-public class User {
+@EntityListeners({AuditingEntityListener.class})
+public class User extends AbstractAuditable<User, Long> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -12,6 +12,7 @@ import com.kozhanov.creditFinanceInstitutionHandbook.deserialization.codeValue.R
 import com.kozhanov.creditFinanceInstitutionHandbook.deserialization.handbook.AccountsDeserializer;
 import com.kozhanov.creditFinanceInstitutionHandbook.model.codeValue.AccountStatus;
 import com.kozhanov.creditFinanceInstitutionHandbook.model.codeValue.RegulationAccountType;
+import org.hibernate.envers.Audited;
 
 import javax.persistence.*;
 import javax.validation.constraints.Max;
@@ -23,6 +24,7 @@ import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "accounts")
+@Audited
 public class Accounts {
 
     @Id

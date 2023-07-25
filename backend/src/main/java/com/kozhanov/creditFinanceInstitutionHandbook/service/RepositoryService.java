@@ -47,6 +47,9 @@ public class RepositoryService {
     @Resource
     private RegulationAccountTypeRepository regulationAccountTypeRepository;
 
+    @Resource
+    private CurrentUserService currentUserService;
+
 
     @Getter
     private static final Map<Class<?>, JpaRepository<?, ?>> repos = new HashMap<>();

@@ -1,7 +1,8 @@
 package com.kozhanov.creditFinanceInstitutionHandbook.security;
 
+import com.kozhanov.creditFinanceInstitutionHandbook.repository.auth.UserRepository;
+import com.kozhanov.creditFinanceInstitutionHandbook.service.CurrentUserService;
 import io.jsonwebtoken.ExpiredJwtException;
-import io.jsonwebtoken.Jwts;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -24,7 +25,14 @@ public class JwtRequestFilter extends OncePerRequestFilter {
     private UserDetailsService userDetailsService;
 
     @Autowired
+    private CurrentUserService currentUserService;
+
+    @Autowired
     private JwtTokenUtil jwtTokenUtil;
+
+
+    @Autowired
+    private UserRepository userRepository;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
@@ -42,6 +50,8 @@ public class JwtRequestFilter extends OncePerRequestFilter {
                 jwtToken = requestTokenHeader.substring(7);
                 try {
                     username = jwtTokenUtil.getUsernameFromToken(jwtToken);
+                    currentUserService.setCurrentUser(userRepository.findByUsername(username).getId());
+                    userDetailsService.loadUserByUsername(username);
                 } catch (IllegalArgumentException e) {
                     System.out.println("Unable to get JWT Token");
                 } catch (ExpiredJwtException e) {
@@ -52,6 +62,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             }
             if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
                 UserDetails userDetails = this.userDetailsService.loadUserByUsername(username);
+
                 if (jwtTokenUtil.validateToken(jwtToken, userDetails)) {
                     UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
                             userDetails, null, userDetails.getAuthorities());
@@ -61,6 +72,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
                 }
             }
         }
+        currentUserService.setCurrentUser(0L);
         chain.doFilter(request, response);
     }
 

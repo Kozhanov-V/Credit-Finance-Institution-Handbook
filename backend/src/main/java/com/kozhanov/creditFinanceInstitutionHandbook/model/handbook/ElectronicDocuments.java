@@ -3,6 +3,7 @@ package com.kozhanov.creditFinanceInstitutionHandbook.model.handbook;
 import com.kozhanov.creditFinanceInstitutionHandbook.deserialization.handbook.ElectronicDocumentsDeserializer;
 import com.kozhanov.creditFinanceInstitutionHandbook.model.codeValue.CreationReason;
 import com.kozhanov.creditFinanceInstitutionHandbook.model.codeValue.InfoTypeCode;
+import org.hibernate.envers.Audited;
 
 import javax.persistence.*;
 import javax.validation.constraints.Digits;
@@ -15,6 +16,7 @@ import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "electronic_documents")
+@Audited
 public class ElectronicDocuments {
 
     @Id

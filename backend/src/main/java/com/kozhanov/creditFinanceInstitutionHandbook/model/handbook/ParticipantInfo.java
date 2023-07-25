@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.kozhanov.creditFinanceInstitutionHandbook.deserialization.handbook.RstrListDeserializer;
 import com.kozhanov.creditFinanceInstitutionHandbook.model.codeValue.*;
+import org.hibernate.envers.Audited;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -14,6 +15,7 @@ import javax.validation.constraints.*;
 
 @Entity
 @Table(name = "participant_info")
+@Audited
 public class ParticipantInfo {
 
 
