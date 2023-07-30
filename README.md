@@ -3,7 +3,7 @@
 
 This is a web application for administering reference information about credit finance institutions. It includes functionality for adding, editing, and deleting records through the user interface, as well as a mechanism for batch uploading and updating reference data based on the information provided by the Central Bank of Russia. The application provides API access for "external" services to reference information and its search.
 
-##Technologies
+## Technologies
 
 - Backend:
   - Spring Boot 
