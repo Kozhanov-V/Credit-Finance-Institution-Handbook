@@ -28,6 +28,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
@@ -125,7 +126,8 @@ public class UserManagementController {
     public ResponseEntity<?> deleteBicDirectoryEntry(@PathVariable int bic, @RequestBody String username) {
         username = username.substring(0,username.length()-1);
 
-        User user = userRepository.findByUsername(username).get();
+        String finalUsername = username;
+        User user = userRepository.findByUsername(username).orElseThrow(() -> new EntityNotFoundException("No entry found with BIC: " + finalUsername));
         BICDirectoryEntry bicDirectoryEntry = bicDirectoryEntryService.findByBic(bic);
         if(user.getBicDirectoryEntries().contains(bicDirectoryEntry)){
             user.getBicDirectoryEntries().remove(bicDirectoryEntry);
