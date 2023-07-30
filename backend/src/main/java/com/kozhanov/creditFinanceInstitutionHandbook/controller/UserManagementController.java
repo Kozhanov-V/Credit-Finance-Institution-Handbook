@@ -86,7 +86,7 @@ public class UserManagementController {
     public ResponseEntity<?> addBicDirectoryEntry(@PathVariable int bic, @RequestBody String username) {
         username = username.substring(0,username.length()-1);
 
-        User user = userRepository.findByUsername(username);
+        User user = userRepository.findByUsername(username).get();
         BICDirectoryEntry bicDirectoryEntry = bicDirectoryEntryService.findByBic(bic);
         user.getBicDirectoryEntries().add(bicDirectoryEntry);
         userRepository.save(user);
@@ -125,7 +125,7 @@ public class UserManagementController {
     public ResponseEntity<?> deleteBicDirectoryEntry(@PathVariable int bic, @RequestBody String username) {
         username = username.substring(0,username.length()-1);
 
-        User user = userRepository.findByUsername(username);
+        User user = userRepository.findByUsername(username).get();
         BICDirectoryEntry bicDirectoryEntry = bicDirectoryEntryService.findByBic(bic);
         if(user.getBicDirectoryEntries().contains(bicDirectoryEntry)){
             user.getBicDirectoryEntries().remove(bicDirectoryEntry);

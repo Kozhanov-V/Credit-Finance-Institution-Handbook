@@ -1,8 +1,10 @@
 package com.kozhanov.creditFinanceInstitutionHandbook.service;
 
 import com.kozhanov.creditFinanceInstitutionHandbook.model.codeValue.*;
+import com.kozhanov.creditFinanceInstitutionHandbook.repository.auth.UserRepository;
 import com.kozhanov.creditFinanceInstitutionHandbook.repository.codeValue.*;
 import lombok.Getter;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
@@ -47,8 +49,8 @@ public class RepositoryService {
     @Resource
     private RegulationAccountTypeRepository regulationAccountTypeRepository;
 
-    @Resource
-    private CurrentUserService currentUserService;
+    @Autowired
+    private UserRepository userRepository;
 
 
     @Getter
@@ -67,6 +69,8 @@ public class RepositoryService {
         repos.put(ParticipantStatus.class, participantStatusRepository);
         repos.put(ParticipantType.class, participantTypeRepository);
         repos.put(RegulationAccountType.class, regulationAccountTypeRepository);
+        repos.put(RegulationAccountType.class, regulationAccountTypeRepository);
+        repos.put(UserRepository.class, userRepository);
     }
 
 

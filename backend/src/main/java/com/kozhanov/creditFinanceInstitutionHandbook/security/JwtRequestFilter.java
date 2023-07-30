@@ -1,9 +1,12 @@
 package com.kozhanov.creditFinanceInstitutionHandbook.security;
 
+import com.kozhanov.creditFinanceInstitutionHandbook.model.users.UserRevisionEntity;
 import com.kozhanov.creditFinanceInstitutionHandbook.repository.auth.UserRepository;
 import com.kozhanov.creditFinanceInstitutionHandbook.service.CurrentUserService;
+import com.kozhanov.creditFinanceInstitutionHandbook.until.CurrentUserChangeEvent;
 import io.jsonwebtoken.ExpiredJwtException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -21,18 +24,15 @@ import java.io.IOException;
 @Component
 public class JwtRequestFilter extends OncePerRequestFilter {
 
-    @Autowired
-    private UserDetailsService userDetailsService;
+    private final JwtTokenUtil jwtTokenUtil;
+    private final ApplicationEventPublisher eventPublisher;
+    private final UserDetailsService userDetailsService;
 
-    @Autowired
-    private CurrentUserService currentUserService;
-
-    @Autowired
-    private JwtTokenUtil jwtTokenUtil;
-
-
-    @Autowired
-    private UserRepository userRepository;
+    public JwtRequestFilter(JwtTokenUtil jwtTokenUtil, ApplicationEventPublisher eventPublisher, UserDetailsService userDetailsService) {
+        this.jwtTokenUtil = jwtTokenUtil;
+        this.eventPublisher = eventPublisher;
+        this.userDetailsService = userDetailsService;
+    }
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
@@ -50,7 +50,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
                 jwtToken = requestTokenHeader.substring(7);
                 try {
                     username = jwtTokenUtil.getUsernameFromToken(jwtToken);
-                    currentUserService.setCurrentUser(userRepository.findByUsername(username).getId());
+                    eventPublisher.publishEvent(new CurrentUserChangeEvent(this,username));
                     userDetailsService.loadUserByUsername(username);
                 } catch (IllegalArgumentException e) {
                     System.out.println("Unable to get JWT Token");
@@ -72,7 +72,6 @@ public class JwtRequestFilter extends OncePerRequestFilter {
                 }
             }
         }
-        currentUserService.setCurrentUser(0L);
         chain.doFilter(request, response);
     }
 
