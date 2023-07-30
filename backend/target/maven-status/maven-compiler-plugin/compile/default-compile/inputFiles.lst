@@ -3,6 +3,7 @@ C:\Users\vkozh\Documents\GitHub\Credit-Finance-Institution-Handbook\backend\src\
 C:\Users\vkozh\Documents\GitHub\Credit-Finance-Institution-Handbook\backend\src\main\java\com\kozhanov\creditFinanceInstitutionHandbook\model\codeValue\RegulationAccountType.java
 C:\Users\vkozh\Documents\GitHub\Credit-Finance-Institution-Handbook\backend\src\main\java\com\kozhanov\creditFinanceInstitutionHandbook\service\ImportServiceImpl.java
 C:\Users\vkozh\Documents\GitHub\Credit-Finance-Institution-Handbook\backend\src\main\java\com\kozhanov\creditFinanceInstitutionHandbook\model\users\Confirmation.java
+C:\Users\vkozh\Documents\GitHub\Credit-Finance-Institution-Handbook\backend\src\main\java\com\kozhanov\creditFinanceInstitutionHandbook\model\users\UserRevisionEntity.java
 C:\Users\vkozh\Documents\GitHub\Credit-Finance-Institution-Handbook\backend\src\main\java\com\kozhanov\creditFinanceInstitutionHandbook\repository\codeValue\AccountOperationRestrictionRepository.java
 C:\Users\vkozh\Documents\GitHub\Credit-Finance-Institution-Handbook\backend\src\main\java\com\kozhanov\creditFinanceInstitutionHandbook\deserialization\codeValue\AccountOperationRestrictionDeserializer.java
 C:\Users\vkozh\Documents\GitHub\Credit-Finance-Institution-Handbook\backend\src\main\java\com\kozhanov\creditFinanceInstitutionHandbook\model\users\User.java
@@ -13,6 +14,7 @@ C:\Users\vkozh\Documents\GitHub\Credit-Finance-Institution-Handbook\backend\src\
 C:\Users\vkozh\Documents\GitHub\Credit-Finance-Institution-Handbook\backend\src\main\java\com\kozhanov\creditFinanceInstitutionHandbook\controller\ApiController.java
 C:\Users\vkozh\Documents\GitHub\Credit-Finance-Institution-Handbook\backend\src\main\java\com\kozhanov\creditFinanceInstitutionHandbook\repository\codeValue\ParticipantTypeRepository.java
 C:\Users\vkozh\Documents\GitHub\Credit-Finance-Institution-Handbook\backend\src\main\java\com\kozhanov\creditFinanceInstitutionHandbook\security\JwtUserDetailsService.java
+C:\Users\vkozh\Documents\GitHub\Credit-Finance-Institution-Handbook\backend\src\main\java\com\kozhanov\creditFinanceInstitutionHandbook\until\CurrentUserChangeEvent.java
 C:\Users\vkozh\Documents\GitHub\Credit-Finance-Institution-Handbook\backend\src\main\java\com\kozhanov\creditFinanceInstitutionHandbook\deserialization\handbook\ParticipantInfoDeserializer.java
 C:\Users\vkozh\Documents\GitHub\Credit-Finance-Institution-Handbook\backend\src\main\java\com\kozhanov\creditFinanceInstitutionHandbook\repository\codeValue\AccountStatusRepository.java
 C:\Users\vkozh\Documents\GitHub\Credit-Finance-Institution-Handbook\backend\src\main\java\com\kozhanov\creditFinanceInstitutionHandbook\deserialization\codeValue\AccountStatusDeserializer.java
@@ -33,7 +35,6 @@ C:\Users\vkozh\Documents\GitHub\Credit-Finance-Institution-Handbook\backend\src\
 C:\Users\vkozh\Documents\GitHub\Credit-Finance-Institution-Handbook\backend\src\main\java\com\kozhanov\creditFinanceInstitutionHandbook\deserialization\handbook\SWBICSDeserializer.java
 C:\Users\vkozh\Documents\GitHub\Credit-Finance-Institution-Handbook\backend\src\main\java\com\kozhanov\creditFinanceInstitutionHandbook\service\ParticipantInfoService.java
 C:\Users\vkozh\Documents\GitHub\Credit-Finance-Institution-Handbook\backend\src\main\java\com\kozhanov\creditFinanceInstitutionHandbook\deserialization\handbook\RstrListDeserializer.java
-C:\Users\vkozh\Documents\GitHub\Credit-Finance-Institution-Handbook\backend\src\main\java\com\kozhanov\creditFinanceInstitutionHandbook\until\AuditorAwareImpl.java
 C:\Users\vkozh\Documents\GitHub\Credit-Finance-Institution-Handbook\backend\src\main\java\com\kozhanov\creditFinanceInstitutionHandbook\service\CurrentUserService.java
 C:\Users\vkozh\Documents\GitHub\Credit-Finance-Institution-Handbook\backend\src\main\java\com\kozhanov\creditFinanceInstitutionHandbook\model\codeValue\ParticipantStatus.java
 C:\Users\vkozh\Documents\GitHub\Credit-Finance-Institution-Handbook\backend\src\main\java\com\kozhanov\creditFinanceInstitutionHandbook\service\ConfirmationService.java
@@ -70,7 +71,6 @@ C:\Users\vkozh\Documents\GitHub\Credit-Finance-Institution-Handbook\backend\src\
 C:\Users\vkozh\Documents\GitHub\Credit-Finance-Institution-Handbook\backend\src\main\java\com\kozhanov\creditFinanceInstitutionHandbook\service\AccountsServiceImpl.java
 C:\Users\vkozh\Documents\GitHub\Credit-Finance-Institution-Handbook\backend\src\main\java\com\kozhanov\creditFinanceInstitutionHandbook\deserialization\codeValue\RegulationAccountTypeDeserializer.java
 C:\Users\vkozh\Documents\GitHub\Credit-Finance-Institution-Handbook\backend\src\main\java\com\kozhanov\creditFinanceInstitutionHandbook\security\JwtTokenUtil.java
-C:\Users\vkozh\Documents\GitHub\Credit-Finance-Institution-Handbook\backend\src\main\java\com\kozhanov\creditFinanceInstitutionHandbook\config\EnversConfig.java
 C:\Users\vkozh\Documents\GitHub\Credit-Finance-Institution-Handbook\backend\src\main\java\com\kozhanov\creditFinanceInstitutionHandbook\model\handbook\BICDirectoryEntry.java
 C:\Users\vkozh\Documents\GitHub\Credit-Finance-Institution-Handbook\backend\src\main\java\com\kozhanov\creditFinanceInstitutionHandbook\model\handbook\ElectronicDocuments.java
 C:\Users\vkozh\Documents\GitHub\Credit-Finance-Institution-Handbook\backend\src\main\java\com\kozhanov\creditFinanceInstitutionHandbook\service\ParticipantInfoServiceImpl.java
@@ -78,6 +78,7 @@ C:\Users\vkozh\Documents\GitHub\Credit-Finance-Institution-Handbook\backend\src\
 C:\Users\vkozh\Documents\GitHub\Credit-Finance-Institution-Handbook\backend\src\main\java\com\kozhanov\creditFinanceInstitutionHandbook\model\users\Role.java
 C:\Users\vkozh\Documents\GitHub\Credit-Finance-Institution-Handbook\backend\src\main\java\com\kozhanov\creditFinanceInstitutionHandbook\service\RepositoryService.java
 C:\Users\vkozh\Documents\GitHub\Credit-Finance-Institution-Handbook\backend\src\main\java\com\kozhanov\creditFinanceInstitutionHandbook\deserialization\handbook\AccountRestrictionDeserializer.java
+C:\Users\vkozh\Documents\GitHub\Credit-Finance-Institution-Handbook\backend\src\main\java\com\kozhanov\creditFinanceInstitutionHandbook\until\UserRevisionListener.java
 C:\Users\vkozh\Documents\GitHub\Credit-Finance-Institution-Handbook\backend\src\main\java\com\kozhanov\creditFinanceInstitutionHandbook\repository\handbook\ElectronicDocumentsRepository.java
 C:\Users\vkozh\Documents\GitHub\Credit-Finance-Institution-Handbook\backend\src\main\java\com\kozhanov\creditFinanceInstitutionHandbook\model\codeValue\AccountStatus.java
 C:\Users\vkozh\Documents\GitHub\Credit-Finance-Institution-Handbook\backend\src\main\java\com\kozhanov\creditFinanceInstitutionHandbook\repository\handbook\ParticipantInfoRepository.java
